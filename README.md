@@ -121,3 +121,15 @@ npm preview
 - Signed URLs for all photo access
 - No secrets in client code
 - Edge Functions handle Stripe operations
+
+---
+
+### Project docs
+Core specs & runbooks: **https://github.com/mystoragevalet/sv-docs**
+
+- Implementation Plan v3.1
+- Final Validation Checklist v3.1
+- Deployment Instructions v3.1
+- Go–NoGo (Line in the Sand) v3.1
+- Business Context & Requirements v3.1
+- Runbooks (webhook tests, env setup, smoke tests)
