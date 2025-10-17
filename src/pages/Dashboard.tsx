@@ -1,10 +1,13 @@
+import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import ItemCard from '../components/ItemCard'
+import AddItemModal from '../components/AddItemModal'
 
 export default function Dashboard() {
   const navigate = useNavigate()
+  const [openAdd, setOpenAdd] = useState(false)
 
   const { data: items, isLoading } = useQuery({
     queryKey: ['items'],
@@ -35,6 +38,15 @@ export default function Dashboard() {
 
       if (error) throw error
       return data
+    },
+  })
+
+  const { data: insurance } = useQuery({
+    queryKey: ['my-insurance'],
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc('fn_my_insurance')
+      if (error) throw error
+      return (data && data[0]) || null
     },
   })
 
@@ -77,6 +89,22 @@ export default function Dashboard() {
           )}
         </div>
 
+        {insurance && (
+          <div className="mb-6 p-4 rounded border border-gray-300 bg-gray-100">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-velvet-night font-medium">Insurance Coverage</span>
+              <span className="text-deep-harbor text-sm">$3,000 plan</span>
+            </div>
+            <div className="w-full h-2 bg-chalk-linen rounded">
+              <div
+                className="h-2 bg-velvet-night rounded transition-all"
+                style={{ width: `${Math.round((insurance?.remaining_ratio ?? 1) * 100)}%` }}
+              />
+            </div>
+            <div className="mt-2 text-deep-harbor text-xs">Remaining coverage shown as a bar</div>
+          </div>
+        )}
+
         {isLoading ? (
           <div className="text-gray-600">Loading your items...</div>
         ) : items && items.length > 0 ? (
@@ -94,6 +122,15 @@ export default function Dashboard() {
           </div>
         )}
       </main>
+
+      <button
+        onClick={() => setOpenAdd(true)}
+        className="fixed bottom-6 right-6 rounded-full w-14 h-14 bg-velvet-night text-pebble-linen shadow-lg hover:shadow-xl text-2xl"
+        aria-label="Add Item"
+      >
+        +
+      </button>
+      {openAdd && <AddItemModal onClose={() => setOpenAdd(false)} />}
     </div>
   )
 }
