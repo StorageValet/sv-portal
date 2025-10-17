@@ -8,6 +8,8 @@ interface ItemCardProps {
   photo_path?: string
   qr_code?: string
   cubic_feet?: number
+  weight_lbs?: number
+  estimated_value_cents?: number
 }
 
 export default function ItemCard({
@@ -16,6 +18,8 @@ export default function ItemCard({
   photo_path,
   qr_code,
   cubic_feet,
+  weight_lbs,
+  estimated_value_cents,
 }: ItemCardProps) {
   const [photoUrl, setPhotoUrl] = useState<string | null>(null)
 
@@ -36,9 +40,13 @@ export default function ItemCard({
       )}
       <h3 className="font-semibold text-lg mb-2">{label}</h3>
       {description && <p className="text-gray-600 text-sm mb-3">{description}</p>}
-      <div className="flex justify-between text-xs text-gray-500">
+      <div className="mt-2 text-sm text-deep-harbor flex flex-wrap gap-x-3 gap-y-1">
         {qr_code && <span>QR: {qr_code}</span>}
-        {cubic_feet && <span>{cubic_feet} cu ft</span>}
+        {typeof cubic_feet === 'number' && <span>{cubic_feet.toFixed(1)} ft³</span>}
+        {typeof weight_lbs === 'number' && <span>{weight_lbs} lbs</span>}
+        {typeof estimated_value_cents === 'number' && (
+          <span>${(estimated_value_cents / 100).toFixed(2)} value</span>
+        )}
       </div>
     </div>
   )
