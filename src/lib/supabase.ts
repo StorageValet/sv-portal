@@ -147,7 +147,7 @@ export type InventoryEventType =
   | 'delivered'
   | 'returned'
 
-// Helper: Log inventory event
+// Helper: Log inventory event (with manual userId)
 export async function logInventoryEvent(
   itemId: string,
   userId: string,
@@ -169,4 +169,29 @@ export async function logInventoryEvent(
   }
 
   return true
+}
+
+// Helper: Log inventory event (auto-fetches current user - Sprint 4)
+export async function logInventoryEventAuto(
+  itemId: string,
+  eventType: string,
+  eventData: object = {}
+): Promise<void> {
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return // Don't log if no user
+
+  try {
+    const { error } = await supabase.from('inventory_events').insert({
+      item_id: itemId,
+      user_id: user.id,
+      event_type: eventType,
+      event_data: eventData,
+    })
+    if (error) {
+      throw error
+    }
+  } catch (error) {
+    console.error(`Failed to log inventory event: ${eventType}`, error)
+    // Non-critical, so we don't re-throw to the user
+  }
 }

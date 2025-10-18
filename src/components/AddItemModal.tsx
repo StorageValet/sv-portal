@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { supabase } from '../lib/supabase'
+import { supabase, logInventoryEventAuto } from '../lib/supabase'
 
 type Props = { onClose: () => void }
 
@@ -57,7 +57,7 @@ export default function AddItemModal({ onClose }: Props) {
 
       const tagArr = tags.split(',').map(t => t.trim()).filter(Boolean)
 
-      const { error: insErr } = await supabase.from('items').insert({
+      const { data: insertedData, error: insErr } = await supabase.from('items').insert({
         user_id: user.id,
         label: label.trim(),
         description: description.trim(),
@@ -67,7 +67,18 @@ export default function AddItemModal({ onClose }: Props) {
         tags: tagArr,
         details: { photos: [path] }
       })
+      .select()
+      .single()
+
       if (insErr) throw insErr
+
+      // Log the creation event
+      if (insertedData) {
+        await logInventoryEventAuto(insertedData.id, 'item_created', {
+          label: insertedData.label,
+          value: insertedData.estimated_value_cents
+        })
+      }
     },
     onSuccess: async () => {
       await qc.invalidateQueries({ queryKey: ['items'] })
