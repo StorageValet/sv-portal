@@ -69,7 +69,7 @@ export default function Schedule() {
       return
     }
 
-    let details = { notes: formData.get('notes') as string }
+    let details: Record<string, any> = { notes: formData.get('notes') as string }
     if (activeTab === 'container_delivery') {
       details = {
         ...details,

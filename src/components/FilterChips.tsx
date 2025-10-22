@@ -1,5 +1,3 @@
-import React from 'react';
-
 type ItemStatus = 'all' | 'home' | 'in_transit' | 'stored';
 
 interface FilterChipsProps {
