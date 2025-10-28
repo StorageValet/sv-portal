@@ -9,10 +9,25 @@ interface ItemDetailModalProps {
 }
 
 export default function ItemDetailModal({ itemId, onClose }: ItemDetailModalProps) {
+  const { data: user } = useQuery({
+    queryKey: ['user'],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      return user;
+    },
+  });
+
   const { data: item, isLoading } = useQuery({
     queryKey: ['item', itemId],
+    enabled: !!user && !!itemId,
     queryFn: async () => {
-      const { data, error } = await supabase.from('items').select('*').eq('id', itemId).single();
+      if (!user) return null;
+      const { data, error } = await supabase
+        .from('items')
+        .select('*')
+        .eq('id', itemId)
+        .eq('user_id', user.id)
+        .single();
       if (error) throw new Error(error.message);
       return data;
     },

@@ -32,12 +32,23 @@ export default function Dashboard() {
     return () => clearTimeout(timer)
   }, [searchQuery])
 
-  const { data: items, isLoading } = useQuery({
-    queryKey: ['items'],
+  const { data: user } = useQuery({
+    queryKey: ['user'],
     queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      return user
+    },
+  })
+
+  const { data: items, isLoading } = useQuery({
+    queryKey: ['items', user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      if (!user) return []
       const { data, error } = await supabase
         .from('items')
         .select('*')
+        .eq('user_id', user.id)
         .order('created_at', { ascending: false })
 
       if (error) throw error

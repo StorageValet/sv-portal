@@ -28,7 +28,8 @@ export default function QRCodeDisplay({ item }: QRCodeDisplayProps) {
       downloadLink.href = pngFile;
       downloadLink.click();
     };
-    img.src = "data:image/svg+xml;base64," + btoa(svgData);
+    // Fix: Use proper UTF-8 encoding instead of btoa (which breaks on non-ASCII)
+    img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
   };
 
   const printQR = () => {

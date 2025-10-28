@@ -61,11 +61,10 @@ export default function AddItemModal({ onClose }: Props) {
         user_id: user.id,
         label: label.trim(),
         description: description.trim(),
-        photo_path: path,
+        photo_paths: [path], // Migration 0004: Use photo_paths array
         estimated_value_cents,
         weight_lbs, length_inches: length_in, width_inches: width_in, height_inches: height_in,
-        tags: tagArr,
-        details: { photos: [path] }
+        tags: tagArr
       })
       .select()
       .single()

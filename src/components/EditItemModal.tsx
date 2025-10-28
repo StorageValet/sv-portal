@@ -21,13 +21,24 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Fetch the item's current data
+  const { data: user } = useQuery({
+    queryKey: ['user'],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      return user
+    },
+  })
+
   const { data: item, isLoading, isError } = useQuery({
     queryKey: ['item', itemId],
+    enabled: !!user && !!itemId,
     queryFn: async () => {
+      if (!user) return null
       const { data, error } = await supabase
         .from('items')
         .select('*')
         .eq('id', itemId)
+        .eq('user_id', user.id) // IDOR fix: verify ownership
         .single()
       if (error) throw new Error(error.message)
       return data
@@ -83,15 +94,7 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
 
       const finalPhotoPaths = [...updatedItem.photoPathsToKeep, ...newPhotoPaths]
 
-      // Delete photos that were removed
-      const photosToDelete = (item.photo_paths || [item.photo_path].filter(Boolean))
-        .filter((p: string) => !updatedItem.photoPathsToKeep.includes(p))
-
-      if (photosToDelete.length > 0) {
-        await deleteItemPhotos(photosToDelete)
-      }
-
-      // Update item in database
+      // Update item in database FIRST (before deleting photos)
       const { error: updateError } = await supabase
         .from('items')
         .update({
@@ -106,8 +109,17 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
           photo_paths: finalPhotoPaths,
         })
         .eq('id', itemId)
+        .eq('user_id', userData.user.id) // IDOR fix: verify ownership
 
       if (updateError) throw new Error(`Failed to update item: ${updateError.message}`)
+
+      // Delete photos that were removed (AFTER successful DB update)
+      const photosToDelete = (item.photo_paths || [item.photo_path].filter(Boolean))
+        .filter((p: string) => !updatedItem.photoPathsToKeep.includes(p))
+
+      if (photosToDelete.length > 0) {
+        await deleteItemPhotos(photosToDelete)
+      }
 
       // Log inventory event
       await logInventoryEventAuto(

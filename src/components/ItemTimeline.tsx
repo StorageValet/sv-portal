@@ -7,14 +7,25 @@ interface ItemTimelineProps {
 }
 
 export default function ItemTimeline({ itemId }: ItemTimelineProps) {
+  const { data: user } = useQuery({
+    queryKey: ['user'],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      return user;
+    },
+  });
+
   const { data: events, isLoading } = useQuery({
     queryKey: ['inventory_events', itemId],
+    enabled: !!user && !!itemId,
     queryFn: async () => {
+      if (!user) return [];
       const { data, error } = await supabase
         .from('inventory_events')
         .select('*')
         .eq('item_id', itemId)
-        .order('created_at', { ascending: false });
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false});
 
       if (error) throw new Error(error.message);
       return data;

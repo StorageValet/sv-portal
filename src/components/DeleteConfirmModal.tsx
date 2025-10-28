@@ -12,14 +12,25 @@ export default function DeleteConfirmModal({ itemId, onClose }: DeleteConfirmMod
   const [isDeleting, setIsDeleting] = useState(false)
   const [photoUrl, setPhotoUrl] = useState<string | null>(null)
 
+  const { data: user } = useQuery({
+    queryKey: ['user'],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      return user
+    },
+  })
+
   // Fetch item details to display in the confirmation
   const { data: item, isLoading } = useQuery({
     queryKey: ['item', itemId],
+    enabled: !!user && !!itemId,
     queryFn: async () => {
+      if (!user) return null
       const { data, error } = await supabase
         .from('items')
         .select('label, photo_path, photo_paths')
         .eq('id', itemId)
+        .eq('user_id', user.id)
         .single()
       if (error) throw new Error(error.message)
 
@@ -69,7 +80,13 @@ export default function DeleteConfirmModal({ itemId, onClose }: DeleteConfirmMod
 
       // Delete the item record from the database
       // Note: inventory_events will cascade delete automatically (ON DELETE CASCADE)
-      const { error: dbError } = await supabase.from('items').delete().eq('id', id)
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('Not authenticated')
+      const { error: dbError } = await supabase
+        .from('items')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', user.id)
       if (dbError) throw new Error(`Failed to delete item: ${dbError.message}`)
     },
     onSuccess: () => {
