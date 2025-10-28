@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 import { supabase, deleteItemPhotos, getItemPhotoUrl, logInventoryEventAuto } from '../lib/supabase'
 
 interface DeleteConfirmModalProps {
@@ -94,10 +95,11 @@ export default function DeleteConfirmModal({ itemId, onClose }: DeleteConfirmMod
       queryClient.invalidateQueries({ queryKey: ['items'] })
       queryClient.invalidateQueries({ queryKey: ['item', itemId] })
       queryClient.invalidateQueries({ queryKey: ['my-insurance'] }) // Affects insurance total
+      toast.success('Item deleted successfully')
       onClose()
     },
     onError: (error) => {
-      alert(`Error: ${error.message}`)
+      toast.error(`Error: ${error.message}`)
     },
     onSettled: () => {
       setIsDeleting(false)

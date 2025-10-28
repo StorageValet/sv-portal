@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 import { supabase, logInventoryEventAuto } from '../lib/supabase'
 
 type Props = { onClose: () => void }
@@ -89,9 +90,12 @@ export default function AddItemModal({ onClose }: Props) {
     try {
       setBusy(true)
       await m.mutateAsync()
+      toast.success('Item added successfully')
       onClose()
     } catch (e: any) {
-      setError(e?.message || 'Failed to add item')
+      const errorMsg = e?.message || 'Failed to add item'
+      setError(errorMsg)
+      toast.error(errorMsg)
     } finally {
       setBusy(false)
     }

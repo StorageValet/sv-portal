@@ -78,7 +78,7 @@ export default function Dashboard() {
     },
   })
 
-  const { data: insurance } = useQuery({
+  const { data: insurance, isLoading: insuranceLoading, isError: insuranceError } = useQuery({
     queryKey: ['my-insurance'],
     queryFn: async () => {
       const { data, error } = await supabase.rpc('fn_my_insurance')
@@ -199,7 +199,17 @@ export default function Dashboard() {
           )}
         </div>
 
-        {insurance && (
+        {insuranceLoading ? (
+          <div className="mb-6 p-4 rounded border border-gray-200 bg-gray-50 animate-pulse">
+            <div className="h-4 bg-gray-200 rounded w-1/3 mb-2"></div>
+            <div className="h-2 bg-gray-200 rounded w-full mb-2"></div>
+            <div className="h-3 bg-gray-200 rounded w-1/4"></div>
+          </div>
+        ) : insuranceError ? (
+          <div className="mb-6 p-4 rounded border border-red-200 bg-red-50">
+            <p className="text-sm text-red-600">Unable to load insurance coverage</p>
+          </div>
+        ) : insurance ? (
           <div className="mb-6 p-4 rounded border border-gray-300 bg-gray-100">
             <div className="flex items-center justify-between mb-2">
               <span className="text-velvet-night font-medium">Insurance Coverage</span>
@@ -213,7 +223,7 @@ export default function Dashboard() {
             </div>
             <div className="mt-2 text-deep-harbor text-xs">Remaining coverage shown as a bar</div>
           </div>
-        )}
+        ) : null}
 
         {/* Sprint 3: Search, Filters, and View Toggle */}
         <div className="mb-6 space-y-4">
