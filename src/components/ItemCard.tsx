@@ -28,6 +28,18 @@ export default function ItemCard({ item, isSelected, onSelect, onEdit, onDelete,
   const [photoUrl, setPhotoUrl] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
+  const cubicFeet = item.cubic_feet !== undefined && item.cubic_feet !== null
+    ? Number(item.cubic_feet)
+    : null
+
+  const weightLbs = item.weight_lbs !== undefined && item.weight_lbs !== null
+    ? Number(item.weight_lbs)
+    : null
+
+  const estimatedValueCents = item.estimated_value_cents !== undefined && item.estimated_value_cents !== null
+    ? Number(item.estimated_value_cents)
+    : null
+
   useEffect(() => {
     // Migration 0004: Read from photo_paths[] first, fallback to legacy photo_path
     const firstPhotoPath = item.photo_paths && item.photo_paths.length > 0
@@ -108,12 +120,12 @@ export default function ItemCard({ item, isSelected, onSelect, onEdit, onDelete,
 
         {/* Metadata */}
         <div className="text-sm text-gray-600 space-y-1 mt-3 flex-grow">
-          {(typeof item.cubic_feet === 'number' && typeof item.weight_lbs === 'number') && (
-            <p>{item.cubic_feet.toFixed(1)} ft³ • {item.weight_lbs} lbs</p>
+          {Number.isFinite(cubicFeet) && Number.isFinite(weightLbs) && (
+            <p>{cubicFeet!.toFixed(1)} ft³ • {weightLbs} lbs</p>
           )}
-          {typeof item.estimated_value_cents === 'number' && (
+          {Number.isFinite(estimatedValueCents) && (
             <p className="font-medium text-gray-700">
-              ${(item.estimated_value_cents / 100).toFixed(2)} value
+              ${(estimatedValueCents! / 100).toFixed(2)} value
             </p>
           )}
         </div>
