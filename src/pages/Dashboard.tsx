@@ -77,6 +77,14 @@ export default function Dashboard() {
     },
   })
 
+  const formatCurrency = (valueCents: number) =>
+    `$${(valueCents / 100).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
+
+  const insuranceCapCents = insurance?.insurance_cap_cents ?? 0
+  const totalItemValueCents = insurance?.total_item_value_cents ?? 0
+  const remainingCents = Math.max(0, insurance?.remaining_cents ?? (insuranceCapCents - totalItemValueCents))
+  const usedRatio = insuranceCapCents > 0 ? Math.min(totalItemValueCents / insuranceCapCents, 1) : 0
+
   // Sprint 3: Filter and search items
   const filteredItems = useMemo(() => {
     if (!items) return []
@@ -159,18 +167,17 @@ export default function Dashboard() {
         <div className="mb-6 p-4 rounded border border-gray-300 bg-gray-100">
           <div className="flex items-center justify-between mb-2">
             <span className="text-velvet-night font-medium">Insurance Coverage</span>
-            <span className="text-deep-harbor text-sm">$3,000 plan</span>
+            <span className="text-deep-harbor text-sm">{formatCurrency(insuranceCapCents)} plan</span>
           </div>
           <div className="w-full h-2 bg-chalk-linen rounded">
             <div
               className="h-2 bg-velvet-night rounded transition-all"
-              style={{ width: `${Math.round((insurance?.remaining_ratio ?? 1) * 100)}%` }}
+              style={{ width: `${Math.round(usedRatio * 100)}%` }}
             />
           </div>
-          <div className="text-sm text-gray-600 mt-2">
-            {insurance.remaining_amount
-              ? `$${insurance.remaining_amount.toLocaleString()} remaining coverage`
-              : 'Remaining coverage shown as a bar'}
+          <div className="text-sm text-gray-600 mt-2 flex justify-between">
+            <span>{formatCurrency(totalItemValueCents)} used</span>
+            <span>{formatCurrency(remainingCents)} remaining</span>
           </div>
         </div>
       )}
