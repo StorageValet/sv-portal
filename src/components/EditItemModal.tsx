@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query'
-import { supabase, validatePhotoFiles, uploadItemPhotos, deleteItemPhotos, getItemPhotoUrls, logInventoryEventAuto } from '../lib/supabase'
+import { supabase, validatePhotoFiles, uploadItemPhotos, deleteItemPhotos, getItemPhotoUrls, logInventoryEventAuto, MAX_PHOTO_SIZE_MB, MAX_PHOTO_COUNT } from '../lib/supabase'
 
 interface EditItemModalProps {
   itemId: string
@@ -70,6 +70,7 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
       setIsSubmitting(true)
       const { data: userData, error: userError } = await supabase.auth.getUser()
       if (userError || !userData.user) throw new Error('Could not find user.')
+      if (!item) throw new Error('Item data is not available. Please retry.')
 
       // Upload new photos
       let newPhotoPaths: string[] = []
@@ -84,7 +85,7 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
       const finalPhotoPaths = [...updatedItem.photoPathsToKeep, ...newPhotoPaths]
 
       // Delete photos that were removed
-      const photosToDelete = (item.photo_paths || [item.photo_path].filter(Boolean))
+      const photosToDelete = ((item.photo_paths && item.photo_paths.length > 0 ? item.photo_paths : item.photo_path ? [item.photo_path] : []) as string[])
         .filter((p: string) => !updatedItem.photoPathsToKeep.includes(p))
 
       if (photosToDelete.length > 0) {
@@ -106,6 +107,7 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
           photo_paths: finalPhotoPaths,
         })
         .eq('id', itemId)
+        .eq('user_id', userData.user.id)
 
       if (updateError) throw new Error(`Failed to update item: ${updateError.message}`)
 
@@ -136,8 +138,8 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
     const files = e.target.files ? Array.from(e.target.files) : []
     const totalPhotos = files.length + existingPhotoPaths.length
 
-    if (totalPhotos > 5) {
-      setPhotoError('You can upload a maximum of 5 photos in total.')
+    if (totalPhotos > MAX_PHOTO_COUNT) {
+      setPhotoError(`You can upload a maximum of ${MAX_PHOTO_COUNT} photos in total.`)
       return
     }
 
@@ -171,8 +173,8 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
     const newPhotos = photos
 
     const totalPhotos = newPhotos.length + existingPhotoPaths.length
-    if (totalPhotos === 0 || totalPhotos > 5) {
-      setPhotoError('Please select between 1 and 5 photos in total.')
+    if (totalPhotos === 0 || totalPhotos > MAX_PHOTO_COUNT) {
+      setPhotoError(`Please select between 1 and ${MAX_PHOTO_COUNT} photos in total.`)
       return
     }
 
@@ -359,7 +361,7 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
           {/* Photo Management */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Photos ({existingPhotoPaths.length + photos.length} / 5) *
+              Photos ({existingPhotoPaths.length + photos.length} / {MAX_PHOTO_COUNT}) *
             </label>
             <div className="mt-2 grid grid-cols-3 sm:grid-cols-5 gap-4">
               {/* Existing photos with signed URLs */}
@@ -409,7 +411,7 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
               className="mt-4 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
             />
             <p className="mt-1 text-xs text-gray-500">
-              JPG, PNG, or WebP only. Max 5MB per photo. Total 1-5 photos.
+              JPG, PNG, or WebP only. Max {MAX_PHOTO_SIZE_MB}MB per photo. Total 1-{MAX_PHOTO_COUNT} photos.
             </p>
             {photoError && (
               <p className="text-red-500 text-sm mt-1">{photoError}</p>

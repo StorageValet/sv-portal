@@ -9,6 +9,9 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
+export const MAX_PHOTO_SIZE_MB = 20
+export const MAX_PHOTO_COUNT = 5
+
 // ═══════════════════════════════════════════════════════════════════
 // PHOTO MANAGEMENT (Multi-Photo Support)
 // ═══════════════════════════════════════════════════════════════════
@@ -97,13 +100,12 @@ export async function deleteItemPhotos(photoPaths: string[]): Promise<void> {
   }
 }
 
-// Helper: Validate photo file (≤5MB, JPG/PNG/WebP only)
+// Helper: Validate photo file (≤MAX_PHOTO_SIZE_MB, JPG/PNG/WebP only)
 export function validatePhotoFile(file: File): { valid: boolean; error?: string } {
-  const maxSizeMB = 5
   const allowedFormats = ['image/jpeg', 'image/png', 'image/webp']
 
-  if (file.size > maxSizeMB * 1024 * 1024) {
-    return { valid: false, error: `File size must be ≤${maxSizeMB}MB` }
+  if (file.size > MAX_PHOTO_SIZE_MB * 1024 * 1024) {
+    return { valid: false, error: `File size must be ≤${MAX_PHOTO_SIZE_MB}MB` }
   }
 
   if (!allowedFormats.includes(file.type)) {
@@ -113,14 +115,14 @@ export function validatePhotoFile(file: File): { valid: boolean; error?: string 
   return { valid: true }
 }
 
-// Helper: Validate multiple photo files (1-5 photos, each ≤5MB)
+// Helper: Validate multiple photo files (1-MAX_PHOTO_COUNT photos, each within size limit)
 export function validatePhotoFiles(files: File[]): { valid: boolean; error?: string } {
   if (files.length === 0) {
     return { valid: false, error: 'At least 1 photo is required' }
   }
 
-  if (files.length > 5) {
-    return { valid: false, error: 'Maximum 5 photos allowed' }
+  if (files.length > MAX_PHOTO_COUNT) {
+    return { valid: false, error: `Maximum ${MAX_PHOTO_COUNT} photos allowed` }
   }
 
   // Validate each file

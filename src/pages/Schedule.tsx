@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import AppLayout from '../components/AppLayout'
 import { supabase } from '../lib/supabase'
 
 type ServiceType = 'pickup' | 'redelivery' | 'container_delivery'
@@ -224,7 +225,8 @@ export default function Schedule() {
     }`
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
+    <AppLayout>
+      <div className="p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold text-gray-900 mb-4">Schedule a Service</h1>
 
       <div className="border-b border-gray-200 mb-6">
@@ -272,6 +274,7 @@ export default function Schedule() {
           </button>
         </div>
       </form>
-    </div>
+      </div>
+    </AppLayout>
   )
 }

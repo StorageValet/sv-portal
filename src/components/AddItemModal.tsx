@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { supabase, logInventoryEventAuto } from '../lib/supabase'
+import { supabase, logInventoryEventAuto, MAX_PHOTO_SIZE_MB } from '../lib/supabase'
 
 type Props = { onClose: () => void }
 
@@ -42,7 +42,7 @@ export default function AddItemModal({ onClose }: Props) {
 
       const okTypes = ['image/jpeg','image/png','image/webp']
       if (!okTypes.includes(file.type)) throw new Error('Photo must be JPG, PNG, or WebP')
-      if (file.size > 5 * 1024 * 1024) throw new Error('Photo must be ≤ 5MB')
+      if (file.size > MAX_PHOTO_SIZE_MB * 1024 * 1024) throw new Error(`Photo must be ≤ ${MAX_PHOTO_SIZE_MB}MB`)
 
       const estimated_value_cents = dollarsToCents(valueUSD)
       const weight_lbs  = num(weight, 'Weight (lbs)')
@@ -146,7 +146,9 @@ export default function AddItemModal({ onClose }: Props) {
             <input value={weight} onChange={e=>setWeight(e.target.value)} inputMode="decimal" className="form-input w-full" />
           </div>
           <div>
-            <label className="block text-sm text-deep-harbor mb-1">Photo (JPG/PNG/WebP • ≤5MB) *</label>
+            <label className="block text-sm text-deep-harbor mb-1">
+              Photo (JPG/PNG/WebP • ≤{MAX_PHOTO_SIZE_MB}MB) *
+            </label>
             <input type="file" accept="image/jpeg,image/png,image/webp"
               onChange={(e)=>setFile((e.target.files && e.target.files[0]) || null)} className="block w-full" />
           </div>
