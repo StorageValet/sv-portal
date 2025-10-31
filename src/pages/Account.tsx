@@ -32,8 +32,20 @@ export default function Account() {
 
   const getStatusDisplay = (status: string) => {
     const statusMap: Record<string, { color: string; text: string }> = {
+      // Active subscription states
       active: { color: 'text-green-700 bg-green-50 border-green-200', text: 'Active' },
+      trialing: { color: 'text-blue-700 bg-blue-50 border-blue-200', text: 'Trial Period' },
+
+      // Payment issue states
       past_due: { color: 'text-red-700 bg-red-50 border-red-200', text: 'Past Due' },
+      unpaid: { color: 'text-red-700 bg-red-50 border-red-200', text: 'Unpaid' },
+
+      // Setup/incomplete states
+      incomplete: { color: 'text-yellow-700 bg-yellow-50 border-yellow-200', text: 'Setup Incomplete' },
+      incomplete_expired: { color: 'text-orange-700 bg-orange-50 border-orange-200', text: 'Setup Expired' },
+
+      // Inactive states
+      paused: { color: 'text-gray-700 bg-gray-50 border-gray-200', text: 'Paused' },
       canceled: { color: 'text-gray-700 bg-gray-50 border-gray-200', text: 'Canceled' },
       inactive: { color: 'text-gray-700 bg-gray-50 border-gray-200', text: 'Inactive' },
     };
@@ -72,12 +84,20 @@ export default function Account() {
                               Last payment: {format(new Date(profile.last_payment_at), 'MMM d, yyyy')}
                           </p>
                       )}
-                      {profile?.subscription_status === 'past_due' && profile?.last_payment_failed_at && (
+                      {['past_due', 'unpaid'].includes(profile?.subscription_status || '') && profile?.last_payment_failed_at && (
                           <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-md">
                               <p className="text-sm text-red-700 font-medium">⚠️ Payment Issue</p>
                               <p className="text-xs text-red-600 mt-1">
                                   Last payment failed on {format(new Date(profile.last_payment_failed_at), 'MMM d, yyyy')}.
                                   Please update your payment method to continue service.
+                              </p>
+                          </div>
+                      )}
+                      {['incomplete', 'incomplete_expired'].includes(profile?.subscription_status || '') && (
+                          <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+                              <p className="text-sm text-yellow-700 font-medium">⚠️ Setup Required</p>
+                              <p className="text-xs text-yellow-600 mt-1">
+                                  Your subscription setup is incomplete. Please complete payment to activate your account.
                               </p>
                           </div>
                       )}
