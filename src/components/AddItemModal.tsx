@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { supabase, logInventoryEventAuto, MAX_PHOTO_SIZE_MB } from '../lib/supabase'
+import { supabase, logInventoryEventAuto, MAX_PHOTO_SIZE_MB, MAX_PHOTO_COUNT, uploadItemPhotos, validatePhotoFiles } from '../lib/supabase'
 
 type Props = { onClose: () => void }
 
@@ -25,47 +25,96 @@ export default function AddItemModal({ onClose }: Props) {
   const [length, setLength] = useState('')
   const [width, setWidth]   = useState('')
   const [height, setHeight] = useState('')
-  const [file, setFile] = useState<File | null>(null)
+  const [photos, setPhotos] = useState<File[]>([])
   const [tags, setTags] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [photoError, setPhotoError] = useState<string | null>(null)
+
+  // Handle photo selection (multi-select like texting)
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files ? Array.from(e.target.files) : []
+
+    if (files.length === 0) return
+
+    if (files.length > MAX_PHOTO_COUNT) {
+      setPhotoError(`You can select a maximum of ${MAX_PHOTO_COUNT} photos.`)
+      return
+    }
+
+    const { valid, error } = validatePhotoFiles(files)
+    if (!valid) {
+      setPhotoError(error || 'Invalid files.')
+      setPhotos([])
+    } else {
+      setPhotoError(null)
+      setPhotos(files)
+    }
+  }
+
+  // Remove a photo from the selection
+  const handleRemovePhoto = (index: number) => {
+    setPhotos(prev => prev.filter((_, i) => i !== index))
+    setPhotoError(null)
+  }
+
+  // Set a photo as the cover (move to first position)
+  const handleSetCover = (index: number) => {
+    setPhotos(prev => {
+      const newPhotos = [...prev]
+      const [photo] = newPhotos.splice(index, 1)
+      return [photo, ...newPhotos]
+    })
+  }
 
   const m = useMutation({
     mutationFn: async () => {
       setError(null)
+      setPhotoError(null)
+
+      // Validation
       if (label.trim().length < 3) throw new Error('Label: min 3 characters')
       if (description.trim().length < 3) throw new Error('Description: min 3 characters')
-      if (!file) throw new Error('A photo is required')
+      if (photos.length === 0) throw new Error('At least 1 photo is required')
+      if (photos.length > MAX_PHOTO_COUNT) throw new Error(`Maximum ${MAX_PHOTO_COUNT} photos allowed`)
 
       const { data: { user }, error: uerr } = await supabase.auth.getUser()
       if (uerr || !user) throw new Error('Not authenticated')
 
-      const okTypes = ['image/jpeg','image/png','image/webp']
-      if (!okTypes.includes(file.type)) throw new Error('Photo must be JPG, PNG, or WebP')
-      if (file.size > MAX_PHOTO_SIZE_MB * 1024 * 1024) throw new Error(`Photo must be ≤ ${MAX_PHOTO_SIZE_MB}MB`)
+      // Validate photos (redundant check for safety)
+      const { valid, error: validationError } = validatePhotoFiles(photos)
+      if (!valid) throw new Error(validationError || 'Invalid photo files')
 
+      // Parse numeric fields
       const estimated_value_cents = dollarsToCents(valueUSD)
       const weight_lbs  = num(weight, 'Weight (lbs)')
       const length_in   = num(length, 'Length (in)')
       const width_in    = num(width,  'Width (in)')
       const height_in   = num(height, 'Height (in)')
 
-      const ext = file.type.split('/')[1] || 'jpg'
-      const path = `${user.id}/${Date.now()}_0.${ext}`
-      const { error: upErr } = await supabase.storage.from('item-photos').upload(path, file, { upsert: false })
-      if (upErr) throw upErr
+      // Upload all photos
+      const { paths, errors } = await uploadItemPhotos(user.id, photos)
+      if (errors.length > 0) {
+        throw new Error(`Photo upload failed: ${errors.join(', ')}`)
+      }
+      if (paths.length === 0) {
+        throw new Error('No photos were uploaded successfully')
+      }
 
       const tagArr = tags.split(',').map(t => t.trim()).filter(Boolean)
 
+      // Insert item with photo_paths array (first photo is the cover)
       const { data: insertedData, error: insErr } = await supabase.from('items').insert({
         user_id: user.id,
         label: label.trim(),
         description: description.trim(),
-        photo_path: path,
+        photo_paths: paths, // Use photo_paths array (not legacy photo_path)
         estimated_value_cents,
-        weight_lbs, length_inches: length_in, width_inches: width_in, height_inches: height_in,
+        weight_lbs,
+        length_inches: length_in,
+        width_inches: width_in,
+        height_inches: height_in,
         tags: tagArr,
-        details: { photos: [path] }
       })
       .select()
       .single()
@@ -76,7 +125,8 @@ export default function AddItemModal({ onClose }: Props) {
       if (insertedData) {
         await logInventoryEventAuto(insertedData.id, 'item_created', {
           label: insertedData.label,
-          value: insertedData.estimated_value_cents
+          value: insertedData.estimated_value_cents,
+          photo_count: paths.length
         })
       }
     },
@@ -140,18 +190,78 @@ export default function AddItemModal({ onClose }: Props) {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-4 mt-4">
-          <div>
-            <label className="block text-sm text-deep-harbor mb-1">Weight (lbs) *</label>
-            <input value={weight} onChange={e=>setWeight(e.target.value)} inputMode="decimal" className="form-input w-full" />
-          </div>
-          <div>
-            <label className="block text-sm text-deep-harbor mb-1">
-              Photo (JPG/PNG/WebP • ≤{MAX_PHOTO_SIZE_MB}MB) *
-            </label>
-            <input type="file" accept="image/jpeg,image/png,image/webp"
-              onChange={(e)=>setFile((e.target.files && e.target.files[0]) || null)} className="block w-full" />
-          </div>
+        <div className="mt-4">
+          <label className="block text-sm text-deep-harbor mb-1">Weight (lbs) *</label>
+          <input value={weight} onChange={e=>setWeight(e.target.value)} inputMode="decimal" className="form-input w-full" />
+        </div>
+
+        {/* Photo Upload Section */}
+        <div className="mt-4">
+          <label className="block text-sm text-deep-harbor mb-2">
+            Photos ({photos.length} / {MAX_PHOTO_COUNT}) *
+          </label>
+
+          {/* Photo Preview Grid */}
+          {photos.length > 0 && (
+            <div className="mb-4 grid grid-cols-3 sm:grid-cols-5 gap-4">
+              {photos.map((file, index) => (
+                <div key={index} className="relative group">
+                  <img
+                    src={URL.createObjectURL(file)}
+                    alt={`Photo ${index + 1}`}
+                    className="h-24 w-24 object-cover rounded-md border-2 border-slate/30 transition-all group-hover:border-slate"
+                  />
+                  {/* Cover Badge (first photo is cover) */}
+                  {index === 0 && (
+                    <div className="absolute top-1 left-1 bg-gunmetal text-bone text-xs px-2 py-0.5 rounded font-medium">
+                      Cover
+                    </div>
+                  )}
+                  {/* Set as Cover button (only show on non-cover photos) */}
+                  {index !== 0 && (
+                    <button
+                      type="button"
+                      onClick={() => handleSetCover(index)}
+                      className="absolute top-1 left-1 bg-slate/90 hover:bg-slate text-bone text-xs px-2 py-0.5 rounded font-medium opacity-0 group-hover:opacity-100 transition-opacity"
+                      title="Set as cover photo"
+                    >
+                      Set Cover
+                    </button>
+                  )}
+                  {/* Remove button */}
+                  <button
+                    type="button"
+                    onClick={() => handleRemovePhoto(index)}
+                    className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full text-xs font-bold hover:bg-red-600 flex items-center justify-center shadow-md"
+                    title="Remove photo"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* File Input */}
+          <input
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            multiple
+            onChange={handlePhotoChange}
+            className="block w-full text-sm text-deep-harbor
+              file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0
+              file:text-sm file:font-semibold file:bg-slate file:text-bone
+              hover:file:bg-gunmetal-2 file:cursor-pointer cursor-pointer"
+          />
+          <p className="mt-1 text-xs text-deep-harbor/70">
+            JPG, PNG, or WebP only. Max {MAX_PHOTO_SIZE_MB}MB per photo. Select 1-{MAX_PHOTO_COUNT} photos at once.
+            First photo is the cover image.
+          </p>
+          {photoError && (
+            <p className="text-red-600 text-sm mt-2 bg-red-50 border border-red-200 rounded p-2">
+              {photoError}
+            </p>
+          )}
         </div>
 
         <div className="mt-6 flex items-center justify-end gap-3">
