@@ -29,11 +29,11 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-cream">
       <div className="max-w-md w-full space-y-8 p-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">Storage Valet</h1>
-          <p className="mt-2 text-gray-600">Sign in to your account</p>
+          <img src="/logo.png" alt="Storage Valet" className="h-32 w-auto mx-auto mb-6" />
+          <p className="mt-2 text-gunmetal-2">Sign in to your account</p>
         </div>
 
         {sent ? (
