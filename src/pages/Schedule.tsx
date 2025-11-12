@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import AppLayout from '../components/AppLayout'
+import ItemSelectionModal from '../components/ItemSelectionModal'
 import { supabase } from '../lib/supabase'
 
 type ServiceType = 'pickup' | 'redelivery' | 'container_delivery'
@@ -12,6 +13,20 @@ export default function Schedule() {
   const queryClient = useQueryClient()
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  // Check for action_id query parameter (item selection mode)
+  const searchParams = new URLSearchParams(location.search)
+  const actionId = searchParams.get('action_id')
+
+  // If action_id is present, render item selection mode
+  if (actionId) {
+    return (
+      <AppLayout>
+        <ItemSelectionModal actionId={actionId} />
+      </AppLayout>
+    )
+  }
+
+  // Otherwise, render existing scheduling form
   // Assumes item IDs are passed in state from the Dashboard link
   const { selectedItemIds = [] } = location.state || { selectedItemIds: [] }
 

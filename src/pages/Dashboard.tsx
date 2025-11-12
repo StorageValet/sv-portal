@@ -77,8 +77,43 @@ export default function Dashboard() {
     },
   })
 
+  // Query pending bookings (schedule-first flow)
+  const { data: pendingBookings } = useQuery({
+    queryKey: ['pending-bookings'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('actions')
+        .select('id, scheduled_start, scheduled_end, status, pickup_item_ids, delivery_item_ids')
+        .in('status', ['pending_items', 'pending_confirmation', 'confirmed'])
+        .gte('scheduled_start', new Date().toISOString())
+        .order('scheduled_start', { ascending: true })
+
+      if (error) {
+        console.warn('Pending bookings query error:', error.message)
+        return []
+      }
+      return data || []
+    },
+  })
+
   const formatCurrency = (valueCents: number) =>
     `$${(valueCents / 100).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
+
+  const formatDateTime = (isoString: string) => {
+    const date = new Date(isoString)
+    return date.toLocaleString('en-US', {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit'
+    })
+  }
+
+  // Service area gating logic
+  const hasAddress = profile?.delivery_address && Object.keys(profile.delivery_address).length > 0
+  const isOutOfServiceArea = profile?.out_of_service_area === true
+  const canSchedule = hasAddress && !isOutOfServiceArea
 
   const insuranceCapCents = insurance?.insurance_cap_cents ?? 0
   const totalItemValueCents = insurance?.total_item_value_cents ?? 0
@@ -162,6 +197,90 @@ export default function Dashboard() {
           </p>
         )}
       </div>
+
+      {/* Service Area Alert (if out of area or missing address) */}
+      {!canSchedule && (
+        <div className="mb-6 p-4 rounded-lg border bg-yellow-50 border-yellow-200">
+          <div className="flex items-start">
+            <svg className="h-5 w-5 text-yellow-600 mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <div>
+              {!hasAddress && (
+                <>
+                  <h3 className="text-sm font-semibold text-yellow-800 mb-1">Address Required</h3>
+                  <p className="text-sm text-yellow-700">
+                    Please add your delivery address in{' '}
+                    <button onClick={() => navigate('/account')} className="underline font-medium hover:text-yellow-900">
+                      Account Settings
+                    </button>
+                    {' '}before scheduling a service.
+                  </p>
+                </>
+              )}
+              {hasAddress && isOutOfServiceArea && (
+                <>
+                  <h3 className="text-sm font-semibold text-yellow-800 mb-1">Service Area Notice</h3>
+                  <p className="text-sm text-yellow-700">
+                    Your address is outside our primary service area. Our team will review your request manually.
+                    Please contact{' '}
+                    <a href="mailto:support@mystoragevalet.com" className="underline font-medium hover:text-yellow-900">
+                      support@mystoragevalet.com
+                    </a>
+                    {' '}if you think this is an error.
+                  </p>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Pending Bookings Section */}
+      {pendingBookings && pendingBookings.length > 0 && (
+        <div className="mb-6">
+          <h3 className="text-lg font-semibold text-gray-900 mb-3">Upcoming Services</h3>
+          <div className="space-y-3">
+            {pendingBookings.map(booking => (
+              <div key={booking.id} className="border border-gray-300 rounded-lg p-4 bg-white shadow-sm">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <svg className="h-5 w-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <p className="text-sm font-semibold text-gray-900">
+                        {formatDateTime(booking.scheduled_start)}
+                      </p>
+                    </div>
+                    <div className="flex items-center space-x-4 text-sm text-gray-600">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 capitalize">
+                        {booking.status === 'pending_items' ? 'Awaiting Items' :
+                         booking.status === 'pending_confirmation' ? 'Pending Confirmation' :
+                         'Confirmed'}
+                      </span>
+                      {booking.pickup_item_ids && booking.pickup_item_ids.length > 0 && (
+                        <span>↑ {booking.pickup_item_ids.length} pickup</span>
+                      )}
+                      {booking.delivery_item_ids && booking.delivery_item_ids.length > 0 && (
+                        <span>↓ {booking.delivery_item_ids.length} delivery</span>
+                      )}
+                    </div>
+                  </div>
+                  {booking.status === 'pending_items' && (
+                    <button
+                      onClick={() => navigate(`/schedule?action_id=${booking.id}`)}
+                      className="ml-4 px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 transition-colors"
+                    >
+                      Add Items
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {insurance && (
         <div className="mb-6 p-4 rounded border border-gray-300 bg-gray-100">
@@ -274,15 +393,17 @@ export default function Dashboard() {
           <div className="flex items-center space-x-2">
             <button
               onClick={handleSchedulePickup}
-              disabled={selectedHomeItems.length === 0}
+              disabled={!canSchedule || selectedHomeItems.length === 0}
               className="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+              title={!canSchedule ? 'Address required and must be in service area' : ''}
             >
               Schedule Pickup ({selectedHomeItems.length})
             </button>
             <button
               onClick={handleScheduleRedelivery}
-              disabled={selectedStoredItems.length === 0}
+              disabled={!canSchedule || selectedStoredItems.length === 0}
               className="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+              title={!canSchedule ? 'Address required and must be in service area' : ''}
             >
               Schedule Redelivery ({selectedStoredItems.length})
             </button>
