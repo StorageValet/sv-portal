@@ -34,26 +34,7 @@ export default function Dashboard() {
     return () => clearTimeout(timer)
   }, [searchQuery])
 
-  const { data: items, isLoading } = useQuery({
-    queryKey: ['items'],
-    queryFn: async () => {
-      // Get current user first
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) throw new Error('User not authenticated')
-
-      // Fetch only items belonging to this user (SECURITY: user_id filter)
-      const { data, error } = await supabase
-        .from('items')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-
-      if (error) throw error
-      return data
-    },
-    enabled: !isWaitlist && !profileLoading, // Don't load items for waitlist users
-  })
-
+  // Load profile first (needed for waitlist detection)
   const { data: profile, isLoading: profileLoading } = useQuery({
     queryKey: ['profile'],
     queryFn: async () => {
@@ -78,6 +59,26 @@ export default function Dashboard() {
 
   // Check if user is out of service area (waitlist)
   const isWaitlist = profile?.out_of_service_area === true
+
+  const { data: items, isLoading } = useQuery({
+    queryKey: ['items'],
+    queryFn: async () => {
+      // Get current user first
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('User not authenticated')
+
+      // Fetch only items belonging to this user (SECURITY: user_id filter)
+      const { data, error } = await supabase
+        .from('items')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+      return data
+    },
+    enabled: !isWaitlist && !profileLoading, // Don't load items for waitlist users
+  })
 
   const { data: insurance } = useQuery({
     queryKey: ['my-insurance'],
