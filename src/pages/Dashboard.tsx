@@ -34,13 +34,20 @@ export default function Dashboard() {
     return () => clearTimeout(timer)
   }, [searchQuery])
 
-  // Load profile first (needed for waitlist detection)
-  const { data: profile, isLoading: profileLoading } = useQuery({
-    queryKey: ['profile'],
+  // Centralized user query (runs once, cached)
+  const { data: user } = useQuery({
+    queryKey: ['user'],
     queryFn: async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
+      const { data: { user } } = await supabase.auth.getUser()
+      return user
+    },
+    staleTime: Infinity, // User won't change during session
+  })
+
+  // Load profile (depends on user)
+  const { data: profile, isLoading: profileLoading } = useQuery({
+    queryKey: ['profile', user?.id],
+    queryFn: async () => {
       if (!user) return null
 
       const { data, error } = await supabase
@@ -55,16 +62,16 @@ export default function Dashboard() {
       }
       return data
     },
+    enabled: !!user,
   })
 
   // Check if user is out of service area (waitlist)
   const isWaitlist = profile?.out_of_service_area === true
 
+  // Load items (depends on user and profile)
   const { data: items, isLoading } = useQuery({
-    queryKey: ['items'],
+    queryKey: ['items', user?.id],
     queryFn: async () => {
-      // Get current user first
-      const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('User not authenticated')
 
       // Fetch only items belonging to this user (SECURITY: user_id filter)
@@ -77,9 +84,10 @@ export default function Dashboard() {
       if (error) throw error
       return data
     },
-    enabled: !isWaitlist && !profileLoading, // Don't load items for waitlist users
+    enabled: !!user && !!profile && !isWaitlist,
   })
 
+  // Load insurance (depends on profile)
   const { data: insurance } = useQuery({
     queryKey: ['my-insurance'],
     queryFn: async () => {
@@ -87,7 +95,7 @@ export default function Dashboard() {
       if (error) throw error
       return (data && data[0]) || null
     },
-    enabled: !isWaitlist && !profileLoading, // Don't load insurance for waitlist users
+    enabled: !!user && !!profile && !isWaitlist,
   })
 
   // Query pending bookings (schedule-first flow)
@@ -218,7 +226,7 @@ export default function Dashboard() {
       </div>
 
       {/* Service Area Alert (if out of area or missing address) */}
-      {!canSchedule && (
+      {!profileLoading && !canSchedule && (
         <div className="mb-6 p-4 rounded-lg border bg-yellow-50 border-yellow-200">
           <div className="flex items-start">
             <svg className="h-5 w-5 text-yellow-600 mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

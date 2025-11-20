@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { getItemPhotoUrl } from '../lib/supabase'
 
 interface Item {
@@ -25,9 +25,6 @@ interface ItemCardProps {
 }
 
 export default function ItemCard({ item, isSelected, onSelect, onEdit, onDelete, onViewDetails }: ItemCardProps) {
-  const [photoUrl, setPhotoUrl] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-
   const cubicFeet = item.cubic_feet !== undefined && item.cubic_feet !== null
     ? Number(item.cubic_feet)
     : null
@@ -40,26 +37,18 @@ export default function ItemCard({ item, isSelected, onSelect, onEdit, onDelete,
     ? Number(item.estimated_value_cents)
     : null
 
-  useEffect(() => {
-    // Migration 0004: Read from photo_paths[] first, fallback to legacy photo_path
-    const firstPhotoPath = item.photo_paths && item.photo_paths.length > 0
-      ? item.photo_paths[0]
-      : item.photo_path
+  // Migration 0004: Read from photo_paths[] first, fallback to legacy photo_path
+  const firstPhotoPath = item.photo_paths && item.photo_paths.length > 0
+    ? item.photo_paths[0]
+    : item.photo_path
 
-    if (firstPhotoPath) {
-      setIsLoading(true)
-      getItemPhotoUrl(firstPhotoPath)
-        .then(url => {
-          setPhotoUrl(url)
-          setIsLoading(false)
-        })
-        .catch(() => {
-          setIsLoading(false)
-        })
-    } else {
-      setIsLoading(false)
-    }
-  }, [item.photo_path, item.photo_paths])
+  // Use React Query to cache signed URLs (50-minute cache, URLs expire at 60 minutes)
+  const { data: photoUrl, isLoading } = useQuery({
+    queryKey: ['item-photo', firstPhotoPath],
+    queryFn: () => getItemPhotoUrl(firstPhotoPath!),
+    enabled: !!firstPhotoPath,
+    staleTime: 1000 * 60 * 50, // 50 minutes
+  })
 
   const statusColors = {
     home: 'bg-green-100 text-green-800',

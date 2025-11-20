@@ -7,15 +7,28 @@ export default function ProtectedRoute({ children }: { children: JSX.Element }) 
   const [authenticated, setAuthenticated] = useState(false)
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    // Check if URL has auth hash (magic link callback)
+    const hashParams = new URLSearchParams(window.location.hash.substring(1))
+    const hasAuthHash = hashParams.has('access_token')
+
+    const initAuth = async () => {
+      // If magic link callback, wait for Supabase to process hash
+      if (hasAuthHash) {
+        await new Promise(resolve => setTimeout(resolve, 100))
+      }
+
+      const { data: { session } } = await supabase.auth.getSession()
       setAuthenticated(!!session)
       setLoading(false)
-    })
+    }
+
+    initAuth()
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setAuthenticated(!!session)
+      setLoading(false)
     })
 
     return () => subscription.unsubscribe()
