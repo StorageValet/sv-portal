@@ -3,6 +3,7 @@ import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Schedule from './pages/Schedule'
 import Account from './pages/Account'
+import WaitlistAdmin from './pages/WaitlistAdmin'
 import ProtectedRoute from './components/ProtectedRoute'
 
 export default function App() {
@@ -31,6 +32,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <Account />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/waitlist"
+          element={
+            <ProtectedRoute>
+              <WaitlistAdmin />
             </ProtectedRoute>
           }
         />

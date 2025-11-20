@@ -8,6 +8,7 @@ import AddItemModal from '../components/AddItemModal'
 import EditItemModal from '../components/EditItemModal'
 import DeleteConfirmModal from '../components/DeleteConfirmModal'
 import ItemDetailModal from '../components/ItemDetailModal'
+import WaitlistDashboard from '../components/WaitlistDashboard'
 
 export default function Dashboard() {
   const navigate = useNavigate()
@@ -36,17 +37,24 @@ export default function Dashboard() {
   const { data: items, isLoading } = useQuery({
     queryKey: ['items'],
     queryFn: async () => {
+      // Get current user first
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('User not authenticated')
+
+      // Fetch only items belonging to this user (SECURITY: user_id filter)
       const { data, error } = await supabase
         .from('items')
         .select('*')
+        .eq('user_id', user.id)
         .order('created_at', { ascending: false })
 
       if (error) throw error
       return data
     },
+    enabled: !isWaitlist && !profileLoading, // Don't load items for waitlist users
   })
 
-  const { data: profile } = useQuery({
+  const { data: profile, isLoading: profileLoading } = useQuery({
     queryKey: ['profile'],
     queryFn: async () => {
       const {
@@ -68,6 +76,9 @@ export default function Dashboard() {
     },
   })
 
+  // Check if user is out of service area (waitlist)
+  const isWaitlist = profile?.out_of_service_area === true
+
   const { data: insurance } = useQuery({
     queryKey: ['my-insurance'],
     queryFn: async () => {
@@ -75,6 +86,7 @@ export default function Dashboard() {
       if (error) throw error
       return (data && data[0]) || null
     },
+    enabled: !isWaitlist && !profileLoading, // Don't load insurance for waitlist users
   })
 
   // Query pending bookings (schedule-first flow)
@@ -187,6 +199,12 @@ export default function Dashboard() {
     navigate('/schedule', { state: { selectedItemIds: Array.from(selectedItems), action: 'redelivery' } })
   }
 
+  // Show waitlist dashboard if user is out of service area
+  if (isWaitlist) {
+    return <WaitlistDashboard profile={profile} />
+  }
+
+  // Normal dashboard for in-service-area customers
   return (
     <AppLayout>
       <div className="mb-8">
