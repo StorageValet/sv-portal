@@ -17,7 +17,6 @@ export default function AppLayout({ children }: AppLayoutProps) {
 
   const navItems = [
     { label: 'Dashboard', to: '/dashboard' },
-    { label: 'Schedule', to: '/schedule' },
     { label: 'Account', to: '/account' },
   ]
 
