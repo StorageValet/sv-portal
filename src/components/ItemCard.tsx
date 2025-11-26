@@ -59,8 +59,8 @@ export default function ItemCard({ item, isSelected, onSelect, onEdit, onDelete,
   const statusLabel = item.status || 'home'
 
   return (
-    <div className={`border rounded-lg shadow-sm bg-white flex flex-col overflow-hidden transition-all ${
-      isSelected ? 'ring-2 ring-indigo-500 ring-offset-2' : ''
+    <div className={`border rounded-lg shadow-sm bg-gunmetal-2 border-slate flex flex-col overflow-hidden transition-all ${
+      isSelected ? 'ring-2 ring-bone ring-offset-2 ring-offset-gunmetal' : ''
     }`}>
       {/* Photo Section with Checkbox and Status Badge */}
       <div className="relative">
@@ -69,12 +69,12 @@ export default function ItemCard({ item, isSelected, onSelect, onEdit, onDelete,
           type="checkbox"
           checked={isSelected}
           onChange={() => onSelect(item.id)}
-          className="absolute top-2 left-2 h-5 w-5 rounded text-indigo-600 border-gray-300 focus:ring-indigo-500 cursor-pointer z-10"
+          className="absolute top-2 left-2 h-5 w-5 rounded text-bone border-slate focus:ring-bone cursor-pointer z-10 bg-gunmetal-2"
           onClick={(e) => e.stopPropagation()}
         />
 
         {isLoading ? (
-          <div className="h-48 w-full bg-gray-200 animate-pulse" />
+          <div className="h-48 w-full bg-slate animate-pulse" />
         ) : photoUrl ? (
           <img
             src={photoUrl}
@@ -82,7 +82,7 @@ export default function ItemCard({ item, isSelected, onSelect, onEdit, onDelete,
             className="h-48 w-full object-cover"
           />
         ) : (
-          <div className="h-48 w-full bg-gray-100 flex items-center justify-center text-gray-400">
+          <div className="h-48 w-full bg-slate flex items-center justify-center text-bone/50">
             No Photo
           </div>
         )}
@@ -97,45 +97,45 @@ export default function ItemCard({ item, isSelected, onSelect, onEdit, onDelete,
 
       {/* Content Section */}
       <div className="p-4 flex flex-col flex-grow">
-        <h3 className="font-bold text-lg text-gray-800">{item.label}</h3>
+        <h3 className="font-bold text-lg text-cream">{item.label}</h3>
 
         {item.description && (
-          <p className="text-sm text-gray-600 mt-1 line-clamp-2">{item.description}</p>
+          <p className="text-sm text-bone mt-1 line-clamp-2">{item.description}</p>
         )}
 
         {item.qr_code && (
-          <p className="text-xs text-gray-500 mt-2">QR: {item.qr_code}</p>
+          <p className="text-xs text-bone/70 mt-2">QR: {item.qr_code}</p>
         )}
 
         {/* Metadata */}
-        <div className="text-sm text-gray-600 space-y-1 mt-3 flex-grow">
+        <div className="text-sm text-bone space-y-1 mt-3 flex-grow">
           {Number.isFinite(cubicFeet) && Number.isFinite(weightLbs) && (
             <p>{cubicFeet!.toFixed(1)} ft³ • {weightLbs} lbs</p>
           )}
           {Number.isFinite(estimatedValueCents) && (
-            <p className="font-medium text-gray-700">
+            <p className="font-medium text-cream">
               ${(estimatedValueCents! / 100).toFixed(2)} value
             </p>
           )}
         </div>
 
         {/* Action Buttons */}
-        <div className="mt-4 flex justify-end space-x-2 border-t pt-3">
+        <div className="mt-4 flex justify-end space-x-2 border-t border-slate pt-3">
           <button
             onClick={() => onViewDetails(item.id)}
-            className="text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors"
+            className="text-sm font-medium text-bone hover:text-cream transition-colors"
           >
             Details
           </button>
           <button
             onClick={() => onEdit(item.id)}
-            className="text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors"
+            className="text-sm font-medium text-bone hover:text-cream transition-colors"
           >
             Edit
           </button>
           <button
             onClick={() => onDelete(item.id)}
-            className="text-sm font-medium text-red-600 hover:text-red-800 transition-colors"
+            className="text-sm font-medium text-red-400 hover:text-red-300 transition-colors"
           >
             Delete
           </button>
