@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
@@ -12,6 +12,7 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
   const navigate = useNavigate()
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [initialized, setInitialized] = useState(false)
 
   // Fetch the action to verify ownership and get details
   const { data: action, isLoading: actionLoading, error: actionError } = useQuery({
@@ -46,6 +47,23 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
       return data
     },
   })
+
+  // Pre-populate selected items when editing existing booking
+  useEffect(() => {
+    if (action && !initialized) {
+      const existingIds = new Set<string>()
+      if (action.pickup_item_ids) {
+        action.pickup_item_ids.forEach((id: string) => existingIds.add(id))
+      }
+      if (action.delivery_item_ids) {
+        action.delivery_item_ids.forEach((id: string) => existingIds.add(id))
+      }
+      if (existingIds.size > 0) {
+        setSelectedIds(existingIds)
+      }
+      setInitialized(true)
+    }
+  }, [action, initialized])
 
   const formatDateTime = (isoString: string) => {
     const date = new Date(isoString)
@@ -231,6 +249,7 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
                     type="checkbox"
                     checked={selectedIds.has(item.id)}
                     onChange={() => toggleItem(item.id)}
+                    onClick={(e) => e.stopPropagation()}
                     className="h-5 w-5 text-indigo-600 rounded focus:ring-indigo-500"
                   />
                 </div>
@@ -275,6 +294,7 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
                     type="checkbox"
                     checked={selectedIds.has(item.id)}
                     onChange={() => toggleItem(item.id)}
+                    onClick={(e) => e.stopPropagation()}
                     className="h-5 w-5 text-indigo-600 rounded focus:ring-indigo-500"
                   />
                 </div>
