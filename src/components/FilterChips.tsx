@@ -14,12 +14,12 @@ export default function FilterChips({ activeStatus, onStatusChange }: FilterChip
     if (status === activeStatus) {
       return `${baseClass} bg-indigo-600 text-white`;
     }
-    return `${baseClass} bg-slate text-bone hover:bg-gunmetal-2`;
+    return `${baseClass} bg-gray-100 text-gray-700 hover:bg-gray-200`;
   };
 
   return (
     <div className="flex items-center space-x-2">
-      <span className="text-sm font-medium text-bone">Filter by status:</span>
+      <span className="text-sm font-medium text-gray-600">Filter by status:</span>
       {statuses.map((status) => (
         <button
           key={status}

@@ -217,9 +217,9 @@ export default function Dashboard() {
   return (
     <AppLayout>
       <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-2 text-cream">Your Items</h2>
+        <h2 className="text-2xl font-bold mb-2">Your Items</h2>
         {profile && (
-          <p className="text-bone">
+          <p className="text-gray-600">
             Subscription: <span className="font-medium capitalize">{profile.subscription_status}</span>
           </p>
         )}
@@ -227,18 +227,18 @@ export default function Dashboard() {
 
       {/* Service Area Alert (if out of area or missing address) */}
       {!profileLoading && !canSchedule && (
-        <div className="mb-6 p-4 rounded-lg border bg-yellow-900/30 border-yellow-700/50">
+        <div className="mb-6 p-4 rounded-lg border bg-yellow-50 border-yellow-200">
           <div className="flex items-start">
-            <svg className="h-5 w-5 text-yellow-400 mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="h-5 w-5 text-yellow-600 mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
             <div>
               {!hasAddress && (
                 <>
-                  <h3 className="text-sm font-semibold text-yellow-400 mb-1">Address Required</h3>
-                  <p className="text-sm text-yellow-300">
+                  <h3 className="text-sm font-semibold text-yellow-800 mb-1">Address Required</h3>
+                  <p className="text-sm text-yellow-700">
                     Please add your delivery address in{' '}
-                    <button onClick={() => navigate('/account')} className="underline font-medium hover:text-yellow-100">
+                    <button onClick={() => navigate('/account')} className="underline font-medium hover:text-yellow-900">
                       Account Settings
                     </button>
                     {' '}before scheduling a service.
@@ -247,11 +247,11 @@ export default function Dashboard() {
               )}
               {hasAddress && isOutOfServiceArea && (
                 <>
-                  <h3 className="text-sm font-semibold text-yellow-400 mb-1">Service Area Notice</h3>
-                  <p className="text-sm text-yellow-300">
+                  <h3 className="text-sm font-semibold text-yellow-800 mb-1">Service Area Notice</h3>
+                  <p className="text-sm text-yellow-700">
                     Your address is outside our primary service area. Our team will review your request manually.
                     Please contact{' '}
-                    <a href="mailto:support@mystoragevalet.com" className="underline font-medium hover:text-yellow-100">
+                    <a href="mailto:support@mystoragevalet.com" className="underline font-medium hover:text-yellow-900">
                       support@mystoragevalet.com
                     </a>
                     {' '}if you think this is an error.
@@ -266,12 +266,12 @@ export default function Dashboard() {
       {/* Upcoming Services Section - Always shown */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-lg font-semibold text-cream">Upcoming Services</h3>
+          <h3 className="text-lg font-semibold text-gray-900">Upcoming Services</h3>
           <a
             href="https://calendly.com/zach-mystoragevalet"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center px-4 py-2 text-sm font-semibold text-gunmetal bg-bone rounded-md shadow-sm hover:bg-cream transition-colors"
+            className="inline-flex items-center px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 transition-colors"
           >
             <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -283,19 +283,19 @@ export default function Dashboard() {
         {pendingBookings && pendingBookings.length > 0 ? (
           <div className="space-y-3">
             {pendingBookings.map(booking => (
-              <div key={booking.id} className="border border-slate rounded-lg p-4 bg-gunmetal-2 shadow-sm">
+              <div key={booking.id} className="border border-gray-300 rounded-lg p-4 bg-white shadow-sm">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
-                      <svg className="h-5 w-5 text-bone" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="h-5 w-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
-                      <p className="text-sm font-semibold text-cream">
+                      <p className="text-sm font-semibold text-gray-900">
                         {formatDateTime(booking.scheduled_start)}
                       </p>
                     </div>
-                    <div className="flex items-center space-x-4 text-sm text-bone">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-bone/20 text-bone capitalize">
+                    <div className="flex items-center space-x-4 text-sm text-gray-600">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 capitalize">
                         {booking.status === 'pending_items' ? 'Awaiting Items' :
                          booking.status === 'pending_confirmation' ? 'Pending Confirmation' :
                          'Confirmed'}
@@ -311,7 +311,7 @@ export default function Dashboard() {
                   {booking.status === 'pending_items' && (
                     <button
                       onClick={() => navigate(`/schedule?action_id=${booking.id}`)}
-                      className="ml-4 px-4 py-2 text-sm font-semibold text-gunmetal bg-bone rounded-md shadow-sm hover:bg-cream transition-colors"
+                      className="ml-4 px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 transition-colors"
                     >
                       Add Items
                     </button>
@@ -319,7 +319,7 @@ export default function Dashboard() {
                   {booking.status === 'pending_confirmation' && (
                     <button
                       onClick={() => navigate(`/schedule?action_id=${booking.id}`)}
-                      className="ml-4 px-4 py-2 text-sm font-medium text-bone bg-gunmetal-2 border border-bone rounded-md shadow-sm hover:bg-slate transition-colors"
+                      className="ml-4 px-4 py-2 text-sm font-medium text-indigo-600 bg-white border border-indigo-600 rounded-md shadow-sm hover:bg-indigo-50 transition-colors"
                     >
                       Edit Items
                     </button>
@@ -329,29 +329,29 @@ export default function Dashboard() {
             ))}
           </div>
         ) : (
-          <div className="border border-dashed border-slate rounded-lg p-6 text-center bg-gunmetal-2">
-            <svg className="mx-auto h-10 w-10 text-bone/50 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="border border-dashed border-gray-300 rounded-lg p-6 text-center bg-gray-50">
+            <svg className="mx-auto h-10 w-10 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            <p className="text-bone mb-2">No upcoming appointments</p>
-            <p className="text-sm text-bone/70">Click "Book Appointment" to schedule a pickup or delivery</p>
+            <p className="text-gray-600 mb-2">No upcoming appointments</p>
+            <p className="text-sm text-gray-500">Click "Book Appointment" to schedule a pickup or delivery</p>
           </div>
         )}
       </div>
 
       {insurance && (
-        <div className="mb-6 p-4 rounded border border-slate bg-gunmetal-2">
+        <div className="mb-6 p-4 rounded border border-gray-300 bg-gray-100">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-cream font-medium">Insurance Coverage</span>
-            <span className="text-bone text-sm">{formatCurrency(insuranceCapCents)} plan</span>
+            <span className="text-velvet-night font-medium">Insurance Coverage</span>
+            <span className="text-deep-harbor text-sm">{formatCurrency(insuranceCapCents)} plan</span>
           </div>
-          <div className="w-full h-2 bg-slate rounded">
+          <div className="w-full h-2 bg-chalk-linen rounded">
             <div
-              className="h-2 bg-bone rounded transition-all"
+              className="h-2 bg-velvet-night rounded transition-all"
               style={{ width: `${Math.round(usedRatio * 100)}%` }}
             />
           </div>
-          <div className="text-sm text-bone mt-2 flex justify-between">
+          <div className="text-sm text-gray-600 mt-2 flex justify-between">
             <span>{formatCurrency(totalItemValueCents)} used</span>
             <span>{formatCurrency(remainingCents)} remaining</span>
           </div>
@@ -365,21 +365,21 @@ export default function Dashboard() {
             placeholder="Search items by name, description, QR code, or category..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-4 py-3 pl-10 border border-slate rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-bone focus:border-bone bg-gunmetal-2 text-cream placeholder-bone/50"
+            className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
           />
-          <svg className="absolute left-3 top-3.5 h-5 w-5 text-bone/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </div>
 
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center space-x-2 flex-wrap">
-            <span className="text-sm font-medium text-bone">Filters:</span>
+            <span className="text-sm font-medium text-gray-700">Filters:</span>
 
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as any)}
-              className="px-3 py-1.5 text-sm border border-slate rounded-md bg-gunmetal-2 text-cream hover:bg-slate focus:outline-none focus:ring-2 focus:ring-bone"
+              className="px-3 py-1.5 text-sm border border-gray-300 rounded-md bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
               <option value="all">All Status</option>
               <option value="home">Home</option>
@@ -390,7 +390,7 @@ export default function Dashboard() {
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="px-3 py-1.5 text-sm border border-slate rounded-md bg-gunmetal-2 text-cream hover:bg-slate focus:outline-none focus:ring-2 focus:ring-bone"
+              className="px-3 py-1.5 text-sm border border-gray-300 rounded-md bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               disabled={categories.length === 0}
             >
               <option value="all">All Categories</option>
@@ -406,17 +406,17 @@ export default function Dashboard() {
                   setStatusFilter('all')
                   setCategoryFilter('all')
                 }}
-                className="px-3 py-1.5 text-sm text-bone hover:text-cream underline"
+                className="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-800 underline"
               >
                 Clear Filters
               </button>
             )}
           </div>
 
-          <div className="flex items-center space-x-1 bg-gunmetal-2 border border-slate rounded-lg p-1">
+          <div className="flex items-center space-x-1 bg-gray-100 rounded-lg p-1">
             <button
               onClick={() => setViewMode('grid')}
-              className={`p-2 rounded ${viewMode === 'grid' ? 'bg-slate shadow-sm text-bone' : 'text-bone/70 hover:text-bone'}`}
+              className={`p-2 rounded ${viewMode === 'grid' ? 'bg-white shadow-sm text-indigo-600' : 'text-gray-500 hover:text-gray-700'}`}
               title="Grid View"
             >
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -425,7 +425,7 @@ export default function Dashboard() {
             </button>
             <button
               onClick={() => setViewMode('list')}
-              className={`p-2 rounded ${viewMode === 'list' ? 'bg-slate shadow-sm text-bone' : 'text-bone/70 hover:text-bone'}`}
+              className={`p-2 rounded ${viewMode === 'list' ? 'bg-white shadow-sm text-indigo-600' : 'text-gray-500 hover:text-gray-700'}`}
               title="List View"
             >
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -436,22 +436,22 @@ export default function Dashboard() {
         </div>
 
         {items && items.length > 0 && (
-          <p className="text-sm text-bone">
+          <p className="text-sm text-gray-600">
             Showing {filteredItems.length} of {items.length} item{items.length !== 1 ? 's' : ''}
           </p>
         )}
       </div>
 
       {selectedItems.size > 0 && (
-        <div className="bg-bone/10 border border-bone/30 p-4 rounded-lg mb-6 flex items-center justify-between flex-wrap gap-4">
-          <p className="text-sm font-medium text-cream">
+        <div className="bg-indigo-50 p-4 rounded-lg mb-6 border border-indigo-200 flex items-center justify-between flex-wrap gap-4">
+          <p className="text-sm font-medium text-gray-700">
             {selectedItems.size} item(s) selected
           </p>
           <div className="flex items-center space-x-2">
             <button
               onClick={handleSchedulePickup}
               disabled={!canSchedule || selectedHomeItems.length === 0}
-              className="px-4 py-2 text-sm font-semibold text-gunmetal bg-bone rounded-md shadow-sm hover:bg-cream disabled:bg-slate disabled:cursor-not-allowed transition-colors"
+              className="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
               title={!canSchedule ? 'Address required and must be in service area' : ''}
             >
               Schedule Pickup ({selectedHomeItems.length})
@@ -459,14 +459,14 @@ export default function Dashboard() {
             <button
               onClick={handleScheduleRedelivery}
               disabled={!canSchedule || selectedStoredItems.length === 0}
-              className="px-4 py-2 text-sm font-semibold text-gunmetal bg-bone rounded-md shadow-sm hover:bg-cream disabled:bg-slate disabled:cursor-not-allowed transition-colors"
+              className="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
               title={!canSchedule ? 'Address required and must be in service area' : ''}
             >
               Schedule Redelivery ({selectedStoredItems.length})
             </button>
             <button
               onClick={handleClearSelection}
-              className="px-4 py-2 text-sm font-medium text-bone bg-gunmetal-2 border border-slate rounded-md shadow-sm hover:bg-slate transition-colors"
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 transition-colors"
             >
               Clear Selection
             </button>
@@ -475,7 +475,7 @@ export default function Dashboard() {
       )}
 
       {isLoading ? (
-        <div className="text-bone">Loading your items...</div>
+        <div className="text-gray-600">Loading your items...</div>
       ) : items && items.length > 0 ? (
         filteredItems.length > 0 ? (
           <div className={viewMode === 'grid'
@@ -497,7 +497,7 @@ export default function Dashboard() {
           </div>
         ) : (
           <div className="card text-center">
-            <p className="text-bone mb-4">
+            <p className="text-gray-600 mb-4">
               No items match your filters. Try adjusting your search or filters.
             </p>
             <button
@@ -514,7 +514,7 @@ export default function Dashboard() {
         )
       ) : (
         <div className="card text-center">
-          <p className="text-bone mb-4">No items yet. Get started by adding your first item.</p>
+          <p className="text-gray-600 mb-4">No items yet. Get started by adding your first item.</p>
           <button
             onClick={() => setOpenAdd(true)}
             className="btn-primary inline-block"
@@ -526,7 +526,7 @@ export default function Dashboard() {
 
       <button
         onClick={() => setOpenAdd(true)}
-        className="fixed bottom-6 right-6 rounded-full w-14 h-14 bg-bone text-gunmetal shadow-lg hover:shadow-xl hover:bg-cream text-2xl transition-all"
+        className="fixed bottom-6 right-6 rounded-full w-14 h-14 bg-velvet-night text-pebble-linen shadow-lg hover:shadow-xl text-2xl transition-shadow"
         aria-label="Add Item"
       >
         +

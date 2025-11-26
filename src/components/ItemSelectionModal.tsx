@@ -138,7 +138,7 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-          <p className="text-bone">Loading...</p>
+          <p className="text-gray-600">Loading...</p>
         </div>
       </div>
     )
@@ -153,7 +153,7 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
         </p>
         <button
           onClick={() => navigate('/dashboard')}
-          className="px-4 py-2 bg-red-600 text-gunmetal rounded-md hover:bg-red-700"
+          className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
         >
           Return to Dashboard
         </button>
@@ -170,7 +170,7 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
         </p>
         <button
           onClick={() => navigate('/dashboard')}
-          className="px-4 py-2 bg-yellow-600 text-gunmetal rounded-md hover:bg-yellow-700"
+          className="px-4 py-2 bg-yellow-600 text-white rounded-md hover:bg-yellow-700"
         >
           Return to Dashboard
         </button>
@@ -195,8 +195,8 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
           Back to Dashboard
         </button>
 
-        <h1 className="text-3xl font-bold text-cream mb-2">Select Items for Service</h1>
-        <div className="flex items-center space-x-2 text-bone">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Select Items for Service</h1>
+        <div className="flex items-center space-x-2 text-gray-600">
           <svg className="h-5 w-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
@@ -222,7 +222,7 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
 
       {/* At Home Section */}
       <section className="mb-8">
-        <h2 className="text-xl font-semibold text-cream mb-4 flex items-center">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
           <svg className="h-6 w-6 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
           </svg>
@@ -230,7 +230,7 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
         </h2>
 
         {homeItems.length === 0 ? (
-          <p className="text-bone/70 italic">No items currently at home</p>
+          <p className="text-gray-500 italic">No items currently at home</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {homeItems.map(item => (
@@ -240,11 +240,11 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
                 className={`border rounded-lg p-4 cursor-pointer transition-all ${
                   selectedIds.has(item.id)
                     ? 'border-indigo-500 bg-indigo-50 shadow-md'
-                    : 'border-slate bg-gunmetal-2 border border-slate hover:border-bone'
+                    : 'border-gray-300 bg-white hover:border-indigo-300'
                 }`}
               >
                 <div className="flex items-start justify-between mb-2">
-                  <h3 className="font-medium text-cream">{item.label}</h3>
+                  <h3 className="font-medium text-gray-900">{item.label}</h3>
                   <input
                     type="checkbox"
                     checked={selectedIds.has(item.id)}
@@ -253,9 +253,9 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
                     className="h-5 w-5 text-indigo-600 rounded focus:ring-indigo-500"
                   />
                 </div>
-                <p className="text-sm text-bone line-clamp-2">{item.description}</p>
+                <p className="text-sm text-gray-600 line-clamp-2">{item.description}</p>
                 {item.category && (
-                  <span className="inline-block mt-2 px-2 py-1 text-xs bg-slate text-bone rounded">
+                  <span className="inline-block mt-2 px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded">
                     {item.category}
                   </span>
                 )}
@@ -267,7 +267,7 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
 
       {/* In Storage Section */}
       <section className="mb-8">
-        <h2 className="text-xl font-semibold text-cream mb-4 flex items-center">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
           <svg className="h-6 w-6 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
           </svg>
@@ -275,7 +275,7 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
         </h2>
 
         {storedItems.length === 0 ? (
-          <p className="text-bone/70 italic">No items currently in storage</p>
+          <p className="text-gray-500 italic">No items currently in storage</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {storedItems.map(item => (
@@ -285,11 +285,11 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
                 className={`border rounded-lg p-4 cursor-pointer transition-all ${
                   selectedIds.has(item.id)
                     ? 'border-indigo-500 bg-indigo-50 shadow-md'
-                    : 'border-slate bg-gunmetal-2 border border-slate hover:border-bone'
+                    : 'border-gray-300 bg-white hover:border-indigo-300'
                 }`}
               >
                 <div className="flex items-start justify-between mb-2">
-                  <h3 className="font-medium text-cream">{item.label}</h3>
+                  <h3 className="font-medium text-gray-900">{item.label}</h3>
                   <input
                     type="checkbox"
                     checked={selectedIds.has(item.id)}
@@ -298,9 +298,9 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
                     className="h-5 w-5 text-indigo-600 rounded focus:ring-indigo-500"
                   />
                 </div>
-                <p className="text-sm text-bone line-clamp-2">{item.description}</p>
+                <p className="text-sm text-gray-600 line-clamp-2">{item.description}</p>
                 {item.category && (
-                  <span className="inline-block mt-2 px-2 py-1 text-xs bg-slate text-bone rounded">
+                  <span className="inline-block mt-2 px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded">
                     {item.category}
                   </span>
                 )}
@@ -311,12 +311,12 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
       </section>
 
       {/* Fixed Bottom Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-gunmetal-2 border-t border-slate shadow-lg">
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="text-sm text-bone">
+          <div className="text-sm text-gray-700">
             <span className="font-semibold">{selectedCount} item(s) selected</span>
             {selectedCount > 0 && (
-              <span className="ml-4 text-bone">
+              <span className="ml-4 text-gray-600">
                 {selectedHomeCount > 0 && `${selectedHomeCount} pickup`}
                 {selectedHomeCount > 0 && selectedStoredCount > 0 && ' • '}
                 {selectedStoredCount > 0 && `${selectedStoredCount} delivery`}
@@ -326,14 +326,14 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
           <div className="flex items-center space-x-3">
             <button
               onClick={() => navigate('/dashboard')}
-              className="px-4 py-2 text-sm font-medium text-bone bg-gunmetal-2 border border-slate rounded-md hover:bg-slate"
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
             >
               Cancel
             </button>
             <button
               onClick={handleSubmit}
               disabled={selectedCount === 0 || isSubmitting}
-              className="px-6 py-2 text-sm font-semibold text-gunmetal bg-bone rounded-md hover:bg-cream disabled:bg-slate disabled:cursor-not-allowed transition-colors"
+              className="px-6 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
             >
               {isSubmitting ? 'Confirming...' : 'Confirm Items'}
             </button>

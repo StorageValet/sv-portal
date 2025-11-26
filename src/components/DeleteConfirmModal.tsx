@@ -95,11 +95,11 @@ export default function DeleteConfirmModal({ itemId, onClose }: DeleteConfirmMod
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
-      <div className="bg-gunmetal-2 border border-slate rounded-lg shadow-xl p-8 max-w-md w-full">
-        <h2 className="text-xl font-bold text-cream mb-4">Confirm Deletion</h2>
+      <div className="bg-white rounded-lg shadow-xl p-8 max-w-md w-full">
+        <h2 className="text-xl font-bold text-gray-900 mb-4">Confirm Deletion</h2>
 
-        <div className="text-sm text-bone space-y-4">
-          <p className="font-medium text-red-400">
+        <div className="text-sm text-gray-600 space-y-4">
+          <p className="font-medium text-red-600">
             ⚠️ Are you sure you want to permanently delete this item?
           </p>
           <p>
@@ -107,29 +107,29 @@ export default function DeleteConfirmModal({ itemId, onClose }: DeleteConfirmMod
           </p>
 
           {isLoading ? (
-            <div className="mt-4 h-20 bg-slate animate-pulse rounded-md" />
+            <div className="mt-4 h-20 bg-gray-100 animate-pulse rounded-md" />
           ) : item ? (
-            <div className="mt-4 flex items-center space-x-4 p-4 bg-slate rounded-md border border-slate">
+            <div className="mt-4 flex items-center space-x-4 p-4 bg-gray-50 rounded-md border border-gray-200">
               {photoUrl ? (
                 <img
                   src={photoUrl}
                   alt={item.label}
-                  className="h-16 w-16 object-cover rounded-md border border-slate"
+                  className="h-16 w-16 object-cover rounded-md border border-gray-300"
                 />
               ) : (
-                <div className="h-16 w-16 bg-slate rounded-md flex items-center justify-center text-bone/50 text-xs">
+                <div className="h-16 w-16 bg-gray-200 rounded-md flex items-center justify-center text-gray-400 text-xs">
                   No Photo
                 </div>
               )}
               <div className="flex-1">
-                <p className="font-semibold text-cream">{item.label}</p>
-                <p className="text-xs text-bone/70 mt-1">
+                <p className="font-semibold text-gray-800">{item.label}</p>
+                <p className="text-xs text-gray-500 mt-1">
                   {item.photo_paths?.length || (item.photo_path ? 1 : 0)} photo(s)
                 </p>
               </div>
             </div>
           ) : (
-            <p className="text-red-400">Error loading item details.</p>
+            <p className="text-red-500">Error loading item details.</p>
           )}
         </div>
 
@@ -138,7 +138,7 @@ export default function DeleteConfirmModal({ itemId, onClose }: DeleteConfirmMod
             type="button"
             onClick={onClose}
             disabled={isDeleting}
-            className="btn-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+            className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Cancel
           </button>
