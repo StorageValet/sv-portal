@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 import { supabase, validatePhotoFiles, uploadItemPhotos, deleteItemPhotos, getItemPhotoUrls, logInventoryEventAuto, MAX_PHOTO_SIZE_MB, MAX_PHOTO_COUNT } from '../lib/supabase'
 
 interface EditItemModalProps {
@@ -124,10 +125,11 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
       queryClient.invalidateQueries({ queryKey: ['items'] })
       queryClient.invalidateQueries({ queryKey: ['item', itemId] })
       queryClient.invalidateQueries({ queryKey: ['my-insurance'] })
+      toast.success('Item updated successfully')
       onClose()
     },
     onError: (error) => {
-      alert(`Error: ${error.message}`)
+      toast.error(`Failed to update: ${error.message}`)
     },
     onSettled: () => {
       setIsSubmitting(false)

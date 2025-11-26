@@ -345,11 +345,15 @@ export default function Dashboard() {
             <span className="text-velvet-night font-medium">Insurance Coverage</span>
             <span className="text-deep-harbor text-sm">{formatCurrency(insuranceCapCents)} plan</span>
           </div>
-          <div className="w-full h-2 bg-chalk-linen rounded">
-            <div
-              className="h-2 bg-velvet-night rounded transition-all"
-              style={{ width: `${Math.round(usedRatio * 100)}%` }}
-            />
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-gray-500 w-6">$0</span>
+            <div className="flex-1 h-2 bg-chalk-linen rounded">
+              <div
+                className="h-2 bg-velvet-night rounded transition-all"
+                style={{ width: `${Math.round(usedRatio * 100)}%` }}
+              />
+            </div>
+            <span className="text-xs text-gray-500 w-12 text-right">{formatCurrency(insuranceCapCents)}</span>
           </div>
           <div className="text-sm text-gray-600 mt-2 flex justify-between">
             <span>{formatCurrency(totalItemValueCents)} used</span>
@@ -451,16 +455,16 @@ export default function Dashboard() {
             <button
               onClick={handleSchedulePickup}
               disabled={!canSchedule || selectedHomeItems.length === 0}
-              className="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
-              title={!canSchedule ? 'Address required and must be in service area' : ''}
+              className="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors"
+              title={!canSchedule ? 'Address required and must be in service area' : selectedHomeItems.length === 0 ? 'Select items at home to schedule pickup' : ''}
             >
               Schedule Pickup ({selectedHomeItems.length})
             </button>
             <button
               onClick={handleScheduleRedelivery}
               disabled={!canSchedule || selectedStoredItems.length === 0}
-              className="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
-              title={!canSchedule ? 'Address required and must be in service area' : ''}
+              className="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors"
+              title={!canSchedule ? 'Address required and must be in service area' : selectedStoredItems.length === 0 ? 'Select items in storage to schedule redelivery' : ''}
             >
               Schedule Redelivery ({selectedStoredItems.length})
             </button>
@@ -475,7 +479,13 @@ export default function Dashboard() {
       )}
 
       {isLoading ? (
-        <div className="text-gray-600">Loading your items...</div>
+        <div className="flex flex-col items-center justify-center py-12">
+          <svg className="animate-spin h-8 w-8 text-indigo-600 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <p className="text-gray-600">Loading your items...</p>
+        </div>
       ) : items && items.length > 0 ? (
         filteredItems.length > 0 ? (
           <div className={viewMode === 'grid'

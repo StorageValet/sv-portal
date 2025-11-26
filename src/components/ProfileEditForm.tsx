@@ -1,11 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 import { supabase } from '../lib/supabase';
 import { useState } from 'react';
 
 export default function ProfileEditForm() {
   const queryClient = useQueryClient();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const { data: profile, isLoading } = useQuery({
     queryKey: ['profile'],
@@ -37,11 +37,10 @@ export default function ProfileEditForm() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['profile'] });
-      setSuccessMessage("Profile updated successfully!");
-      setTimeout(() => setSuccessMessage(null), 3000);
+      toast.success('Profile updated successfully');
     },
     onError: (error) => {
-      alert(`Error: ${error.message}`);
+      toast.error(`Failed to update profile: ${error.message}`);
     },
     onSettled: () => {
       setIsSubmitting(false);
@@ -130,7 +129,6 @@ export default function ProfileEditForm() {
         </div>
 
         <div className="flex justify-end items-center pt-4 border-t">
-            {successMessage && <p className="text-sm text-green-600 mr-4 transition-opacity duration-300">{successMessage}</p>}
             <button type="submit" disabled={isSubmitting} className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 disabled:opacity-50">
                 {isSubmitting ? 'Saving...' : 'Save Profile'}
             </button>

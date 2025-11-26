@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 import { supabase, logInventoryEventAuto, MAX_PHOTO_SIZE_MB, MAX_PHOTO_COUNT, uploadItemPhotos, validatePhotoFiles } from '../lib/supabase'
 
 type Props = { onClose: () => void }
@@ -133,6 +134,7 @@ export default function AddItemModal({ onClose }: Props) {
     onSuccess: async () => {
       await qc.invalidateQueries({ queryKey: ['items'] })
       await qc.invalidateQueries({ queryKey: ['my-insurance'] })
+      toast.success('Item added successfully')
     }
   })
 
