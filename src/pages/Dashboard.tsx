@@ -263,10 +263,24 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Pending Bookings Section */}
-      {pendingBookings && pendingBookings.length > 0 && (
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-3">Upcoming Services</h3>
+      {/* Upcoming Services Section - Always shown */}
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-lg font-semibold text-gray-900">Upcoming Services</h3>
+          <a
+            href="https://calendly.com/zach-mystoragevalet"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 transition-colors"
+          >
+            <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            Book Appointment
+          </a>
+        </div>
+
+        {pendingBookings && pendingBookings.length > 0 ? (
           <div className="space-y-3">
             {pendingBookings.map(booking => (
               <div key={booking.id} className="border border-gray-300 rounded-lg p-4 bg-white shadow-sm">
@@ -306,8 +320,16 @@ export default function Dashboard() {
               </div>
             ))}
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="border border-dashed border-gray-300 rounded-lg p-6 text-center bg-gray-50">
+            <svg className="mx-auto h-10 w-10 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <p className="text-gray-600 mb-2">No upcoming appointments</p>
+            <p className="text-sm text-gray-500">Click "Book Appointment" to schedule a pickup or delivery</p>
+          </div>
+        )}
+      </div>
 
       {insurance && (
         <div className="mb-6 p-4 rounded border border-gray-300 bg-gray-100">
