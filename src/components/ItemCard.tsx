@@ -59,7 +59,7 @@ export default function ItemCard({ item, isSelected, onSelect, onEdit, onDelete,
   const statusLabel = item.status || 'home'
 
   return (
-    <div className={`border rounded-lg shadow-sm bg-gunmetal-2 border-slate flex flex-col overflow-hidden transition-all ${
+    <div className={`border border-slate rounded-lg shadow-sm bg-gunmetal-2 flex flex-col overflow-hidden transition-all ${
       isSelected ? 'ring-2 ring-bone ring-offset-2 ring-offset-gunmetal' : ''
     }`}>
       {/* Photo Section with Checkbox and Status Badge */}

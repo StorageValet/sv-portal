@@ -14,7 +14,7 @@ export default function FilterChips({ activeStatus, onStatusChange }: FilterChip
     if (status === activeStatus) {
       return `${baseClass} bg-indigo-600 text-white`;
     }
-    return `${baseClass} bg-slate text-bone hover:bg-gray-200`;
+    return `${baseClass} bg-slate text-bone hover:bg-gunmetal-2`;
   };
 
   return (

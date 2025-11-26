@@ -23,7 +23,7 @@ export default function ItemDetailModal({ itemId, onClose }: ItemDetailModalProp
       <div className="bg-gunmetal-2 border border-slate rounded-lg shadow-xl p-8 max-w-3xl w-full max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-start">
             <h2 className="text-2xl font-bold text-cream">{item?.label || 'Loading...'}</h2>
-            <button onClick={onClose} className="text-bone/70 hover:text-gray-800">&times;</button>
+            <button onClick={onClose} className="text-bone/70 hover:text-cream">&times;</button>
         </div>
 
         {isLoading ? <p>Loading details...</p> : item ? (

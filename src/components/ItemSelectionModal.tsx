@@ -240,7 +240,7 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
                 className={`border rounded-lg p-4 cursor-pointer transition-all ${
                   selectedIds.has(item.id)
                     ? 'border-indigo-500 bg-indigo-50 shadow-md'
-                    : 'border-slate bg-gunmetal-2 border border-slate hover:border-indigo-300'
+                    : 'border-slate bg-gunmetal-2 border border-slate hover:border-bone'
                 }`}
               >
                 <div className="flex items-start justify-between mb-2">
@@ -285,7 +285,7 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
                 className={`border rounded-lg p-4 cursor-pointer transition-all ${
                   selectedIds.has(item.id)
                     ? 'border-indigo-500 bg-indigo-50 shadow-md'
-                    : 'border-slate bg-gunmetal-2 border border-slate hover:border-indigo-300'
+                    : 'border-slate bg-gunmetal-2 border border-slate hover:border-bone'
                 }`}
               >
                 <div className="flex items-start justify-between mb-2">
@@ -311,7 +311,7 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
       </section>
 
       {/* Fixed Bottom Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-gunmetal-2 border border-slate border-t border-slate shadow-lg">
+      <div className="fixed bottom-0 left-0 right-0 bg-gunmetal-2 border-t border-slate shadow-lg">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="text-sm text-bone">
             <span className="font-semibold">{selectedCount} item(s) selected</span>
@@ -326,14 +326,14 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
           <div className="flex items-center space-x-3">
             <button
               onClick={() => navigate('/dashboard')}
-              className="px-4 py-2 text-sm font-medium text-bone bg-gunmetal-2 border border-slate border border-slate rounded-md hover:bg-slate"
+              className="px-4 py-2 text-sm font-medium text-bone bg-gunmetal-2 border border-slate rounded-md hover:bg-slate"
             >
               Cancel
             </button>
             <button
               onClick={handleSubmit}
               disabled={selectedCount === 0 || isSubmitting}
-              className="px-6 py-2 text-sm font-semibold text-gunmetal bg-bone rounded-md hover:bg-cream disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+              className="px-6 py-2 text-sm font-semibold text-gunmetal bg-bone rounded-md hover:bg-cream disabled:bg-slate disabled:cursor-not-allowed transition-colors"
             >
               {isSubmitting ? 'Confirming...' : 'Confirm Items'}
             </button>
