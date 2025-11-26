@@ -214,8 +214,8 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg shadow-xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <h2 className="text-2xl font-bold mb-6 text-gray-800">Edit Item</h2>
+      <div className="bg-gunmetal-2 border border-slate rounded-lg shadow-xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <h2 className="text-2xl font-bold mb-6 text-cream">Edit Item</h2>
 
         {isLocked && (
           <div className="p-3 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 border border-yellow-200" role="alert">
@@ -226,7 +226,7 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Label */}
           <div>
-            <label htmlFor="label" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="label" className="block text-sm font-medium text-bone">
               Label *
             </label>
             <input
@@ -236,13 +236,13 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
               required
               minLength={3}
               defaultValue={item.label}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-3 py-2 border"
+              className="mt-1 block w-full rounded-md border-slate shadow-sm focus:border-bone focus:ring-bone sm:text-sm px-3 py-2 border"
             />
           </div>
 
           {/* Description */}
           <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="description" className="block text-sm font-medium text-bone">
               Description *
             </label>
             <textarea
@@ -252,13 +252,13 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
               minLength={3}
               rows={3}
               defaultValue={item.description}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-3 py-2 border"
+              className="mt-1 block w-full rounded-md border-slate shadow-sm focus:border-bone focus:ring-bone sm:text-sm px-3 py-2 border"
             />
           </div>
 
           {/* Estimated Value */}
           <div>
-            <label htmlFor="value" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="value" className="block text-sm font-medium text-bone">
               Estimated Value (USD) *
             </label>
             <input
@@ -269,13 +269,13 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
               min="0.01"
               step="0.01"
               defaultValue={centsToDollars(item.estimated_value_cents)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-3 py-2 border"
+              className="mt-1 block w-full rounded-md border-slate shadow-sm focus:border-bone focus:ring-bone sm:text-sm px-3 py-2 border"
             />
           </div>
 
           {/* Weight (Physical Lock Enforced) */}
           <div>
-            <label htmlFor="weight" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="weight" className="block text-sm font-medium text-bone">
               Weight (lbs) * {isLocked && '🔒'}
             </label>
             <input
@@ -287,14 +287,14 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
               step="0.01"
               defaultValue={item.weight_lbs}
               disabled={isLocked}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-3 py-2 border disabled:bg-gray-100 disabled:cursor-not-allowed"
+              className="mt-1 block w-full rounded-md border-slate shadow-sm focus:border-bone focus:ring-bone sm:text-sm px-3 py-2 border disabled:bg-slate disabled:cursor-not-allowed"
             />
           </div>
 
           {/* Dimensions (Physical Lock Enforced) */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label htmlFor="length" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="length" className="block text-sm font-medium text-bone">
                 Length (in) * {isLocked && '🔒'}
               </label>
               <input
@@ -306,11 +306,11 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
                 step="0.01"
                 defaultValue={item.length_inches}
                 disabled={isLocked}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-3 py-2 border disabled:bg-gray-100 disabled:cursor-not-allowed"
+                className="mt-1 block w-full rounded-md border-slate shadow-sm focus:border-bone focus:ring-bone sm:text-sm px-3 py-2 border disabled:bg-slate disabled:cursor-not-allowed"
               />
             </div>
             <div>
-              <label htmlFor="width" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="width" className="block text-sm font-medium text-bone">
                 Width (in) * {isLocked && '🔒'}
               </label>
               <input
@@ -322,11 +322,11 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
                 step="0.01"
                 defaultValue={item.width_inches}
                 disabled={isLocked}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-3 py-2 border disabled:bg-gray-100 disabled:cursor-not-allowed"
+                className="mt-1 block w-full rounded-md border-slate shadow-sm focus:border-bone focus:ring-bone sm:text-sm px-3 py-2 border disabled:bg-slate disabled:cursor-not-allowed"
               />
             </div>
             <div>
-              <label htmlFor="height" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="height" className="block text-sm font-medium text-bone">
                 Height (in) * {isLocked && '🔒'}
               </label>
               <input
@@ -338,14 +338,14 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
                 step="0.01"
                 defaultValue={item.height_inches}
                 disabled={isLocked}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-3 py-2 border disabled:bg-gray-100 disabled:cursor-not-allowed"
+                className="mt-1 block w-full rounded-md border-slate shadow-sm focus:border-bone focus:ring-bone sm:text-sm px-3 py-2 border disabled:bg-slate disabled:cursor-not-allowed"
               />
             </div>
           </div>
 
           {/* Tags */}
           <div>
-            <label htmlFor="tags" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="tags" className="block text-sm font-medium text-bone">
               Tags (comma-separated)
             </label>
             <input
@@ -354,13 +354,13 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
               id="tags"
               defaultValue={item.tags?.join(', ') || ''}
               placeholder="e.g., fragile, seasonal, electronics"
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-3 py-2 border"
+              className="mt-1 block w-full rounded-md border-slate shadow-sm focus:border-bone focus:ring-bone sm:text-sm px-3 py-2 border"
             />
           </div>
 
           {/* Photo Management */}
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bone">
               Photos ({existingPhotoPaths.length + photos.length} / {MAX_PHOTO_COUNT}) *
             </label>
             <div className="mt-2 grid grid-cols-3 sm:grid-cols-5 gap-4">
@@ -370,7 +370,7 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
                   <img
                     src={existingPhotoUrls[index] || ''}
                     alt={`Existing ${index + 1}`}
-                    className="h-24 w-24 object-cover rounded-md border border-gray-300"
+                    className="h-24 w-24 object-cover rounded-md border border-slate"
                   />
                   <button
                     type="button"
@@ -388,7 +388,7 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
                   <img
                     src={URL.createObjectURL(file)}
                     alt={`New ${index + 1}`}
-                    className="h-24 w-24 object-cover rounded-md border border-gray-300"
+                    className="h-24 w-24 object-cover rounded-md border border-slate"
                   />
                   <button
                     type="button"
@@ -408,9 +408,9 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
               multiple
               accept="image/jpeg,image/png,image/webp"
               onChange={handlePhotoChange}
-              className="mt-4 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+              className="mt-4 block w-full text-sm text-bone/70 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-bone file:text-gunmetal hover:file:bg-cream"
             />
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="mt-1 text-xs text-bone/70">
               JPG, PNG, or WebP only. Max {MAX_PHOTO_SIZE_MB}MB per photo. Total 1-{MAX_PHOTO_COUNT} photos.
             </p>
             {photoError && (
@@ -424,14 +424,14 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
               type="button"
               onClick={onClose}
               disabled={isSubmitting}
-              className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="rounded-md border border-slate bg-gunmetal-2 py-2 px-4 text-sm font-medium text-bone shadow-sm hover:bg-slate focus:outline-none focus:ring-2 focus:ring-bone focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-bone focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? 'Saving...' : 'Save Changes'}
             </button>

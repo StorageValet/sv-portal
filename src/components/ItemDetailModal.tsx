@@ -20,10 +20,10 @@ export default function ItemDetailModal({ itemId, onClose }: ItemDetailModalProp
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
-      <div className="bg-white rounded-lg shadow-xl p-8 max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-gunmetal-2 border border-slate rounded-lg shadow-xl p-8 max-w-3xl w-full max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-start">
-            <h2 className="text-2xl font-bold text-gray-900">{item?.label || 'Loading...'}</h2>
-            <button onClick={onClose} className="text-gray-500 hover:text-gray-800">&times;</button>
+            <h2 className="text-2xl font-bold text-cream">{item?.label || 'Loading...'}</h2>
+            <button onClick={onClose} className="text-bone/70 hover:text-gray-800">&times;</button>
         </div>
 
         {isLoading ? <p>Loading details...</p> : item ? (
