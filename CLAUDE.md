@@ -1,13 +1,13 @@
 # sv-portal - Storage Valet Customer Portal
-**Last Updated:** 2025-11-24
-**Branch:** Check with `git branch` (likely feature/schedule-first-booking-refactor)
-**Production:** Behind by ~10 days, missing critical features
+**Last Updated:** Nov 25, 2025
+**Branch:** main (all merged Nov 24)
+**Production:** Deployed to portal.mystoragevalet.com
 
-## ⚠️ CRITICAL WARNINGS
-1. **NOT on main branch** - feature branch has Calendly integration
-2. **JWT verification bypassed** - DO NOT attempt to fix
-3. **Production missing migrations** - Features won't work in prod
-4. **No testing completed** - Don't trust that anything works
+## Status (Nov 25)
+- All branches merged to main
+- Deployed to Vercel production
+- Database migrations applied
+- **PENDING:** Manual browser testing
 
 ## Tech Stack
 - React 18.3.1
