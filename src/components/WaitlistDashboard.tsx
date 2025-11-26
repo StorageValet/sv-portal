@@ -51,11 +51,11 @@ export default function WaitlistDashboard({ profile }: WaitlistDashboardProps) {
         </div>
 
         {/* Current Service Areas */}
-        <div className="bg-white rounded-xl shadow-sm p-8 mb-8">
+        <div className="bg-gunmetal-2 border border-slate rounded-xl shadow-sm p-8 mb-8">
           <h2 className="text-xl font-semibold text-gunmetal mb-4">
             Current Service Areas (Northern New Jersey)
           </h2>
-          <p className="text-gray-600 mb-4">
+          <p className="text-bone mb-4">
             We're currently serving these ZIP codes with plans to expand based on demand:
           </p>
           <div className="grid grid-cols-3 gap-3 text-center">
@@ -69,7 +69,7 @@ export default function WaitlistDashboard({ profile }: WaitlistDashboardProps) {
         </div>
 
         {/* Expansion Timeline */}
-        <div className="bg-white rounded-xl shadow-sm p-8">
+        <div className="bg-gunmetal-2 border border-slate rounded-xl shadow-sm p-8">
           <h2 className="text-xl font-semibold text-gunmetal mb-4">
             What's Coming Next
           </h2>
@@ -80,7 +80,7 @@ export default function WaitlistDashboard({ profile }: WaitlistDashboardProps) {
               </div>
               <div>
                 <h3 className="font-semibold">Service Area Expansion</h3>
-                <p className="text-gray-600">
+                <p className="text-bone">
                   Based on waitlist demand, we'll expand to high-interest ZIP codes first
                 </p>
               </div>
@@ -91,7 +91,7 @@ export default function WaitlistDashboard({ profile }: WaitlistDashboardProps) {
               </div>
               <div>
                 <h3 className="font-semibold">Autonomous Delivery Testing</h3>
-                <p className="text-gray-600">
+                <p className="text-bone">
                   Pilot program for contactless, autonomous pickup and delivery
                 </p>
               </div>
@@ -102,7 +102,7 @@ export default function WaitlistDashboard({ profile }: WaitlistDashboardProps) {
               </div>
               <div>
                 <h3 className="font-semibold">Regional Launch</h3>
-                <p className="text-gray-600">
+                <p className="text-bone">
                   Full service across the tri-state area with enhanced features
                 </p>
               </div>

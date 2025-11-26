@@ -44,11 +44,11 @@ export default function ItemTimeline({ itemId }: ItemTimelineProps) {
                 </div>
                 <div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
                   <div>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-bone/70">
                       {event.event_type.replace('_', ' ')}
                     </p>
                   </div>
-                  <div className="whitespace-nowrap text-right text-sm text-gray-500">
+                  <div className="whitespace-nowrap text-right text-sm text-bone/70">
                     <time dateTime={event.created_at}>{format(new Date(event.created_at), 'MMM d, yyyy')}</time>
                   </div>
                 </div>

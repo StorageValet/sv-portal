@@ -46,7 +46,7 @@ export default function QRCodeDisplay({ item }: QRCodeDisplayProps) {
   return (
     <div className="text-center p-4">
       <h3 className="font-bold text-lg">{item.label}</h3>
-      <p className="text-sm text-gray-500 mb-4">{item.qr_code}</p>
+      <p className="text-sm text-bone/70 mb-4">{item.qr_code}</p>
       <div className="flex justify-center">
         <QRCodeSVG value={item.qr_code} size={256} ref={qrRef} />
       </div>
