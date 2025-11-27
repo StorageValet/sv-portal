@@ -1,7 +1,19 @@
 # sv-portal - Storage Valet Customer Portal
-**Last Updated:** Nov 25, 2025
+**Last Updated:** Nov 27, 2025
 **Branch:** main (all merged Nov 24)
 **Production:** Deployed to portal.mystoragevalet.com
+
+## Session: 2025-11-27 – Portal polish, item status, bookings, logos
+
+- Renamed item status `in_transit` → `scheduled` across DB and portal.
+- Wired bookings so items added to a service are marked `scheduled`, and edit mode lets you add/remove items, reverting removed items back to `home` or `stored`.
+- Added item photo thumbnails in ItemSelectionModal and a photo gallery in ItemDetailModal.
+- Fixed Calendly → actions integration so Book Appointment creates Upcoming Services for matching user emails.
+- Repaired search to match label, description, QR code, category, and tags with proper null handling.
+- Integrated new branding:
+  - Header wordmark (600×80 PNG) at larger size in nav.
+  - New white-on-navy hero logo on the sign-in page.
+- All repos (sv-db, sv-portal, sv-edge) are clean, on main, and pushed as of this session.
 
 ## Status (Nov 25)
 - All branches merged to main
@@ -43,24 +55,22 @@ VITE_CALENDLY_SCHEDULING_URL=https://calendly.com/storagevalet
 
 ## Current Features Status
 
-### ✅ Working
+### ✅ Working (Nov 27)
 - Magic link login
-- Basic dashboard display
+- Dashboard with upcoming services
 - Stripe billing portal redirect
 - Photo uploads to storage
+- Calendly integration (creates actions for matching emails)
+- Item selection modal with photo thumbnails
+- Search (label, description, QR, category, tags)
+- Item status flow: home → scheduled → stored
+- Edit booking items (add/remove with status revert)
 
-### ⚠️ Built but Untested
-- Item selection modal (Nov 18)
+### ⚠️ Needs More Testing
 - Multi-photo upload (1-5 photos)
-- Search and filtering
 - Profile editing
-- Schedule page with tabs
-- Add/Edit/Delete items
-
-### ❌ Not Working in Production
-- Calendly integration (on feature branch only)
-- Item selection flow (missing migrations)
-- Service area gating (needs migration 0004+)
+- Schedule page tabs
+- Service area gating
 
 ## Common Issues & Solutions
 
