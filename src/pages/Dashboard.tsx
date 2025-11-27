@@ -219,7 +219,7 @@ export default function Dashboard() {
       <div className="mb-8">
         <h2 className="text-2xl font-bold mb-2">Your Items</h2>
         {profile && (
-          <p className="text-gray-600">
+          <p className="text-gunmetal/70">
             Subscription: <span className="font-medium capitalize">{profile.subscription_status}</span>
           </p>
         )}
@@ -266,12 +266,12 @@ export default function Dashboard() {
       {/* Upcoming Services Section - Always shown */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-lg font-semibold text-gray-900">Upcoming Services</h3>
+          <h3 className="text-lg font-semibold text-gunmetal">Upcoming Services</h3>
           <a
             href="https://calendly.com/zach-mystoragevalet"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 transition-colors"
+            className="btn-primary inline-flex items-center"
           >
             <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -279,23 +279,27 @@ export default function Dashboard() {
             Book Appointment
           </a>
         </div>
+        {/* Webhook processing note */}
+        <p className="text-xs text-slate/60 mb-3">
+          Note: After booking, your appointment may take 15-30 seconds to appear below.
+        </p>
 
         {pendingBookings && pendingBookings.length > 0 ? (
           <div className="space-y-3">
             {pendingBookings.map(booking => (
-              <div key={booking.id} className="border border-gray-300 rounded-lg p-4 bg-white shadow-sm">
+              <div key={booking.id} className="card">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
-                      <svg className="h-5 w-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="h-5 w-5 text-slate" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
-                      <p className="text-sm font-semibold text-gray-900">
+                      <p className="text-sm font-semibold text-gunmetal">
                         {formatDateTime(booking.scheduled_start)}
                       </p>
                     </div>
-                    <div className="flex items-center space-x-4 text-sm text-gray-600">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 capitalize">
+                    <div className="flex items-center space-x-4 text-sm text-gunmetal/70">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-bone text-slate capitalize">
                         {booking.status === 'pending_items' ? 'Awaiting Items' :
                          booking.status === 'pending_confirmation' ? 'Pending Confirmation' :
                          'Confirmed'}
@@ -311,7 +315,7 @@ export default function Dashboard() {
                   {booking.status === 'pending_items' && (
                     <button
                       onClick={() => navigate(`/schedule?action_id=${booking.id}`)}
-                      className="ml-4 px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 transition-colors"
+                      className="btn-primary ml-4"
                     >
                       Add Items
                     </button>
@@ -319,7 +323,7 @@ export default function Dashboard() {
                   {booking.status === 'pending_confirmation' && (
                     <button
                       onClick={() => navigate(`/schedule?action_id=${booking.id}`)}
-                      className="ml-4 px-4 py-2 text-sm font-medium text-indigo-600 bg-white border border-indigo-600 rounded-md shadow-sm hover:bg-indigo-50 transition-colors"
+                      className="btn-secondary ml-4"
                     >
                       Edit Items
                     </button>
@@ -329,33 +333,33 @@ export default function Dashboard() {
             ))}
           </div>
         ) : (
-          <div className="border border-dashed border-gray-300 rounded-lg p-6 text-center bg-gray-50">
-            <svg className="mx-auto h-10 w-10 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="border border-dashed border-slate/30 rounded-lg p-6 text-center bg-cream">
+            <svg className="mx-auto h-10 w-10 text-slate/40 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            <p className="text-gray-600 mb-2">No upcoming appointments</p>
-            <p className="text-sm text-gray-500">Click "Book Appointment" to schedule a pickup or delivery</p>
+            <p className="text-gunmetal/70 mb-2">No upcoming appointments</p>
+            <p className="text-sm text-slate/60">Click "Book Appointment" to schedule a pickup or delivery</p>
           </div>
         )}
       </div>
 
       {insurance && (
-        <div className="mb-6 p-4 rounded border border-gray-300 bg-gray-100">
+        <div className="card mb-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-velvet-night font-medium">Insurance Coverage</span>
-            <span className="text-deep-harbor text-sm">{formatCurrency(insuranceCapCents)} plan</span>
+            <span className="text-gunmetal font-medium">Insurance Coverage</span>
+            <span className="text-slate text-sm">{formatCurrency(insuranceCapCents)} plan</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-gray-500 w-6">$0</span>
-            <div className="flex-1 h-2 bg-chalk-linen rounded">
+            <span className="text-xs text-slate/60 w-6">$0</span>
+            <div className="flex-1 h-2 bg-cream rounded">
               <div
-                className="h-2 bg-velvet-night rounded transition-all"
+                className="h-2 bg-gunmetal rounded transition-all"
                 style={{ width: `${Math.round(usedRatio * 100)}%` }}
               />
             </div>
-            <span className="text-xs text-gray-500 w-12 text-right">{formatCurrency(insuranceCapCents)}</span>
+            <span className="text-xs text-slate/60 w-12 text-right">{formatCurrency(insuranceCapCents)}</span>
           </div>
-          <div className="text-sm text-gray-600 mt-2 flex justify-between">
+          <div className="text-sm text-gunmetal/70 mt-2 flex justify-between">
             <span>{formatCurrency(totalItemValueCents)} used</span>
             <span>{formatCurrency(remainingCents)} remaining</span>
           </div>
@@ -369,21 +373,21 @@ export default function Dashboard() {
             placeholder="Search items by name, description, QR code, or category..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            className="input pl-10"
           />
-          <svg className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="absolute left-3 top-3 h-5 w-5 text-slate/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </div>
 
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center space-x-2 flex-wrap">
-            <span className="text-sm font-medium text-gray-700">Filters:</span>
+            <span className="text-sm font-medium text-gunmetal">Filters:</span>
 
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as any)}
-              className="px-3 py-1.5 text-sm border border-gray-300 rounded-md bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="px-3 py-1.5 text-sm border border-slate/30 rounded-md bg-cream hover:bg-bone focus:outline-none focus:ring-2 focus:ring-slate"
             >
               <option value="all">All Status</option>
               <option value="home">Home</option>
@@ -394,7 +398,7 @@ export default function Dashboard() {
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="px-3 py-1.5 text-sm border border-gray-300 rounded-md bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="px-3 py-1.5 text-sm border border-slate/30 rounded-md bg-cream hover:bg-bone focus:outline-none focus:ring-2 focus:ring-slate"
               disabled={categories.length === 0}
             >
               <option value="all">All Categories</option>
@@ -410,17 +414,17 @@ export default function Dashboard() {
                   setStatusFilter('all')
                   setCategoryFilter('all')
                 }}
-                className="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-800 underline"
+                className="px-3 py-1.5 text-sm text-slate hover:text-gunmetal underline"
               >
                 Clear Filters
               </button>
             )}
           </div>
 
-          <div className="flex items-center space-x-1 bg-gray-100 rounded-lg p-1">
+          <div className="flex items-center space-x-1 bg-bone rounded-lg p-1">
             <button
               onClick={() => setViewMode('grid')}
-              className={`p-2 rounded ${viewMode === 'grid' ? 'bg-white shadow-sm text-indigo-600' : 'text-gray-500 hover:text-gray-700'}`}
+              className={`p-2 rounded ${viewMode === 'grid' ? 'bg-cream shadow-sm text-slate' : 'text-slate/50 hover:text-slate'}`}
               title="Grid View"
             >
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -429,7 +433,7 @@ export default function Dashboard() {
             </button>
             <button
               onClick={() => setViewMode('list')}
-              className={`p-2 rounded ${viewMode === 'list' ? 'bg-white shadow-sm text-indigo-600' : 'text-gray-500 hover:text-gray-700'}`}
+              className={`p-2 rounded ${viewMode === 'list' ? 'bg-cream shadow-sm text-slate' : 'text-slate/50 hover:text-slate'}`}
               title="List View"
             >
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -440,22 +444,22 @@ export default function Dashboard() {
         </div>
 
         {items && items.length > 0 && (
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gunmetal/70">
             Showing {filteredItems.length} of {items.length} item{items.length !== 1 ? 's' : ''}
           </p>
         )}
       </div>
 
       {selectedItems.size > 0 && (
-        <div className="bg-indigo-50 p-4 rounded-lg mb-6 border border-indigo-200 flex items-center justify-between flex-wrap gap-4">
-          <p className="text-sm font-medium text-gray-700">
+        <div className="bg-bone p-4 rounded-lg mb-6 border border-slate/20 flex items-center justify-between flex-wrap gap-4">
+          <p className="text-sm font-medium text-gunmetal">
             {selectedItems.size} item(s) selected
           </p>
           <div className="flex items-center space-x-2">
             <button
               onClick={handleSchedulePickup}
               disabled={!canSchedule || selectedHomeItems.length === 0}
-              className="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors"
+              className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
               title={!canSchedule ? 'Address required and must be in service area' : selectedHomeItems.length === 0 ? 'Select items at home to schedule pickup' : ''}
             >
               Schedule Pickup ({selectedHomeItems.length})
@@ -463,14 +467,14 @@ export default function Dashboard() {
             <button
               onClick={handleScheduleRedelivery}
               disabled={!canSchedule || selectedStoredItems.length === 0}
-              className="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md shadow-sm hover:bg-indigo-700 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed transition-colors"
+              className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
               title={!canSchedule ? 'Address required and must be in service area' : selectedStoredItems.length === 0 ? 'Select items in storage to schedule redelivery' : ''}
             >
               Schedule Redelivery ({selectedStoredItems.length})
             </button>
             <button
               onClick={handleClearSelection}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 transition-colors"
+              className="btn-secondary"
             >
               Clear Selection
             </button>
@@ -480,11 +484,11 @@ export default function Dashboard() {
 
       {isLoading ? (
         <div className="flex flex-col items-center justify-center py-12">
-          <svg className="animate-spin h-8 w-8 text-indigo-600 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <svg className="animate-spin h-8 w-8 text-slate mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
-          <p className="text-gray-600">Loading your items...</p>
+          <p className="text-gunmetal/70">Loading your items...</p>
         </div>
       ) : items && items.length > 0 ? (
         filteredItems.length > 0 ? (
@@ -507,7 +511,7 @@ export default function Dashboard() {
           </div>
         ) : (
           <div className="card text-center">
-            <p className="text-gray-600 mb-4">
+            <p className="text-gunmetal/70 mb-4">
               No items match your filters. Try adjusting your search or filters.
             </p>
             <button
@@ -524,7 +528,7 @@ export default function Dashboard() {
         )
       ) : (
         <div className="card text-center">
-          <p className="text-gray-600 mb-4">No items yet. Get started by adding your first item.</p>
+          <p className="text-gunmetal/70 mb-4">No items yet. Get started by adding your first item.</p>
           <button
             onClick={() => setOpenAdd(true)}
             className="btn-primary inline-block"
@@ -536,7 +540,7 @@ export default function Dashboard() {
 
       <button
         onClick={() => setOpenAdd(true)}
-        className="fixed bottom-6 right-6 rounded-full w-14 h-14 bg-velvet-night text-pebble-linen shadow-lg hover:shadow-xl text-2xl transition-shadow"
+        className="fixed bottom-6 right-6 rounded-full w-14 h-14 bg-slate text-bone shadow-lg hover:shadow-xl hover:bg-gunmetal text-2xl transition-all"
         aria-label="Add Item"
       >
         +

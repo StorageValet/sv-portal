@@ -152,54 +152,54 @@ export default function AddItemModal({ onClose }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="w-full max-w-xl rounded-lg bg-pebble-linen p-6 shadow-xl">
+      <div className="w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-lg bg-cream p-6 shadow-xl">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-velvet-night">Add Item</h2>
-          <button onClick={onClose} className="btn-outline">×</button>
+          <h2 className="text-xl font-semibold text-gunmetal">Add Item</h2>
+          <button onClick={onClose} className="btn-secondary px-3 py-1">×</button>
         </div>
 
         {error && <div className="mb-3 text-sm text-red-700 bg-red-100 border border-red-200 rounded p-2">{error}</div>}
 
-        <label className="block text-sm text-deep-harbor mb-1">Title *</label>
-        <input value={label} onChange={e=>setLabel(e.target.value)} placeholder="e.g., Holiday Decor" className="form-input w-full mb-4" />
+        <label className="block text-sm text-gunmetal/80 mb-1">Title *</label>
+        <input value={label} onChange={e=>setLabel(e.target.value)} placeholder="e.g., Holiday Decor" className="input w-full mb-4" />
 
-        <label className="block text-sm text-deep-harbor mb-1">Description *</label>
-        <textarea value={description} onChange={e=>setDescription(e.target.value)} placeholder="Helpful notes so you can find this later" rows={3} className="form-input w-full mb-4" />
+        <label className="block text-sm text-gunmetal/80 mb-1">Description *</label>
+        <textarea value={description} onChange={e=>setDescription(e.target.value)} placeholder="Helpful notes so you can find this later" rows={3} className="input w-full mb-4" />
 
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm text-deep-harbor mb-1">Estimated Value (USD) *</label>
-            <input value={valueUSD} onChange={e=>setValueUSD(e.target.value)} placeholder="e.g., 200" inputMode="decimal" className="form-input w-full" />
+            <label className="block text-sm text-gunmetal/80 mb-1">Estimated Value (USD) *</label>
+            <input value={valueUSD} onChange={e=>setValueUSD(e.target.value)} placeholder="e.g., 200" inputMode="decimal" className="input w-full" />
           </div>
           <div>
-            <label className="block text-sm text-deep-harbor mb-1">Tags (comma-separated)</label>
-            <input value={tags} onChange={e=>setTags(e.target.value)} placeholder="seasonal, decor" className="form-input w-full" />
+            <label className="block text-sm text-gunmetal/80 mb-1">Tags (comma-separated)</label>
+            <input value={tags} onChange={e=>setTags(e.target.value)} placeholder="seasonal, decor" className="input w-full" />
           </div>
         </div>
 
         <div className="grid md:grid-cols-3 gap-4 mt-4">
           <div>
-            <label className="block text-sm text-deep-harbor mb-1">Length (in) *</label>
-            <input value={length} onChange={e=>setLength(e.target.value)} inputMode="decimal" className="form-input w-full" />
+            <label className="block text-sm text-gunmetal/80 mb-1">Length (in) *</label>
+            <input value={length} onChange={e=>setLength(e.target.value)} inputMode="decimal" className="input w-full" />
           </div>
           <div>
-            <label className="block text-sm text-deep-harbor mb-1">Width (in) *</label>
-            <input value={width} onChange={e=>setWidth(e.target.value)} inputMode="decimal" className="form-input w-full" />
+            <label className="block text-sm text-gunmetal/80 mb-1">Width (in) *</label>
+            <input value={width} onChange={e=>setWidth(e.target.value)} inputMode="decimal" className="input w-full" />
           </div>
           <div>
-            <label className="block text-sm text-deep-harbor mb-1">Height (in) *</label>
-            <input value={height} onChange={e=>setHeight(e.target.value)} inputMode="decimal" className="form-input w-full" />
+            <label className="block text-sm text-gunmetal/80 mb-1">Height (in) *</label>
+            <input value={height} onChange={e=>setHeight(e.target.value)} inputMode="decimal" className="input w-full" />
           </div>
         </div>
 
         <div className="mt-4">
-          <label className="block text-sm text-deep-harbor mb-1">Weight (lbs) *</label>
-          <input value={weight} onChange={e=>setWeight(e.target.value)} inputMode="decimal" className="form-input w-full" />
+          <label className="block text-sm text-gunmetal/80 mb-1">Weight (lbs) *</label>
+          <input value={weight} onChange={e=>setWeight(e.target.value)} inputMode="decimal" className="input w-full" />
         </div>
 
         {/* Photo Upload Section */}
         <div className="mt-4">
-          <label className="block text-sm text-deep-harbor mb-2">
+          <label className="block text-sm text-gunmetal/80 mb-2">
             Photos ({photos.length} / {MAX_PHOTO_COUNT}) *
           </label>
 
@@ -250,12 +250,12 @@ export default function AddItemModal({ onClose }: Props) {
             accept="image/jpeg,image/png,image/webp"
             multiple
             onChange={handlePhotoChange}
-            className="block w-full text-sm text-deep-harbor
+            className="block w-full text-sm text-gunmetal
               file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0
               file:text-sm file:font-semibold file:bg-slate file:text-bone
-              hover:file:bg-gunmetal-2 file:cursor-pointer cursor-pointer"
+              hover:file:bg-gunmetal file:cursor-pointer cursor-pointer"
           />
-          <p className="mt-1 text-xs text-deep-harbor/70">
+          <p className="mt-1 text-xs text-gunmetal/60">
             JPG, PNG, or WebP only. Max {MAX_PHOTO_SIZE_MB}MB per photo. Select 1-{MAX_PHOTO_COUNT} photos at once.
             First photo is the cover image.
           </p>
@@ -267,7 +267,7 @@ export default function AddItemModal({ onClose }: Props) {
         </div>
 
         <div className="mt-6 flex items-center justify-end gap-3">
-          <button onClick={onClose} className="btn-outline">Cancel</button>
+          <button onClick={onClose} className="btn-secondary">Cancel</button>
           <button onClick={handleSubmit} disabled={busy} className="btn-primary disabled:opacity-60">
             {busy ? 'Adding…' : 'Add Item'}
           </button>
