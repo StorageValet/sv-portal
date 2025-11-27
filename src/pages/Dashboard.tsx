@@ -9,10 +9,12 @@ import EditItemModal from '../components/EditItemModal'
 import DeleteConfirmModal from '../components/DeleteConfirmModal'
 import ItemDetailModal from '../components/ItemDetailModal'
 import WaitlistDashboard from '../components/WaitlistDashboard'
+import CalendlyEmbed from '../components/CalendlyEmbed'
 
 export default function Dashboard() {
   const navigate = useNavigate()
   const [openAdd, setOpenAdd] = useState(false)
+  const [openCalendly, setOpenCalendly] = useState(false)
   const [editingItemId, setEditingItemId] = useState<string | null>(null)
   const [deletingItemId, setDeletingItemId] = useState<string | null>(null)
   const [viewingItemId, setViewingItemId] = useState<string | null>(null)
@@ -267,17 +269,15 @@ export default function Dashboard() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-lg font-semibold text-gunmetal">Upcoming Services</h3>
-          <a
-            href="https://calendly.com/zach-mystoragevalet"
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            onClick={() => setOpenCalendly(true)}
             className="btn-primary inline-flex items-center"
           >
             <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
             Book Appointment
-          </a>
+          </button>
         </div>
         {/* Webhook processing note */}
         <p className="text-xs text-slate/60 mb-3">
@@ -550,6 +550,7 @@ export default function Dashboard() {
       {editingItemId && <EditItemModal itemId={editingItemId} onClose={() => setEditingItemId(null)} />}
       {deletingItemId && <DeleteConfirmModal itemId={deletingItemId} onClose={() => setDeletingItemId(null)} />}
       {viewingItemId && <ItemDetailModal itemId={viewingItemId} onClose={() => setViewingItemId(null)} />}
+      {openCalendly && <CalendlyEmbed onClose={() => setOpenCalendly(false)} />}
     </AppLayout>
   )
 }

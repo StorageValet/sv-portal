@@ -45,14 +45,18 @@ export default function QRCodeDisplay({ item }: QRCodeDisplayProps) {
 
   return (
     <div className="text-center p-4">
-      <h3 className="font-bold text-lg">{item.label}</h3>
-      <p className="text-sm text-gray-500 mb-4">{item.qr_code}</p>
-      <div className="flex justify-center">
-        <QRCodeSVG value={item.qr_code} size={256} ref={qrRef} />
+      <h3 className="font-bold text-lg text-gunmetal">{item.label}</h3>
+      <p className="text-sm text-slate/70 mb-4">{item.qr_code}</p>
+      <div className="flex justify-center bg-white p-4 rounded-lg">
+        <QRCodeSVG value={item.qr_code} size={200} ref={qrRef} />
       </div>
-      <div className="mt-6 flex justify-center space-x-4">
-        <button onClick={downloadQR} className="text-sm font-medium text-indigo-600">Download PNG</button>
-        <button onClick={printQR} className="text-sm font-medium text-indigo-600">Print</button>
+      <div className="mt-4 flex justify-center space-x-4">
+        <button onClick={downloadQR} className="text-sm font-medium text-slate hover:text-gunmetal transition-colors">
+          Download PNG
+        </button>
+        <button onClick={printQR} className="text-sm font-medium text-slate hover:text-gunmetal transition-colors">
+          Print
+        </button>
       </div>
     </div>
   );

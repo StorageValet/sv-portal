@@ -49,36 +49,36 @@ export default function Account() {
     <AppLayout>
       <div className="max-w-4xl mx-auto space-y-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Your Account</h1>
-          <p className="mt-1 text-sm text-gray-600">
+          <h1 className="text-2xl font-bold text-gunmetal">Your Account</h1>
+          <p className="mt-1 text-sm text-gunmetal/70">
             Update your profile, delivery information, and manage your subscription.
           </p>
         </div>
 
         <ProfileEditForm />
 
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h3 className="text-lg font-medium leading-6 text-gray-900">Subscription & Billing</h3>
+        <div className="card">
+          <h3 className="text-lg font-semibold text-gunmetal">Subscription & Billing</h3>
           <div className="mt-4 space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div className="space-y-2">
-                <p className="text-sm text-gray-600">
-                  Current Plan: <span className="font-semibold text-gray-800">Storage Valet Premium ($299/month)</span>
+                <p className="text-sm text-gunmetal/80">
+                  Current Plan: <span className="font-semibold text-gunmetal">Storage Valet Premium ($299/month)</span>
                 </p>
                 <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-600">Status:</span>
+                  <span className="text-sm text-gunmetal/70">Status:</span>
                   <span className={`text-sm font-semibold px-2 py-1 rounded border ${getStatusDisplay(profile?.subscription_status || 'inactive').color}`}>
                     {getStatusDisplay(profile?.subscription_status || 'inactive').text}
                   </span>
                 </div>
                 {profile?.last_payment_at && (
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-gunmetal/60">
                     Last payment: {format(new Date(profile.last_payment_at), 'MMM d, yyyy')}
                   </p>
                 )}
                 {profile?.subscription_status === 'past_due' && profile?.last_payment_failed_at && (
                   <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-md">
-                    <p className="text-sm text-red-700 font-medium">⚠️ Payment Issue</p>
+                    <p className="text-sm text-red-700 font-medium">Payment Issue</p>
                     <p className="text-xs text-red-600 mt-1">
                       Last payment failed on {format(new Date(profile.last_payment_failed_at), 'MMM d, yyyy')}.
                       Please update your payment method to continue service.
@@ -87,7 +87,7 @@ export default function Account() {
                 )}
                 {['incomplete', 'incomplete_expired'].includes(profile?.subscription_status || '') && (
                   <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
-                    <p className="text-sm text-yellow-700 font-medium">⚠️ Setup Required</p>
+                    <p className="text-sm text-yellow-700 font-medium">Setup Required</p>
                     <p className="text-xs text-yellow-600 mt-1">
                       Your subscription setup is incomplete. Please finish checkout to activate your account.
                     </p>
@@ -96,13 +96,13 @@ export default function Account() {
               </div>
               <button
                 onClick={handleManageBilling}
-                className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700"
+                className="btn-primary whitespace-nowrap"
               >
                 Manage Billing
               </button>
             </div>
           </div>
-          <p className="mt-4 text-xs text-gray-500">
+          <p className="mt-4 text-xs text-gunmetal/60">
             You will be redirected to our secure payment partner, Stripe, to manage your subscription.
           </p>
         </div>
