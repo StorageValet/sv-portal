@@ -26,7 +26,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link to="/dashboard" className="flex items-center">
-              <img src="/logo-wordmark-navy.png" alt="Storage Valet" className="h-10 w-auto md:h-10 sm:h-9" />
+              <img src="/logo-wordmark-navy.png" alt="Storage Valet" className="h-12 w-auto" />
             </Link>
             <div className="flex gap-4 items-center">
               {navItems.map(item => {
