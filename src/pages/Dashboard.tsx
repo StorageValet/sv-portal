@@ -25,11 +25,11 @@ export default function Dashboard() {
   const [categoryFilter, setCategoryFilter] = useState<string>('all')
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
-  // Debounce search input (500ms delay)
+  // Debounce search input (300ms delay per README spec)
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchQuery)
-    }, 500)
+    }, 300)
 
     return () => clearTimeout(timer)
   }, [searchQuery])
@@ -142,19 +142,30 @@ export default function Dashboard() {
   const usedRatio = insuranceCapCents > 0 ? Math.min(totalItemValueCents / insuranceCapCents, 1) : 0
 
   // Sprint 3: Filter and search items
+  // Searches: label, description, QR code, category, tags (per README spec)
   const filteredItems = useMemo(() => {
     if (!items) return []
 
     let filtered = items
 
     if (debouncedSearch) {
-      const query = debouncedSearch.toLowerCase()
-      filtered = filtered.filter(item =>
-        item.label?.toLowerCase().includes(query) ||
-        item.description?.toLowerCase().includes(query) ||
-        item.qr_code?.toLowerCase().includes(query) ||
-        item.category?.toLowerCase().includes(query)
-      )
+      const query = debouncedSearch.toLowerCase().trim()
+      filtered = filtered.filter(item => {
+        // Explicitly convert null/undefined to empty string for robust matching
+        const label = (item.label || '').toLowerCase()
+        const description = (item.description || '').toLowerCase()
+        const qrCode = (item.qr_code || '').toLowerCase()
+        const category = (item.category || '').toLowerCase()
+        const tags = Array.isArray(item.tags) ? item.tags.join(' ').toLowerCase() : ''
+
+        return (
+          label.includes(query) ||
+          description.includes(query) ||
+          qrCode.includes(query) ||
+          category.includes(query) ||
+          tags.includes(query)
+        )
+      })
     }
 
     if (statusFilter !== 'all') {
@@ -167,6 +178,15 @@ export default function Dashboard() {
 
     return filtered
   }, [items, debouncedSearch, statusFilter, categoryFilter])
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // SEARCH TEST PROTOCOL (for verification):
+  // 1. Create item with unique word in TITLE only (e.g., "Flamingo Chair")
+  // 2. Create item with unique word in DESCRIPTION only (e.g., desc: "basketball hoop")
+  // 3. Search "Flamingo" → should find item 1
+  // 4. Search "basketball" → should find item 2
+  // 5. Both should respect status filter (All, Home, Scheduled, Stored)
+  // ─────────────────────────────────────────────────────────────────────────────
 
   const categories = useMemo(() => {
     if (!items) return []
@@ -368,7 +388,7 @@ export default function Dashboard() {
         <div className="relative">
           <input
             type="text"
-            placeholder="Search items by name, description, QR code, or category..."
+            placeholder="Search items by name, description, QR code, category, or tags..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="input pl-10"
