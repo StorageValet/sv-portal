@@ -102,9 +102,22 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
     })
   }
 
-  // Partition items by status
-  const homeItems = items?.filter(item => item.status === 'home') || []
-  const storedItems = items?.filter(item => item.status === 'stored') || []
+  // Get this booking's existing item IDs (for edit mode)
+  const bookingPickupIds = new Set<string>(action?.pickup_item_ids || [])
+  const bookingDeliveryIds = new Set<string>(action?.delivery_item_ids || [])
+
+  // Partition items by status, INCLUDING scheduled items that belong to THIS booking
+  // At Home section: 'home' items + 'scheduled' items in this booking's pickup_item_ids
+  const homeItems = items?.filter(item =>
+    item.status === 'home' ||
+    (item.status === 'scheduled' && bookingPickupIds.has(item.id))
+  ) || []
+
+  // In Storage section: 'stored' items + 'scheduled' items in this booking's delivery_item_ids
+  const storedItems = items?.filter(item =>
+    item.status === 'stored' ||
+    (item.status === 'scheduled' && bookingDeliveryIds.has(item.id))
+  ) || []
 
   const toggleItem = (itemId: string) => {
     setSelectedIds(prev => {
