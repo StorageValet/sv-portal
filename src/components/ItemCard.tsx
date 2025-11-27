@@ -11,7 +11,7 @@ interface Item {
   cubic_feet?: number
   weight_lbs?: number
   estimated_value_cents?: number
-  status?: 'home' | 'in_transit' | 'stored'
+  status?: 'home' | 'scheduled' | 'stored'
 }
 
 interface ItemCardProps {
@@ -53,8 +53,15 @@ export default function ItemCard({ item, isSelected, onSelect, onEdit, onDelete,
   // Status badge colors - using semantic colors for clarity
   const statusColors = {
     home: 'bg-green-100 text-green-800',
-    in_transit: 'bg-amber-100 text-amber-800',
+    scheduled: 'bg-amber-100 text-amber-800',
     stored: 'bg-cerulean text-white',
+  }
+
+  // Status-based card styling (left border accent)
+  const statusCardStyles = {
+    home: '',
+    scheduled: 'border-l-4 border-amber-400 bg-amber-50/30',
+    stored: 'border-l-4 border-stormy-teal',
   }
 
   const statusLabel = item.status || 'home'
@@ -62,7 +69,7 @@ export default function ItemCard({ item, isSelected, onSelect, onEdit, onDelete,
   return (
     <div className={`card p-0 flex flex-col overflow-hidden transition-all ${
       isSelected ? 'ring-2 ring-tropical-teal ring-offset-2' : ''
-    }`}>
+    } ${statusCardStyles[statusLabel] || ''}`}>
       {/* Photo Section with Checkbox and Status Badge */}
       <div className="relative">
         {/* Selection Checkbox */}

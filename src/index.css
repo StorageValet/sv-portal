@@ -4,7 +4,11 @@
 
 @layer base {
   body {
-    @apply bg-honeydew text-text-primary;
+    @apply bg-honeydew text-text-primary font-sans;
+  }
+
+  h1, h2, h3 {
+    @apply font-serif;
   }
 }
 

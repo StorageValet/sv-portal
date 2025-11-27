@@ -21,7 +21,7 @@ export default function Dashboard() {
   // Sprint 3: Search and filter state
   const [searchQuery, setSearchQuery] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
-  const [statusFilter, setStatusFilter] = useState<'all' | 'home' | 'in_transit' | 'stored'>('all')
+  const [statusFilter, setStatusFilter] = useState<'all' | 'home' | 'scheduled' | 'stored'>('all')
   const [categoryFilter, setCategoryFilter] = useState<string>('all')
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
@@ -391,7 +391,7 @@ export default function Dashboard() {
             >
               <option value="all">All Status</option>
               <option value="home">Home</option>
-              <option value="in_transit">In Transit</option>
+              <option value="scheduled">Scheduled</option>
               <option value="stored">Stored</option>
             </select>
 

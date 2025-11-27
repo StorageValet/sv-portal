@@ -6,6 +6,10 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'serif': ['"DM Serif Display"', 'Georgia', 'serif'],
+        'sans': ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+      },
       colors: {
         // Storage Valet Brand Colors (TEAL Palette)
         'stormy-teal': '#006d77',       // Primary brand, headers, authority

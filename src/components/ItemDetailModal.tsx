@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { supabase } from '../lib/supabase';
+import { supabase, getItemPhotoUrls } from '../lib/supabase';
 import ItemTimeline from './ItemTimeline';
 import QRCodeDisplay from './QRCodeDisplay';
 
@@ -9,6 +10,8 @@ interface ItemDetailModalProps {
 }
 
 export default function ItemDetailModal({ itemId, onClose }: ItemDetailModalProps) {
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
+
   const { data: item, isLoading } = useQuery({
     queryKey: ['item', itemId],
     queryFn: async () => {
@@ -16,6 +19,14 @@ export default function ItemDetailModal({ itemId, onClose }: ItemDetailModalProp
       if (error) throw new Error(error.message);
       return data;
     },
+  });
+
+  // Fetch photo URLs
+  const { data: photoUrls = [] } = useQuery({
+    queryKey: ['item-photos', item?.photo_paths],
+    queryFn: () => getItemPhotoUrls(item!.photo_paths || []),
+    enabled: !!item?.photo_paths && item.photo_paths.length > 0,
+    staleTime: 1000 * 60 * 50, // 50 minutes
   });
 
   return (
@@ -35,16 +46,57 @@ export default function ItemDetailModal({ itemId, onClose }: ItemDetailModalProp
             <p className="text-gunmetal/70">Loading details...</p>
           </div>
         ) : item ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="card">
-              <h3 className="font-semibold text-gunmetal mb-4">QR Code</h3>
-              <QRCodeDisplay item={item} />
+          <>
+            {/* Photo Gallery Section */}
+            <section className="mb-6">
+              <h3 className="text-sm font-semibold text-text-primary mb-3">Photos</h3>
+              {photoUrls.length > 0 ? (
+                <div className="space-y-3">
+                  {/* Primary Image */}
+                  <div className="w-full rounded-xl overflow-hidden bg-slate-100">
+                    <img
+                      src={photoUrls[selectedPhotoIndex]}
+                      alt={item.label}
+                      className="w-full max-h-72 object-cover"
+                    />
+                  </div>
+                  {/* Thumbnail Strip (if multiple photos) */}
+                  {photoUrls.length > 1 && (
+                    <div className="flex gap-2 overflow-x-auto pb-1">
+                      {photoUrls.map((url, index) => (
+                        <button
+                          key={url}
+                          type="button"
+                          onClick={() => setSelectedPhotoIndex(index)}
+                          className={`h-16 w-16 rounded-md overflow-hidden bg-slate-100 flex-shrink-0 transition-all ${
+                            index === selectedPhotoIndex
+                              ? 'ring-2 ring-tropical-teal ring-offset-1'
+                              : 'opacity-70 hover:opacity-100'
+                          }`}
+                        >
+                          <img src={url} alt="" className="h-full w-full object-cover" />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <p className="text-sm text-text-secondary">No photos uploaded yet.</p>
+              )}
+            </section>
+
+            {/* QR Code + Timeline Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="card">
+                <h3 className="font-semibold text-gunmetal mb-4">QR Code</h3>
+                <QRCodeDisplay item={item} />
+              </div>
+              <div className="card">
+                <h3 className="font-semibold text-gunmetal mb-4">Item History</h3>
+                <ItemTimeline itemId={item.id} />
+              </div>
             </div>
-            <div className="card">
-              <h3 className="font-semibold text-gunmetal mb-4">Item History</h3>
-              <ItemTimeline itemId={item.id} />
-            </div>
-          </div>
+          </>
         ) : (
           <p className="text-gunmetal/70 text-center py-8">Could not load item details.</p>
         )}

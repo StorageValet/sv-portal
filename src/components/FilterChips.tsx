@@ -1,4 +1,4 @@
-type ItemStatus = 'all' | 'home' | 'in_transit' | 'stored';
+type ItemStatus = 'all' | 'home' | 'scheduled' | 'stored';
 
 interface FilterChipsProps {
   activeStatus: ItemStatus;
@@ -6,7 +6,7 @@ interface FilterChipsProps {
   // We can add category filters here in a future step
 }
 
-const statuses: ItemStatus[] = ['all', 'home', 'in_transit', 'stored'];
+const statuses: ItemStatus[] = ['all', 'home', 'scheduled', 'stored'];
 
 export default function FilterChips({ activeStatus, onStatusChange }: FilterChipsProps) {
   const getChipClass = (status: ItemStatus) => {
