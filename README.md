@@ -69,7 +69,7 @@ sv-portal/
 - **Item Display:** Grid/list view toggle
 - **Search:** Real-time keyword search (debounced 300ms)
   - Searches: label, description, QR code, category, tags
-- **Filters:** Status (all/home/in_transit/stored), Category
+- **Filters:** Status (all/home/scheduled/stored), Category
 - **Batch Selection:** Multi-select items for batch operations
 - **CRUD Operations:**
   - **Add:** Multi-photo upload (1-5 photos), business fields
@@ -83,7 +83,7 @@ sv-portal/
 - **Multi-Photo Support:** 1-5 photos per item
 - **Photo Security:** Private bucket, RLS, signed URLs (1h expiry)
 - **Physical Lock:** Dimensions locked after pickup confirmation
-- **Status Tracking:** home → in_transit → stored
+- **Status Tracking:** home → scheduled → stored
 - **Categories:** Optional item categorization
 - **Tags:** Searchable tags array
 - **QR Codes:** Auto-generated (SV-YYYY-NNNNNN format)
@@ -152,7 +152,7 @@ npm preview
 ### Tables
 - **items** — Customer inventory
   - Multi-photo: `photo_paths text[]`
-  - Status: `status text` (home/in_transit/stored)
+  - Status: `status text` (home/scheduled/stored)
   - Category: `category text`
   - Physical lock: `physical_locked_at timestamptz`
   - QR code: `qr_code text` (auto-generated)
@@ -196,7 +196,7 @@ npm preview
 ### Sprint 3: Search & Filters
 - [ ] Keyword search filters items in real-time
 - [ ] Search works across label, description, tags, category
-- [ ] Status filter chips work (all/home/in_transit/stored)
+- [ ] Status filter chips work (all/home/scheduled/stored)
 - [ ] Category filter dropdown functions
 - [ ] Combined filters work together
 - [ ] Grid/list view toggle works
