@@ -300,9 +300,7 @@ export default function Dashboard() {
                     </div>
                     <div className="flex items-center space-x-4 text-sm text-text-secondary">
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-frosted-blue text-oxford-navy capitalize">
-                        {booking.status === 'pending_items' ? 'Awaiting Items' :
-                         booking.status === 'pending_confirmation' ? 'Pending Confirmation' :
-                         'Confirmed'}
+                        {booking.status === 'pending_items' ? 'Awaiting Items' : 'Scheduled'}
                       </span>
                       {booking.pickup_item_ids && booking.pickup_item_ids.length > 0 && (
                         <span>↑ {booking.pickup_item_ids.length} pickup</span>
