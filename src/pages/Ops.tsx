@@ -72,13 +72,21 @@ export default function Ops() {
     queryKey: ['staff-check', user?.id],
     queryFn: async () => {
       if (!user) return false
-      // Call sv.is_staff() RPC - function is in sv schema
-      const { data, error } = await supabase.rpc('sv.is_staff')
+      // Query sv.staff table directly - check if current user exists in staff table
+      // This is equivalent to sv.is_staff() but works with Supabase JS client
+      const { data, error } = await supabase
+        .schema('sv')
+        .from('staff')
+        .select('user_id')
+        .eq('user_id', user.id)
+        .maybeSingle()
+
       if (error) {
-        console.error('sv.is_staff RPC error:', error)
+        console.error('Staff check error:', error)
         throw error
       }
-      return data === true
+      // If we got a row back, user is staff
+      return data !== null
     },
     enabled: !!user,
   })
