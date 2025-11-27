@@ -37,12 +37,17 @@ export default function Ops() {
     staleTime: Infinity,
   })
 
-  const { data: isStaff, isLoading: staffLoading } = useQuery({
+  const { data: isStaff, isLoading: staffLoading, error: staffError } = useQuery({
     queryKey: ['staff-check', user?.id],
     queryFn: async () => {
       if (!user) return false
-      const { data, error } = await supabase.rpc('is_staff')
-      return !error && data === true
+      // Call sv.is_staff() RPC - function is in sv schema
+      const { data, error } = await supabase.rpc('sv.is_staff')
+      if (error) {
+        console.error('sv.is_staff RPC error:', error)
+        throw error
+      }
+      return data === true
     },
     enabled: !!user,
   })
@@ -155,6 +160,31 @@ export default function Ops() {
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
           <p className="text-gunmetal/70">Checking access...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Error state - RPC failed
+  if (staffError) {
+    return (
+      <div className="min-h-screen bg-cream flex items-center justify-center p-4">
+        <div className="card max-w-md w-full text-center">
+          <div className="mb-4">
+            <svg className="mx-auto h-12 w-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+          </div>
+          <h2 className="text-xl font-semibold text-gunmetal mb-2">Error Verifying Access</h2>
+          <p className="text-gunmetal/70 mb-4">
+            Unable to verify staff access. Please contact support if this persists.
+          </p>
+          <p className="text-xs text-red-600 mb-4 font-mono bg-red-50 p-2 rounded">
+            {staffError instanceof Error ? staffError.message : 'Unknown error'}
+          </p>
+          <a href="/dashboard" className="btn-primary inline-block">
+            Go to Dashboard
+          </a>
         </div>
       </div>
     )
