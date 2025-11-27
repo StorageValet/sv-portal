@@ -23,6 +23,37 @@ interface Action {
   customer_profile: CustomerProfile | CustomerProfile[] | null
 }
 
+// Helper to extract error message from Supabase PostgrestError or generic Error
+function getStaffErrorMessage(err: unknown): string {
+  if (!err) return 'Unknown error'
+
+  // Log full error to console for debugging
+  console.error('Full staffError object:', err)
+
+  // Try common error properties
+  const anyErr = err as Record<string, unknown>
+
+  if (typeof anyErr.message === 'string' && anyErr.message.length > 0) {
+    return anyErr.message
+  }
+  if (typeof anyErr.details === 'string' && anyErr.details.length > 0) {
+    return anyErr.details
+  }
+  if (typeof anyErr.hint === 'string' && anyErr.hint.length > 0) {
+    return anyErr.hint
+  }
+  if (typeof anyErr.code === 'string') {
+    return `Error code: ${anyErr.code}`
+  }
+
+  // Fallback to JSON dump
+  try {
+    return JSON.stringify(err, null, 2)
+  } catch {
+    return 'Unknown error (not serializable)'
+  }
+}
+
 export default function Ops() {
   const [filter, setFilter] = useState<FilterTab>('upcoming')
   const queryClient = useQueryClient()
@@ -179,9 +210,9 @@ export default function Ops() {
           <p className="text-gunmetal/70 mb-4">
             Unable to verify staff access. Please contact support if this persists.
           </p>
-          <p className="text-xs text-red-600 mb-4 font-mono bg-red-50 p-2 rounded">
-            {staffError instanceof Error ? staffError.message : 'Unknown error'}
-          </p>
+          <pre className="text-xs text-red-600 mb-4 font-mono bg-red-50 p-2 rounded text-left whitespace-pre-wrap break-all max-h-40 overflow-auto">
+            {getStaffErrorMessage(staffError)}
+          </pre>
           <a href="/dashboard" className="btn-primary inline-block">
             Go to Dashboard
           </a>
