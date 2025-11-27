@@ -7,19 +7,25 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Storage Valet Brand Colors (ONYX Palette)
-        'gunmetal': '#162726',        // Dark forest green - primary dark
-        'gunmetal-2': '#1f3133',      // Medium forest green - secondary dark
-        'slate': '#2f4b4d',           // Dark slate gray - accents
-        'bone': '#e5dbca',            // Warm cream - highlights, cards
-        'cream': '#f8f4f0',           // Light cream - backgrounds, body
+        // Storage Valet Brand Colors (TEAL Palette)
+        'stormy-teal': '#006d77',       // Primary brand, headers, authority
+        'tropical-teal': '#79b4b3',     // CTAs, primary accents, actions
+        'tropical-teal-hover': '#6a9fa1', // Hover state for tropical-teal
+        'oxford-navy': '#1d3557',       // Text, depth, dark elements
+        'cerulean': '#457b9d',          // Hierarchy, borders, secondary elements
+        'frosted-blue': '#a8dadc',      // Light accents, hover states
+        'honeydew': '#f8f9fa',          // Page background
+        'bright-snow': '#fafafa',       // Card surfaces, white areas
+        'text-primary': '#1a1a1a',      // Dark text on light backgrounds
+        'text-secondary': '#5a5a5a',    // Muted text, secondary content
+        'border': '#e0e0e0',            // Borders, dividers
 
-        // Legacy aliases (for backward compatibility)
-        'velvet-night': '#162726',
-        'pebble-linen': '#f8f4f0',
-        'deep-harbor': '#2f4b4d',
-        'chalk-linen': '#e5dbca',
-        'midnight-alloy': '#1f3133',
+        // Legacy mappings (for any remaining old class names)
+        'gunmetal': '#006d77',          // Maps to stormy-teal
+        'gunmetal-2': '#1d3557',        // Maps to oxford-navy
+        'slate': '#457b9d',             // Maps to cerulean
+        'bone': '#a8dadc',              // Maps to frosted-blue
+        'cream': '#f8f9fa',             // Maps to honeydew
       },
     },
   },
