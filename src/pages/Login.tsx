@@ -35,7 +35,7 @@ export default function Login() {
         <img
           src="/logo-auth-hero.png"
           alt="Storage Valet"
-          className="w-full max-w-xs md:max-w-sm mx-auto"
+          className="w-full max-w-sm md:max-w-md lg:max-w-lg mx-auto"
         />
       </div>
 
@@ -47,7 +47,7 @@ export default function Login() {
             <img
               src="/logo-auth-hero.png"
               alt="Storage Valet"
-              className="w-full max-w-xs md:max-w-sm mx-auto mb-6"
+              className="w-full max-w-sm md:max-w-md mx-auto mb-6"
             />
           </div>
 
