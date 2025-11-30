@@ -48,9 +48,9 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
 
       // Fetch signed URLs for existing photos
       if (paths.length > 0) {
-        getItemPhotoUrls(paths).then(urls => {
-          setExistingPhotoUrls(urls)
-        })
+        getItemPhotoUrls(paths)
+          .then(urls => setExistingPhotoUrls(urls))
+          .catch(err => console.error('Failed to load photo URLs:', err))
       }
     }
   }, [item])

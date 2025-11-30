@@ -9,6 +9,7 @@ import EditItemModal from '../components/EditItemModal'
 import DeleteConfirmModal from '../components/DeleteConfirmModal'
 import ItemDetailModal from '../components/ItemDetailModal'
 import WaitlistDashboard from '../components/WaitlistDashboard'
+import ErrorState from '../components/ErrorState'
 
 export default function Dashboard() {
   const navigate = useNavigate()
@@ -69,7 +70,7 @@ export default function Dashboard() {
   const isWaitlist = profile?.out_of_service_area === true
 
   // Load items (depends on user and profile)
-  const { data: items, isLoading } = useQuery({
+  const { data: items, isLoading, error: itemsError, refetch: refetchItems } = useQuery({
     queryKey: ['items', user?.id],
     queryFn: async () => {
       if (!user) throw new Error('User not authenticated')
@@ -500,7 +501,9 @@ export default function Dashboard() {
         </div>
       )}
 
-      {isLoading ? (
+      {itemsError ? (
+        <ErrorState error={itemsError} onRetry={refetchItems} message="Failed to load items" />
+      ) : isLoading ? (
         <div className="flex flex-col items-center justify-center py-12">
           <svg className="animate-spin h-8 w-8 text-cerulean mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
