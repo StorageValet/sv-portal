@@ -61,15 +61,15 @@ export default function ProfileEditForm() {
     }) => {
       setIsSubmitting(true);
 
-      // Get current user ID from auth session (works for both new and existing users)
+      // Get current user ID and email from auth session (works for both new and existing users)
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
+      if (!user || !user.email) throw new Error("Not authenticated");
 
       // Use upsert to handle both new users (insert) and existing users (update)
       const { error } = await supabase
         .from('customer_profile')
         .upsert(
-          { ...updatedProfile, user_id: user.id },
+          { ...updatedProfile, user_id: user.id, email: user.email },
           { onConflict: 'user_id' }
         );
 
