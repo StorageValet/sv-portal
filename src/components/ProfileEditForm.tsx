@@ -176,7 +176,7 @@ export default function ProfileEditForm() {
           </div>
           <div>
             <label htmlFor="state" className="block text-sm font-medium text-gunmetal/80 mb-1">State</label>
-            <input type="text" name="state" id="state" defaultValue={profile?.delivery_address?.state || ''} placeholder="NJ" className="input w-full" />
+            <input type="text" name="state" id="state" defaultValue={profile?.delivery_address?.state || 'NJ'} placeholder="NJ" className="input w-full" />
           </div>
           <div>
             <label htmlFor="zip" className="block text-sm font-medium text-gunmetal/80 mb-1">ZIP Code *</label>
