@@ -1,21 +1,19 @@
 // Storage Valet Service Area Configuration
-// 13 ZIP codes in northern New Jersey
-
+// Storage Valet Launch Service Areas (14 ZIP codes in Hudson County, NJ)
 export const SUPPORTED_ZIP_CODES = [
-  '07030', // Hoboken - PRIMARY MARKET
-  '07001', // Avenel
-  '07002', // Bayonne
-  '07003', // Bloomfield
-  '07004', // Fairfield
-  '07005', // Boonton
-  '07006', // Caldwell
-  '07007', // Caldwell (West)
-  '07008', // Carteret
-  '07009', // Cedar Grove
-  '07010', // Cliffside Park
-  '07011', // Clifton
-  '07012', // Clifton
-  '07013', // Clifton
+  '07030', // Hoboken
+  '07310', // Jersey City
+  '07311', // Jersey City
+  '07302', // Jersey City
+  '07305', // Jersey City
+  '07307', // Jersey City
+  '07304', // Jersey City
+  '07306', // Jersey City
+  '07086', // Weehawken / Port Imperial
+  '07087', // Union City
+  '07093', // West New York
+  '07020', // Edgewater
+  '07047', // North Bergen
 ] as const
 
 export type ServiceZipCode = typeof SUPPORTED_ZIP_CODES[number]
