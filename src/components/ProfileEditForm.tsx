@@ -45,7 +45,8 @@ export default function ProfileEditForm() {
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return null;
-      const { data, error } = await supabase.from('customer_profile').select('*').eq('user_id', user.id).single();
+      // Use maybeSingle() instead of single() to handle new users with no profile yet
+      const { data, error } = await supabase.from('customer_profile').select('*').eq('user_id', user.id).maybeSingle();
       if (error) throw new Error(error.message);
       return data;
     }
@@ -59,13 +60,16 @@ export default function ProfileEditForm() {
       delivery_instructions?: string;
     }) => {
       setIsSubmitting(true);
-      if (!profile) throw new Error("Profile not found");
+
+      // Get current user ID from auth session (works for both new and existing users)
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Not authenticated");
 
       // Use upsert to handle both new users (insert) and existing users (update)
       const { error } = await supabase
         .from('customer_profile')
         .upsert(
-          { ...updatedProfile, user_id: profile.user_id },
+          { ...updatedProfile, user_id: user.id },
           { onConflict: 'user_id' }
         );
 
