@@ -10,6 +10,7 @@ import DeleteConfirmModal from '../components/DeleteConfirmModal'
 import ItemDetailModal from '../components/ItemDetailModal'
 import WaitlistDashboard from '../components/WaitlistDashboard'
 import ErrorState from '../components/ErrorState'
+import { isInServiceArea } from '../lib/serviceArea'
 
 export default function Dashboard() {
   const navigate = useNavigate()
@@ -132,10 +133,20 @@ export default function Dashboard() {
     })
   }
 
-  // Service area gating logic
-  const hasAddress = profile?.delivery_address && Object.keys(profile.delivery_address).length > 0
-  const isOutOfServiceArea = profile?.out_of_service_area === true
-  const canSchedule = hasAddress && !isOutOfServiceArea
+  // Service area gating logic (CANONICAL FRONTEND CHECK)
+  // Extract delivery address fields
+  const deliveryAddress = profile?.delivery_address as { street?: string; zip?: string } | null | undefined
+  const deliveryZip = deliveryAddress?.zip?.trim()
+  const deliveryStreet = deliveryAddress?.street?.trim()
+
+  // Determine if user has a complete address (street + zip required)
+  const hasAddress = !!(deliveryStreet && deliveryZip)
+
+  // Check if ZIP is in our launch service area (14 Hudson County ZIPs)
+  const isInServiceAreaFrontEnd = hasAddress && isInServiceArea(deliveryZip)
+
+  // User can schedule ONLY if they have an address AND are in service area
+  const canSchedule = hasAddress && isInServiceAreaFrontEnd
 
   const insuranceCapCents = insurance?.insurance_cap_cents ?? 0
   const totalItemValueCents = insurance?.total_item_value_cents ?? 0
@@ -246,43 +257,59 @@ export default function Dashboard() {
         )}
       </div>
 
-      {/* Service Area Alert (if out of area or missing address) */}
-      {!profileLoading && !canSchedule && (
-        <div className="mb-6 p-4 rounded-lg border bg-yellow-50 border-yellow-200">
+      {/* Service Area Gating - Three States */}
+      {!profileLoading && !hasAddress && (
+        /* CASE A: No address yet - Blocking card */
+        <div className="mb-6 p-6 rounded-lg border-2 border-yellow-400 bg-yellow-50">
           <div className="flex items-start">
-            <svg className="h-5 w-5 text-yellow-600 mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="h-6 w-6 text-yellow-600 mt-0.5 mr-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
-            <div>
-              {!hasAddress && (
-                <>
-                  <h3 className="text-sm font-semibold text-yellow-800 mb-1">Address Required</h3>
-                  <p className="text-sm text-yellow-700">
-                    Please add your delivery address in{' '}
-                    <button onClick={() => navigate('/account')} className="underline font-medium hover:text-yellow-900">
-                      Account Settings
-                    </button>
-                    {' '}before scheduling a service.
-                  </p>
-                </>
-              )}
-              {hasAddress && isOutOfServiceArea && (
-                <>
-                  <h3 className="text-sm font-semibold text-yellow-800 mb-1">Service Area Notice</h3>
-                  <p className="text-sm text-yellow-700">
-                    Your address is outside our primary service area. Our team will review your request manually.
-                    Please contact{' '}
-                    <a href="mailto:support@mystoragevalet.com" className="underline font-medium hover:text-yellow-900">
-                      support@mystoragevalet.com
-                    </a>
-                    {' '}if you think this is an error.
-                  </p>
-                </>
-              )}
+            <div className="flex-1">
+              <h3 className="text-lg font-bold text-yellow-900 mb-2">Add Your Delivery Address to Get Started</h3>
+              <p className="text-sm text-yellow-800 mb-4">
+                Storage Valet needs your delivery address to verify that you're in our service area and to schedule pickups and deliveries.
+                This takes less than a minute to complete.
+              </p>
+              <button
+                onClick={() => navigate('/account')}
+                className="btn-primary bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-2 rounded-md font-medium"
+              >
+                Go to Account Settings →
+              </button>
             </div>
           </div>
         </div>
       )}
+
+      {!profileLoading && hasAddress && !isInServiceAreaFrontEnd && (
+        /* CASE B: Address exists but out of service area - Warning card */
+        <div className="mb-6 p-6 rounded-lg border-2 border-red-400 bg-red-50">
+          <div className="flex items-start">
+            <svg className="h-6 w-6 text-red-600 mt-0.5 mr-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div className="flex-1">
+              <h3 className="text-lg font-bold text-red-900 mb-2">We're Not Servicing Your Area Yet</h3>
+              <p className="text-sm text-red-800 mb-2">
+                Unfortunately, your ZIP code ({deliveryZip}) is currently outside our active launch area in Hudson County, NJ.
+              </p>
+              <p className="text-sm text-red-800 mb-4">
+                We're reviewing expansion plans regularly. If you believe this is an error, please contact us at{' '}
+                <a href="mailto:support@mystoragevalet.com" className="underline font-semibold hover:text-red-900">
+                  support@mystoragevalet.com
+                </a>
+                .
+              </p>
+              <p className="text-xs text-red-700 font-medium">
+                You can update your address in Account Settings if you entered it incorrectly.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* CASE C: Valid address in service area - Normal dashboard (no blocking card) */}
 
       {/* Upcoming Services Section - Always shown */}
       <div className="mb-6">
