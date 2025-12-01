@@ -61,10 +61,13 @@ export default function ProfileEditForm() {
       setIsSubmitting(true);
       if (!profile) throw new Error("Profile not found");
 
+      // Use upsert to handle both new users (insert) and existing users (update)
       const { error } = await supabase
         .from('customer_profile')
-        .update(updatedProfile)
-        .eq('user_id', profile.user_id);
+        .upsert(
+          { ...updatedProfile, user_id: profile.user_id },
+          { onConflict: 'user_id' }
+        );
 
       if (error) throw new Error(error.message);
     },
