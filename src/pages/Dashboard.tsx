@@ -258,8 +258,9 @@ export default function Dashboard() {
       </div>
 
       {/* Service Area Gating - Three States */}
-      {!profileLoading && !hasAddress && (
-        /* CASE A: No address yet - Blocking card */
+      {/* CASE A: No address yet - Blocking card */}
+      {/* Only show when: profile loaded AND profile exists AND no address */}
+      {!profileLoading && profile && !hasAddress && (
         <div className="mb-6 p-6 rounded-lg border-2 border-yellow-400 bg-yellow-50">
           <div className="flex items-start">
             <svg className="h-6 w-6 text-yellow-600 mt-0.5 mr-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -282,8 +283,9 @@ export default function Dashboard() {
         </div>
       )}
 
-      {!profileLoading && hasAddress && !isInServiceAreaFrontEnd && (
-        /* CASE B: Address exists but out of service area - Warning card */
+      {/* CASE B: Address exists but out of service area - Warning card */}
+      {/* Only show when: profile loaded AND profile exists AND has address AND out of area */}
+      {!profileLoading && profile && hasAddress && !isInServiceAreaFrontEnd && (
         <div className="mb-6 p-6 rounded-lg border-2 border-red-400 bg-red-50">
           <div className="flex items-start">
             <svg className="h-6 w-6 text-red-600 mt-0.5 mr-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
