@@ -1,8 +1,18 @@
 # 🚦 **READ FIRST — AI AGENT STARTUP RULES (SYSTEM PROTECTION BLOCK)**
 
-**Last Verified Stable Date:** **Nov 27, 2025**
+**Last Verified Stable Date:** **Dec 9, 2025**
 **Environment:** Production (Vercel + Supabase)
 **Status:** All systems healthy, repos clean, and fully deployed.
+
+### Dec 9, 2025 Session - Portal Fixes
+
+**Yellow banner flicker fix:** Added `profile &&` guard to service area warning banners in Dashboard.tsx. The banners now only show when profile is fully loaded AND address is missing/invalid.
+
+**Commit:** `c77237e` - Fix yellow banner flicker on dashboard load
+
+**SPEC-1 Dataflow: STABILIZED ✅** - Full registration flow tested with zach+101 and zach+102.
+
+---
 
 This file defines the *authoritative truth* for this repository.
 All AI agents (Claude Code, ChatGPT, etc.) must follow these rules before making any assumptions, changes, or recommendations.
@@ -107,7 +117,7 @@ Then follow these rules:
 ## 🔐 **8. Last Known Good Commits**
 
 Record of last verified stable state:
-- **sv-portal/main:** `ed1d218`
+- **sv-portal/main:** `c77237e` (Dec 9, 2025 - Yellow banner flicker fix)
 - **sv-db/main:** `b9a0330`
 - **sv-edge/main:** `5504ce0`
 
