@@ -163,6 +163,20 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
     })
   }
 
+  // Set an existing photo as cover (move to first position)
+  const handleSetCoverExisting = (index: number) => {
+    setExistingPhotoPaths(prev => {
+      const newPaths = [...prev]
+      const [path] = newPaths.splice(index, 1)
+      return [path, ...newPaths]
+    })
+    setExistingPhotoUrls(prev => {
+      const newUrls = [...prev]
+      const [url] = newUrls.splice(index, 1)
+      return [url, ...newUrls]
+    })
+  }
+
   const handleRemoveNewPhoto = (index: number) => {
     setPhotos(prev => prev.filter((_, i) => i !== index))
   }
@@ -261,16 +275,16 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
           {/* Estimated Value */}
           <div>
             <label htmlFor="value" className="block text-sm font-medium text-gray-700">
-              Estimated Value (USD) *
+              Estimated Value (USD)
             </label>
             <input
               type="number"
               name="value"
               id="value"
-              required
-              min="0.01"
+              min="0"
               step="0.01"
-              defaultValue={centsToDollars(item.estimated_value_cents)}
+              placeholder="Optional"
+              defaultValue={item.estimated_value_cents ? centsToDollars(item.estimated_value_cents) : ''}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-3 py-2 border"
             />
           </div>
@@ -368,12 +382,29 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
             <div className="mt-2 grid grid-cols-3 sm:grid-cols-5 gap-4">
               {/* Existing photos with signed URLs */}
               {existingPhotoPaths.map((path, index) => (
-                <div key={path} className="relative">
+                <div key={path} className="relative group">
                   <img
                     src={existingPhotoUrls[index] || ''}
                     alt={`Existing ${index + 1}`}
                     className="h-24 w-24 object-cover rounded-md border border-gray-300"
                   />
+                  {/* Cover Badge (first photo is cover) */}
+                  {index === 0 && (
+                    <div className="absolute top-1 left-1 bg-gray-800 text-white text-xs px-2 py-0.5 rounded font-medium">
+                      Cover
+                    </div>
+                  )}
+                  {/* Set as Cover button (only show on non-cover photos) */}
+                  {index !== 0 && (
+                    <button
+                      type="button"
+                      onClick={() => handleSetCoverExisting(index)}
+                      className="absolute top-1 left-1 bg-gray-600/90 hover:bg-gray-700 text-white text-xs px-2 py-0.5 rounded font-medium opacity-0 group-hover:opacity-100 transition-opacity"
+                      title="Set as cover photo"
+                    >
+                      Set Cover
+                    </button>
+                  )}
                   <button
                     type="button"
                     onClick={() => handleRemoveExistingPhoto(path)}

@@ -411,6 +411,9 @@ export default function Dashboard() {
             <span>{formatCurrency(totalItemValueCents)} used</span>
             <span>{formatCurrency(remainingCents)} remaining</span>
           </div>
+          <p className="text-xs text-text-secondary mt-2">
+            Coverage applies only to items currently in our possession (picked up through return delivery). Values update after pickup.
+          </p>
         </div>
       )}
 

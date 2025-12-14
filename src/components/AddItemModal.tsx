@@ -6,8 +6,9 @@ import { supabase, logInventoryEventAuto, MAX_PHOTO_SIZE_MB, MAX_PHOTO_COUNT, up
 type Props = { onClose: () => void }
 
 function dollarsToCents(v: string): number {
+  if (!v || v.trim() === '') return 0  // Blank = $0
   const n = Number(v.replace(/[^\d.]/g, ''))
-  if (!isFinite(n) || n <= 0) throw new Error('Enter a valid dollar amount')
+  if (!isFinite(n) || n < 0) throw new Error('Enter a valid dollar amount')
   return Math.round(n * 100)
 }
 
@@ -32,25 +33,31 @@ export default function AddItemModal({ onClose }: Props) {
   const [error, setError] = useState<string | null>(null)
   const [photoError, setPhotoError] = useState<string | null>(null)
 
-  // Handle photo selection (multi-select like texting)
+  // Handle photo selection (multi-select, appends to existing)
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files ? Array.from(e.target.files) : []
 
     if (files.length === 0) return
 
-    if (files.length > MAX_PHOTO_COUNT) {
-      setPhotoError(`You can select a maximum of ${MAX_PHOTO_COUNT} photos.`)
+    // Check combined count (existing + new)
+    const totalAfterAdd = photos.length + files.length
+    if (totalAfterAdd > MAX_PHOTO_COUNT) {
+      setPhotoError(`Maximum ${MAX_PHOTO_COUNT} photos allowed. You have ${photos.length}, tried to add ${files.length}.`)
+      e.currentTarget.value = ''  // Reset input for re-selection
       return
     }
 
     const { valid, error } = validatePhotoFiles(files)
     if (!valid) {
       setPhotoError(error || 'Invalid files.')
-      setPhotos([])
     } else {
       setPhotoError(null)
-      setPhotos(files)
+      // Append new files to existing photos
+      setPhotos(prev => [...prev, ...files].slice(0, MAX_PHOTO_COUNT))
     }
+
+    // Reset input so selecting same files triggers onChange again
+    e.currentTarget.value = ''
   }
 
   // Remove a photo from the selection
@@ -168,8 +175,8 @@ export default function AddItemModal({ onClose }: Props) {
 
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm text-gunmetal/80 mb-1">Estimated Value (USD) *</label>
-            <input value={valueUSD} onChange={e=>setValueUSD(e.target.value)} placeholder="e.g., 200" inputMode="decimal" className="input w-full" />
+            <label className="block text-sm text-gunmetal/80 mb-1">Estimated Value (USD)</label>
+            <input value={valueUSD} onChange={e=>setValueUSD(e.target.value)} placeholder="Optional (e.g., 200)" inputMode="decimal" className="input w-full" />
           </div>
           <div>
             <label className="block text-sm text-gunmetal/80 mb-1">Tags (comma-separated)</label>
