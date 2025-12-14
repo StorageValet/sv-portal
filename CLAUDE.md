@@ -1,8 +1,30 @@
 # 🚦 **READ FIRST — AI AGENT STARTUP RULES (SYSTEM PROTECTION BLOCK)**
 
-**Last Verified Stable Date:** **Dec 9, 2025**
+**Last Verified Stable Date:** **Dec 14, 2025**
 **Environment:** Production (Vercel + Supabase)
 **Status:** All systems healthy, repos clean, and fully deployed.
+
+### Dec 14, 2025 Session - Pre-Launch UI/UX Cleanup
+
+**Changes shipped:**
+- **Photo upload fix:** AddItemModal now appends photos instead of replacing (was bug at line 52)
+- **Value optional:** Both AddItemModal and EditItemModal allow blank/0 value (was required)
+- **Set Cover UI:** EditItemModal now has "Set Cover" button matching AddItemModal
+- **Insurance disclaimer:** Dashboard shows "Coverage applies only to items currently in our possession..." below progress bar
+
+**Commit:** `e684e1b` - Fix photo uploads, make value optional, add cover selection, add insurance disclaimer
+
+**Deferred items:**
+- Insurance calculation DB fix (v_user_insurance view counts ALL items, should only count scheduled/stored)
+- Space used vs allotted tracker (no data model for customer allotment)
+
+**Test checklist (browser):**
+- [ ] Photo persistence: select 3, then +2 → should show 5
+- [ ] Value blank: create item with empty value → succeeds as $0
+- [ ] Set Cover: EditItemModal hover non-first photo → button appears, works
+- [ ] Insurance disclaimer: visible below progress bar on Dashboard
+
+---
 
 ### Dec 9, 2025 Session - Portal Fixes
 
@@ -117,9 +139,9 @@ Then follow these rules:
 ## 🔐 **8. Last Known Good Commits**
 
 Record of last verified stable state:
-- **sv-portal/main:** `c77237e` (Dec 9, 2025 - Yellow banner flicker fix)
+- **sv-portal/main:** `e684e1b` (Dec 14, 2025 - Photo uploads, value optional, cover selection, insurance disclaimer)
 - **sv-db/main:** `b9a0330`
-- **sv-edge/main:** `5504ce0`
+- **sv-edge/main:** `5ad2b05` (Dec 14, 2025 - Calendly webhook profile auto-creation)
 
 All repos confirmed clean.
 Production portal returning 200 OK.
