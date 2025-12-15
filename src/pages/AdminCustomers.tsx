@@ -76,8 +76,10 @@ export default function AdminCustomers() {
       )
 
       if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.error || 'Failed to create customer')
+        const errorBody = await response.json().catch(() => ({ error: 'Unknown error' }))
+        const errorMessage = errorBody.error || 'Failed to create customer'
+        // Include HTTP status for debugging
+        throw new Error(`[${response.status}] ${errorMessage}`)
       }
 
       return response.json()
@@ -88,7 +90,9 @@ export default function AdminCustomers() {
       queryClient.invalidateQueries({ queryKey: ['customers'] })
     },
     onError: (error: Error) => {
-      toast.error(error.message)
+      // Show full error message including HTTP status
+      toast.error(error.message, { duration: 6000 })
+      console.error('Admin create customer error:', error)
     },
   })
 
