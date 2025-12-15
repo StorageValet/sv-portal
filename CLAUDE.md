@@ -1,8 +1,28 @@
 # 🚦 **READ FIRST — AI AGENT STARTUP RULES (SYSTEM PROTECTION BLOCK)**
 
-**Last Verified Stable Date:** **Dec 14, 2025**
+**Last Verified Stable Date:** **Dec 15, 2025**
 **Environment:** Production (Vercel + Supabase)
 **Status:** All systems healthy, repos clean, and fully deployed.
+
+### Dec 15, 2025 Session - Brand Palette v1.1 Implementation
+
+**Changes shipped:**
+- **Tailwind CSS variables:** Added 6-color brand palette with space-separated RGB values for alpha support
+- **Portal background:** Changed from Soft White to Bright Snow for consistency with landing page
+- **Status borders:** Scheduled items now use `border-oxford-navy/25` instead of amber (removes warning appearance)
+- **UI Guardrails:** Added comprehensive styling policy to prevent color drift (see bottom of this file)
+- **Framer cleanup:** Removed duplicate "2. Valet Pickup" heading in Concierge section
+
+**Commits:**
+- `7f77238` - style: soften scheduled status accent + align stored accent to valet teal
+- `cb90763` - docs: add UI guardrails to prevent styling drift
+
+**Key files changed:**
+- `src/index.css` - CSS variables for brand palette
+- `tailwind.config.js` - Brand colors with alpha support
+- `src/components/ItemCard.tsx` - Status border styling
+
+---
 
 ### Dec 14, 2025 Session - Pre-Launch UI/UX Cleanup
 
@@ -139,9 +159,9 @@ Then follow these rules:
 ## 🔐 **8. Last Known Good Commits**
 
 Record of last verified stable state:
-- **sv-portal/main:** `e684e1b` (Dec 14, 2025 - Photo uploads, value optional, cover selection, insurance disclaimer)
-- **sv-db/main:** `b9a0330`
-- **sv-edge/main:** `5ad2b05` (Dec 14, 2025 - Calendly webhook profile auto-creation)
+- **sv-portal/main:** `cb90763` (Dec 15, 2025 - Brand palette v1.1, UI guardrails)
+- **sv-db/main:** `c8dcd1d` (Insurance view ACL lockdown)
+- **sv-edge/main:** `ab7c37c` (Staff schema reference fix)
 
 All repos confirmed clean.
 Production portal returning 200 OK.
