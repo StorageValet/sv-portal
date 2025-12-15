@@ -15,7 +15,7 @@
 
 @layer base {
   body {
-    @apply bg-soft-white text-oxford-navy font-sans;
+    @apply bg-bright-snow text-oxford-navy font-sans;
   }
 
   h1, h2, h3 {
