@@ -60,8 +60,8 @@ export default function ItemCard({ item, isSelected, onSelect, onEdit, onDelete,
   // Status-based card styling (left border accent)
   const statusCardStyles = {
     home: '',
-    scheduled: 'border-l-4 border-amber-400 bg-amber-50/30',
-    stored: 'border-l-4 border-stormy-teal',
+    scheduled: 'border-l-4 border-oxford-navy/25',
+    stored: 'border-l-4 border-valet-teal/60',
   }
 
   const statusLabel = item.status || 'home'
