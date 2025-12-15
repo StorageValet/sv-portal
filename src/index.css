@@ -2,9 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Storage Valet Brand Palette v1.1 - CSS Variables for alpha support */
+:root {
+  /* Primary colors (RGB values for Tailwind alpha) */
+  --color-oxford-navy: 29, 53, 87;       /* #1d3557 */
+  --color-valet-teal: 0, 109, 119;       /* #006d77 */
+  --color-bright-snow: 213, 222, 222;    /* #d5dede */
+  --color-soft-white: 250, 250, 250;     /* #fafafa */
+  --color-bone: 232, 228, 224;           /* #e8e4e0 */
+  --color-burnished-gold: 201, 169, 98;  /* #c9a962 */
+}
+
 @layer base {
   body {
-    @apply bg-honeydew text-text-primary font-sans;
+    @apply bg-soft-white text-oxford-navy font-sans;
   }
 
   h1, h2, h3 {
@@ -14,18 +25,20 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-tropical-teal text-white px-4 py-2 rounded-lg hover:bg-tropical-teal-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium;
+    @apply bg-valet-teal text-soft-white px-4 py-2 rounded-lg transition-colors font-medium;
+    @apply hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed;
   }
 
   .btn-secondary {
-    @apply bg-bright-snow text-oxford-navy px-4 py-2 rounded-lg hover:bg-frosted-blue transition-colors border border-border;
+    @apply bg-soft-white text-oxford-navy px-4 py-2 rounded-lg hover:bg-bone transition-colors border border-border;
   }
 
   .card {
-    @apply bg-bright-snow rounded-lg shadow-sm border border-border p-6;
+    @apply bg-soft-white rounded-lg shadow-sm border border-border p-6;
   }
 
   .input {
-    @apply w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-cerulean focus:border-transparent bg-white text-text-primary;
+    @apply w-full px-4 py-2 border border-border rounded-lg bg-soft-white text-oxford-navy;
+    @apply focus:ring-2 focus:ring-valet-teal focus:border-valet-teal focus:ring-opacity-30;
   }
 }
