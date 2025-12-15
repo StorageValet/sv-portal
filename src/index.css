@@ -4,13 +4,13 @@
 
 /* Storage Valet Brand Palette v1.1 - CSS Variables for alpha support */
 :root {
-  /* Primary colors (RGB values for Tailwind alpha) */
-  --color-oxford-navy: 29, 53, 87;       /* #1d3557 */
-  --color-valet-teal: 0, 109, 119;       /* #006d77 */
-  --color-bright-snow: 213, 222, 222;    /* #d5dede */
-  --color-soft-white: 250, 250, 250;     /* #fafafa */
-  --color-bone: 232, 228, 224;           /* #e8e4e0 */
-  --color-burnished-gold: 201, 169, 98;  /* #c9a962 */
+  /* Primary colors (space-separated RGB for modern CSS color syntax) */
+  --color-oxford-navy: 29 53 87;         /* #1d3557 */
+  --color-valet-teal: 0 109 119;         /* #006d77 */
+  --color-bright-snow: 213 222 222;      /* #d5dede */
+  --color-soft-white: 250 250 250;       /* #fafafa */
+  --color-bone: 232 228 224;             /* #e8e4e0 */
+  --color-burnished-gold: 201 169 98;    /* #c9a962 */
 }
 
 @layer base {
