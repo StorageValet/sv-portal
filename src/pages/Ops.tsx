@@ -117,18 +117,35 @@ export default function Ops() {
     refetchInterval: 30000, // Auto-refresh every 30 seconds
   })
 
-  // Mark action as completed
+  // Mark action as completed via complete-service edge function
+  // This properly updates item statuses (pickup→stored, delivery→home)
   const completeMutation = useMutation({
     mutationFn: async (actionId: string) => {
-      const { error } = await supabase
-        .from('actions')
-        .update({ status: 'completed', updated_at: new Date().toISOString() })
-        .eq('id', actionId)
-      if (error) throw error
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) throw new Error('Not authenticated')
+
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/complete-service`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({ action_id: actionId }),
+        }
+      )
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Failed to complete service')
+      }
+
+      return response.json()
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['ops-actions'] })
-      toast.success('Action marked as completed')
+      toast.success(data.message || 'Service marked as completed')
     },
     onError: (error: Error) => {
       toast.error(`Failed to complete: ${error.message}`)

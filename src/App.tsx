@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard'
 import Schedule from './pages/Schedule'
 import Account from './pages/Account'
 import WaitlistAdmin from './pages/WaitlistAdmin'
+import AdminCustomers from './pages/AdminCustomers'
 import Ops from './pages/Ops'
 import ProtectedRoute from './components/ProtectedRoute'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -45,6 +46,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <WaitlistAdmin />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/customers"
+            element={
+              <ProtectedRoute>
+                <AdminCustomers />
               </ProtectedRoute>
             }
           />
