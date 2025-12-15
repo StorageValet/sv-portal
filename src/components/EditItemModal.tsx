@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import { supabase, validatePhotoFiles, uploadItemPhotos, deleteItemPhotos, getItemPhotoUrls, logInventoryEventAuto, MAX_PHOTO_SIZE_MB, MAX_PHOTO_COUNT } from '../lib/supabase'
@@ -15,6 +15,7 @@ const num = (value: string | number) => Number(value) || 0
 
 export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
   const queryClient = useQueryClient()
+  const formRef = useRef<HTMLFormElement>(null)
   const [photos, setPhotos] = useState<File[]>([])
   const [existingPhotoPaths, setExistingPhotoPaths] = useState<string[]>([])
   const [existingPhotoUrls, setExistingPhotoUrls] = useState<string[]>([])
@@ -213,7 +214,12 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
   if (isLoading) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <p className="text-white">Loading item...</p>
+        <div className="bg-white rounded-lg p-6 text-center">
+          <p className="text-gray-700 mb-4">Loading item...</p>
+          <button onClick={onClose} className="text-sm text-gray-500 hover:text-gray-700 underline">
+            Cancel
+          </button>
+        </div>
       </div>
     )
   }
@@ -221,7 +227,12 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
   if (isError || !item) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <p className="text-white">Error loading item.</p>
+        <div className="bg-white rounded-lg p-6 text-center">
+          <p className="text-red-600 mb-4">Error loading item.</p>
+          <button onClick={onClose} className="text-sm text-gray-500 hover:text-gray-700 underline">
+            Close
+          </button>
+        </div>
       </div>
     )
   }
@@ -239,7 +250,7 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
           {/* Label */}
           <div>
             <label htmlFor="label" className="block text-sm font-medium text-gray-700">
@@ -451,25 +462,27 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
             )}
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex justify-end space-x-4 pt-4 border-t">
-            <button
-              type="button"
-              onClick={onClose}
-              disabled={isSubmitting}
-              className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isSubmitting ? 'Saving...' : 'Save Changes'}
-            </button>
-          </div>
         </form>
+
+        {/* Action Buttons - Outside form to prevent interference */}
+        <div className="flex justify-end space-x-4 pt-4 border-t mt-4">
+          <button
+            type="button"
+            onClick={onClose}
+            disabled={isSubmitting}
+            className="rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={() => formRef.current?.requestSubmit()}
+            disabled={isSubmitting}
+            className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isSubmitting ? 'Saving...' : 'Save Changes'}
+          </button>
+        </div>
       </div>
     </div>
   )
