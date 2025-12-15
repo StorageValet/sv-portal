@@ -331,3 +331,98 @@ This portal has been through 8+ iterations.
 The current version "works" but needs testing.
 Don't add features - test and fix what exists.
 The family needs revenue, not perfect code.
+
+---
+
+## 🎨 UI Guardrails — Do Not Break Production
+
+**Added:** Dec 15, 2025
+**Purpose:** Keep the codebase stable, brand-consistent, and easy to refine after launch.
+
+### 1) Token-First Colors (No Random Tailwind)
+
+**Do not introduce new colors** via Tailwind defaults.
+
+**Allowed (brand tokens):**
+- Backgrounds: `bg-bright-snow`, `bg-soft-white`, `bg-bone`
+- Text: `text-oxford-navy`, `text-soft-white`, `text-bone`
+- Accents: `bg-valet-teal`, `border-oxford-navy`, `ring-valet-teal`, `text-burnished-gold`
+- With opacity: `border-oxford-navy/12`, `text-oxford-navy/60`, `ring-valet-teal/30`
+
+**Allowed semantic exceptions:**
+- **Error/Danger:** `red-*` classes for destructive actions, validation errors, delete buttons
+- **Success:** `green-*` classes for "Active", "Success", "Confirmed" states (e.g., subscription badge)
+- **Warning:** Avoid `amber-*`/`yellow-*` unless something truly needs urgent attention
+
+**Prohibited:**
+- `bg-white`, `text-black`, `text-gray-*`, `border-gray-*`
+- `bg-blue-*`, `bg-indigo-*`, `bg-purple-*`, `border-amber-*`
+- Hardcoded hex colors in components (unless one-off approved)
+
+### 2) CSS Variable Format (Critical)
+
+CSS variables **must be space-separated RGB**, not comma-separated:
+
+```css
+/* ✅ Correct */
+:root { --color-oxford-navy: 29 53 87; }
+
+/* ❌ Breaks alpha parsing */
+:root { --color-oxford-navy: 29, 53, 87; }
+```
+
+### 3) @apply Limitations
+
+`@apply` does not reliably support opacity modifiers (`border-oxford-navy/12`).
+
+**Solutions:**
+- Use utility classes directly in JSX
+- Or define semantic tokens: `border-border` maps to `rgb(var(--color-oxford-navy) / 0.12)`
+
+### 4) Scope Control
+
+- **Small diffs, one visible outcome per commit**
+- Avoid broad "restyle everything" passes
+- Commit messages should match the outcome
+
+### 5) Pre-Push Checklist
+
+Before pushing any styling changes:
+
+```bash
+# 1. Must pass
+npm run build
+
+# 2. Quick visual QA (minimum)
+#    - /login (button colors, input focus ring)
+#    - /dashboard (cards, borders, badges)
+#    - /account (forms, buttons)
+
+# 3. Check for prohibited colors (grep will flag semantic exceptions - that's OK)
+rg -n "bg-white|text-gray-|border-gray-|bg-indigo-|bg-purple-|border-amber-" src
+# Note: green-* and red-* are allowed for semantic states (success/error)
+```
+
+### 6) Current Primitives (Phase 1)
+
+These exist in `src/index.css` and serve as shared styling:
+- `.btn-primary` / `.btn-secondary` — buttons
+- `.card` — card containers
+- `.input` — form inputs
+
+**Rule:** If you touch the same styling in 2+ places, promote it to a shared class.
+
+### 7) Post-Launch Polish Approach
+
+When refining after launch, follow this order:
+1. Normalize tokens and primitives (don't change layout)
+2. Typography scale + spacing rhythm
+3. Subtle shadows/borders/badge polish
+
+**Never** refactor layout and styling simultaneously.
+
+### 8) If UI Looks "Default Black/White"
+
+Suspect CSS variable parsing first. Check:
+- Space-separated RGB values (not comma-separated)
+- Variable names match between `:root` and `tailwind.config.js`
