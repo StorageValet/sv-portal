@@ -97,7 +97,7 @@ export default function ProtectedRoute({ children }: { children: JSX.Element }) 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
+        <div className="text-sv-slate">Loading...</div>
       </div>
     )
   }

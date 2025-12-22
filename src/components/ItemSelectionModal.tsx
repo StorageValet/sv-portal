@@ -14,13 +14,13 @@ function ItemThumbnail({ photoPath, label }: { photoPath: string; label: string 
   })
 
   if (isLoading) {
-    return <div className="h-full w-full bg-slate-200 animate-pulse" />
+    return <div className="h-full w-full bg-sv-sand animate-pulse" />
   }
 
   if (!photoUrl) {
     return (
-      <div className="h-full w-full flex items-center justify-center bg-slate-100">
-        <svg className="h-6 w-6 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div className="h-full w-full flex items-center justify-center bg-sv-bone">
+        <svg className="h-6 w-6 text-sv-stone" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>
       </div>
@@ -176,8 +176,8 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sv-terracotta mx-auto mb-4"></div>
+          <p className="text-sv-slate">Loading...</p>
         </div>
       </div>
     )
@@ -226,7 +226,7 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
       <div className="mb-8">
         <button
           onClick={() => navigate('/dashboard')}
-          className="text-indigo-600 hover:text-indigo-800 flex items-center text-sm mb-4"
+          className="text-sv-terracotta hover:text-sv-ember flex items-center text-sm mb-4"
         >
           <svg className="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -234,9 +234,9 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
           Back to Dashboard
         </button>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Select Items for Service</h1>
-        <div className="flex items-center space-x-2 text-gray-600">
-          <svg className="h-5 w-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <h1 className="text-3xl font-bold text-sv-midnight mb-2">Select Items for Service</h1>
+        <div className="flex items-center space-x-2 text-sv-slate">
+          <svg className="h-5 w-5 text-sv-terracotta" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
           <span className="font-medium">{formatDateTime(action.scheduled_start)}</span>
@@ -261,15 +261,15 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
 
       {/* At Home Section */}
       <section className="mb-8">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-          <svg className="h-6 w-6 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <h2 className="text-xl font-semibold text-sv-midnight mb-4 flex items-center">
+          <svg className="h-6 w-6 text-sv-terracotta mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
           </svg>
           At Home ({homeItems.length})
         </h2>
 
         {homeItems.length === 0 ? (
-          <p className="text-gray-500 italic">No items currently at home</p>
+          <p className="text-sv-stone italic">No items currently at home</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {homeItems.map(item => (
@@ -278,18 +278,18 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
                 onClick={() => toggleItem(item.id)}
                 className={`border rounded-lg p-4 cursor-pointer transition-all ${
                   selectedIds.has(item.id)
-                    ? 'border-indigo-500 bg-indigo-50 shadow-md'
-                    : 'border-gray-300 bg-white hover:border-indigo-300'
+                    ? 'border-sv-terracotta bg-sv-peach/20 shadow-md'
+                    : 'border-sv-sand bg-sv-cream hover:border-sv-terracotta/50'
                 }`}
               >
                 <div className="flex items-start gap-3">
                   {/* Thumbnail */}
-                  <div className="h-12 w-12 rounded-md overflow-hidden bg-slate-100 flex-shrink-0">
+                  <div className="h-12 w-12 rounded-md overflow-hidden bg-sv-bone flex-shrink-0">
                     {item.photo_paths?.[0] ? (
                       <ItemThumbnail photoPath={item.photo_paths[0]} label={item.label} />
                     ) : (
                       <div className="h-full w-full flex items-center justify-center">
-                        <svg className="h-6 w-6 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="h-6 w-6 text-sv-stone" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                       </div>
@@ -298,18 +298,18 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between mb-1">
-                      <h3 className="font-medium text-gray-900 truncate">{item.label}</h3>
+                      <h3 className="font-medium text-sv-midnight truncate">{item.label}</h3>
                       <input
                         type="checkbox"
                         checked={selectedIds.has(item.id)}
                         onChange={() => toggleItem(item.id)}
                         onClick={(e) => e.stopPropagation()}
-                        className="h-5 w-5 text-indigo-600 rounded focus:ring-indigo-500 flex-shrink-0 ml-2"
+                        className="h-5 w-5 text-sv-terracotta rounded focus:ring-sv-navy flex-shrink-0 ml-2"
                       />
                     </div>
-                    <p className="text-sm text-gray-600 line-clamp-2">{item.description}</p>
+                    <p className="text-sm text-sv-slate line-clamp-2">{item.description}</p>
                     {item.category && (
-                      <span className="inline-block mt-2 px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded">
+                      <span className="inline-block mt-2 px-2 py-1 text-xs bg-sv-bone text-sv-slate rounded">
                         {item.category}
                       </span>
                     )}
@@ -323,15 +323,15 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
 
       {/* In Storage Section */}
       <section className="mb-8">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-          <svg className="h-6 w-6 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <h2 className="text-xl font-semibold text-sv-midnight mb-4 flex items-center">
+          <svg className="h-6 w-6 text-sv-terracotta mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
           </svg>
           In Storage ({storedItems.length})
         </h2>
 
         {storedItems.length === 0 ? (
-          <p className="text-gray-500 italic">No items currently in storage</p>
+          <p className="text-sv-stone italic">No items currently in storage</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {storedItems.map(item => (
@@ -340,18 +340,18 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
                 onClick={() => toggleItem(item.id)}
                 className={`border rounded-lg p-4 cursor-pointer transition-all ${
                   selectedIds.has(item.id)
-                    ? 'border-indigo-500 bg-indigo-50 shadow-md'
-                    : 'border-gray-300 bg-white hover:border-indigo-300'
+                    ? 'border-sv-terracotta bg-sv-peach/20 shadow-md'
+                    : 'border-sv-sand bg-sv-cream hover:border-sv-terracotta/50'
                 }`}
               >
                 <div className="flex items-start gap-3">
                   {/* Thumbnail */}
-                  <div className="h-12 w-12 rounded-md overflow-hidden bg-slate-100 flex-shrink-0">
+                  <div className="h-12 w-12 rounded-md overflow-hidden bg-sv-bone flex-shrink-0">
                     {item.photo_paths?.[0] ? (
                       <ItemThumbnail photoPath={item.photo_paths[0]} label={item.label} />
                     ) : (
                       <div className="h-full w-full flex items-center justify-center">
-                        <svg className="h-6 w-6 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="h-6 w-6 text-sv-stone" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                       </div>
@@ -360,18 +360,18 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between mb-1">
-                      <h3 className="font-medium text-gray-900 truncate">{item.label}</h3>
+                      <h3 className="font-medium text-sv-midnight truncate">{item.label}</h3>
                       <input
                         type="checkbox"
                         checked={selectedIds.has(item.id)}
                         onChange={() => toggleItem(item.id)}
                         onClick={(e) => e.stopPropagation()}
-                        className="h-5 w-5 text-indigo-600 rounded focus:ring-indigo-500 flex-shrink-0 ml-2"
+                        className="h-5 w-5 text-sv-terracotta rounded focus:ring-sv-navy flex-shrink-0 ml-2"
                       />
                     </div>
-                    <p className="text-sm text-gray-600 line-clamp-2">{item.description}</p>
+                    <p className="text-sm text-sv-slate line-clamp-2">{item.description}</p>
                     {item.category && (
-                      <span className="inline-block mt-2 px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded">
+                      <span className="inline-block mt-2 px-2 py-1 text-xs bg-sv-bone text-sv-slate rounded">
                         {item.category}
                       </span>
                     )}
@@ -384,12 +384,12 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
       </section>
 
       {/* Fixed Bottom Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg">
+      <div className="fixed bottom-0 left-0 right-0 bg-sv-cream border-t border-sv-sand shadow-lg">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="text-sm text-gray-700">
+          <div className="text-sm text-sv-slate">
             <span className="font-semibold">{selectedCount} item(s) selected</span>
             {selectedCount > 0 && (
-              <span className="ml-4 text-gray-600">
+              <span className="ml-4 text-sv-slate">
                 {selectedHomeCount > 0 && `${selectedHomeCount} pickup`}
                 {selectedHomeCount > 0 && selectedStoredCount > 0 && ' • '}
                 {selectedStoredCount > 0 && `${selectedStoredCount} delivery`}
@@ -399,14 +399,14 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
           <div className="flex items-center space-x-3">
             <button
               onClick={() => navigate('/dashboard')}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+              className="px-4 py-2 text-sm font-medium text-sv-slate bg-sv-cream border border-sv-sand rounded-md hover:bg-sv-bone"
             >
               Cancel
             </button>
             <button
               onClick={handleSubmit}
               disabled={selectedCount === 0 || isSubmitting}
-              className="px-6 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-md hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+              className="px-6 py-2 text-sm font-semibold text-white bg-sv-terracotta rounded-md hover:bg-sv-ember disabled:bg-sv-stone disabled:cursor-not-allowed transition-colors"
             >
               {isSubmitting ? 'Confirming...' : 'Confirm Items'}
             </button>

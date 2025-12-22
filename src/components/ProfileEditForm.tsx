@@ -129,11 +129,11 @@ export default function ProfileEditForm() {
   if (isLoading) {
     return (
       <div className="card animate-pulse">
-        <div className="h-6 bg-bone rounded w-1/4 mb-6"></div>
+        <div className="h-6 bg-sv-bone rounded w-1/4 mb-6"></div>
         <div className="space-y-4">
-          <div className="h-10 bg-bone rounded"></div>
-          <div className="h-10 bg-bone rounded"></div>
-          <div className="h-20 bg-bone rounded"></div>
+          <div className="h-10 bg-sv-bone rounded"></div>
+          <div className="h-10 bg-sv-bone rounded"></div>
+          <div className="h-20 bg-sv-bone rounded"></div>
         </div>
       </div>
     );
@@ -142,15 +142,15 @@ export default function ProfileEditForm() {
   return (
     <form onSubmit={handleSubmit} className="card space-y-6">
       <div>
-        <h3 className="text-lg font-semibold text-gunmetal">Personal Information</h3>
+        <h3 className="text-lg font-semibold text-sv-midnight">Personal Information</h3>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label htmlFor="full_name" className="block text-sm font-medium text-gunmetal/80 mb-1">Full Name</label>
+          <label htmlFor="full_name" className="block text-sm font-medium text-sv-slate mb-1">Full Name</label>
           <input type="text" name="full_name" id="full_name" defaultValue={profile?.full_name || ''} className="input w-full" />
         </div>
         <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-gunmetal/80 mb-1">Phone Number</label>
+          <label htmlFor="phone" className="block text-sm font-medium text-sv-slate mb-1">Phone Number</label>
           <input
             type="tel"
             name="phone"
@@ -164,22 +164,22 @@ export default function ProfileEditForm() {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold text-gunmetal">Delivery Address</h3>
+        <h3 className="text-lg font-semibold text-sv-midnight">Delivery Address</h3>
         <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="md:col-span-2">
-            <label htmlFor="street" className="block text-sm font-medium text-gunmetal/80 mb-1">Street Address</label>
+            <label htmlFor="street" className="block text-sm font-medium text-sv-slate mb-1">Street Address</label>
             <input type="text" name="street" id="street" defaultValue={profile?.delivery_address?.street || ''} className="input w-full" />
           </div>
           <div>
-            <label htmlFor="city" className="block text-sm font-medium text-gunmetal/80 mb-1">City</label>
+            <label htmlFor="city" className="block text-sm font-medium text-sv-slate mb-1">City</label>
             <input type="text" name="city" id="city" defaultValue={profile?.delivery_address?.city || ''} className="input w-full" />
           </div>
           <div>
-            <label htmlFor="state" className="block text-sm font-medium text-gunmetal/80 mb-1">State</label>
+            <label htmlFor="state" className="block text-sm font-medium text-sv-slate mb-1">State</label>
             <input type="text" name="state" id="state" defaultValue={profile?.delivery_address?.state || 'NJ'} placeholder="NJ" className="input w-full" />
           </div>
           <div>
-            <label htmlFor="zip" className="block text-sm font-medium text-gunmetal/80 mb-1">ZIP Code *</label>
+            <label htmlFor="zip" className="block text-sm font-medium text-sv-slate mb-1">ZIP Code *</label>
             <input
               type="text"
               name="zip"
@@ -191,19 +191,19 @@ export default function ProfileEditForm() {
             {errors.zip && <p className="mt-1 text-xs text-red-600">{errors.zip}</p>}
           </div>
           <div>
-            <label htmlFor="unit" className="block text-sm font-medium text-gunmetal/80 mb-1">Apt / Unit (Optional)</label>
+            <label htmlFor="unit" className="block text-sm font-medium text-sv-slate mb-1">Apt / Unit (Optional)</label>
             <input type="text" name="unit" id="unit" defaultValue={profile?.delivery_address?.unit || ''} className="input w-full" />
           </div>
         </div>
       </div>
 
       <div>
-        <label htmlFor="delivery_instructions" className="block text-sm font-medium text-gunmetal/80 mb-1">Delivery Instructions</label>
+        <label htmlFor="delivery_instructions" className="block text-sm font-medium text-sv-slate mb-1">Delivery Instructions</label>
         <textarea name="delivery_instructions" id="delivery_instructions" rows={3} defaultValue={profile?.delivery_instructions || ''} className="input w-full"></textarea>
-        <p className="mt-1 text-xs text-gunmetal/60">e.g., "Use the back door, gate code is #1234."</p>
+        <p className="mt-1 text-xs text-sv-stone">e.g., "Use the back door, gate code is #1234."</p>
       </div>
 
-      <div className="flex justify-end items-center pt-4 border-t border-slate/20">
+      <div className="flex justify-end items-center pt-4 border-t border-sv-sand">
         <button type="submit" disabled={isSubmitting} className="btn-primary disabled:opacity-50">
           {isSubmitting ? 'Saving...' : 'Save Profile'}
         </button>

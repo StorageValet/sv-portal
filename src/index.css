@@ -4,7 +4,25 @@
 
 /* Storage Valet Brand Palette v1.1 - CSS Variables for alpha support */
 :root {
-  /* Primary colors (space-separated RGB for modern CSS color syntax) */
+  /* ===== Brand v1.1 Palette (Terracotta) ===== */
+  /* Primary: Navy Family */
+  --color-sv-midnight: 15 41 66;         /* #0f2942 - Headers, headlines */
+  --color-sv-navy: 26 58 92;             /* #1a3a5c - Secondary elements */
+  --color-sv-slate: 61 90 128;           /* #3d5a80 - Body text */
+
+  /* Accent: Terracotta Family */
+  --color-sv-terracotta: 217 119 87;     /* #D97757 - PRIMARY CTA */
+  --color-sv-ember: 196 101 74;          /* #C4654A - Hover states */
+  --color-sv-peach: 232 160 144;         /* #E8A090 - Light accents */
+
+  /* Backgrounds: Warm Neutrals */
+  --color-sv-ivory: 253 252 249;         /* #fdfcf9 - Main backgrounds */
+  --color-sv-cream: 248 246 242;         /* #f8f6f2 - Cards, modals */
+  --color-sv-bone: 238 235 229;          /* #eeebe5 - Subtle backgrounds */
+  --color-sv-sand: 226 222 214;          /* #e2ded6 - Borders */
+  --color-sv-stone: 212 207 197;         /* #d4cfc5 - Disabled states */
+
+  /* ===== Legacy v1.0 Palette (deprecated, removing soon) ===== */
   --color-oxford-navy: 29 53 87;         /* #1d3557 */
   --color-valet-teal: 0 109 119;         /* #006d77 */
   --color-bright-snow: 213 222 222;      /* #d5dede */
@@ -15,30 +33,32 @@
 
 @layer base {
   body {
-    @apply bg-bright-snow text-oxford-navy font-sans;
+    @apply bg-sv-ivory text-sv-slate font-sans;
   }
 
   h1, h2, h3 {
-    @apply font-serif;
+    @apply font-serif text-sv-midnight;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-valet-teal text-soft-white px-4 py-2 rounded-lg transition-colors font-medium;
-    @apply hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed;
+    @apply bg-sv-terracotta text-white px-6 py-3 rounded-lg transition-colors font-semibold;
+    @apply hover:bg-sv-ember disabled:opacity-40 disabled:cursor-not-allowed;
   }
 
   .btn-secondary {
-    @apply bg-soft-white text-oxford-navy px-4 py-2 rounded-lg hover:bg-bone transition-colors border border-border;
+    @apply bg-transparent text-sv-navy px-6 py-3 rounded-lg transition-colors font-semibold;
+    @apply border-2 border-sv-navy hover:bg-sv-cream;
   }
 
   .card {
-    @apply bg-soft-white rounded-lg shadow-sm border border-border p-6;
+    @apply bg-sv-cream rounded-xl shadow-sm border border-sv-sand p-6;
   }
 
   .input {
-    @apply w-full px-4 py-2 border border-border rounded-lg bg-soft-white text-oxford-navy;
-    @apply focus:ring-2 focus:ring-valet-teal focus:border-valet-teal focus:ring-opacity-30;
+    @apply w-full px-4 py-3 border border-sv-sand rounded-lg bg-sv-ivory text-sv-midnight;
+    @apply focus:ring-2 focus:ring-sv-navy focus:border-sv-navy focus:ring-opacity-30;
+    @apply placeholder:text-sv-stone;
   }
 }

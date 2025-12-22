@@ -21,8 +21,8 @@ export default function AppLayout({ children }: AppLayoutProps) {
   ]
 
   return (
-    <div className="min-h-screen bg-honeydew">
-      <nav className="bg-stormy-teal shadow-sm border-b border-oxford-navy">
+    <div className="min-h-screen bg-sv-ivory">
+      <nav className="bg-sv-midnight shadow-sm border-b border-sv-navy">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link to="/dashboard" className="flex items-center">
@@ -38,7 +38,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                     className={`text-sm font-medium ${
                       isActive
                         ? 'text-white'
-                        : 'text-frosted-blue hover:text-white transition-colors'
+                        : 'text-sv-cream hover:text-white transition-colors'
                     }`}
                   >
                     {item.label}
@@ -47,7 +47,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
               })}
               <button
                 onClick={handleLogout}
-                className="text-sm font-medium text-frosted-blue hover:text-white transition-colors"
+                className="text-sm font-medium text-sv-cream hover:text-white transition-colors"
               >
                 Logout
               </button>

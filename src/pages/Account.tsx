@@ -38,9 +38,9 @@ export default function Account() {
       unpaid: { color: 'text-red-700 bg-red-50 border-red-200', text: 'Unpaid' },
       incomplete: { color: 'text-yellow-700 bg-yellow-50 border-yellow-200', text: 'Setup Incomplete' },
       incomplete_expired: { color: 'text-orange-700 bg-orange-50 border-orange-200', text: 'Setup Expired' },
-      paused: { color: 'text-gray-700 bg-gray-50 border-gray-200', text: 'Paused' },
-      canceled: { color: 'text-gray-700 bg-gray-50 border-gray-200', text: 'Canceled' },
-      inactive: { color: 'text-gray-700 bg-gray-50 border-gray-200', text: 'Inactive' },
+      paused: { color: 'text-sv-slate bg-sv-ivory border-sv-sand', text: 'Paused' },
+      canceled: { color: 'text-sv-slate bg-sv-ivory border-sv-sand', text: 'Canceled' },
+      inactive: { color: 'text-sv-slate bg-sv-ivory border-sv-sand', text: 'Inactive' },
     }
     return statusMap[status] || statusMap.inactive
   }
@@ -49,8 +49,8 @@ export default function Account() {
     <AppLayout>
       <div className="max-w-4xl mx-auto space-y-8">
         <div>
-          <h1 className="text-2xl font-bold text-gunmetal">Your Account</h1>
-          <p className="mt-1 text-sm text-gunmetal/70">
+          <h1 className="text-2xl font-bold text-sv-midnight">Your Account</h1>
+          <p className="mt-1 text-sm text-sv-slate">
             Update your profile, delivery information, and manage your subscription.
           </p>
         </div>
@@ -58,21 +58,21 @@ export default function Account() {
         <ProfileEditForm />
 
         <div className="card">
-          <h3 className="text-lg font-semibold text-gunmetal">Subscription & Billing</h3>
+          <h3 className="text-lg font-semibold text-sv-midnight">Subscription & Billing</h3>
           <div className="mt-4 space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div className="space-y-2">
-                <p className="text-sm text-gunmetal/80">
-                  Current Plan: <span className="font-semibold text-gunmetal">Storage Valet Premium ($299/month)</span>
+                <p className="text-sm text-sv-slate">
+                  Current Plan: <span className="font-semibold text-sv-midnight">Storage Valet Premium ($299/month)</span>
                 </p>
                 <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gunmetal/70">Status:</span>
+                  <span className="text-sm text-sv-slate">Status:</span>
                   <span className={`text-sm font-semibold px-2 py-1 rounded border ${getStatusDisplay(profile?.subscription_status || 'inactive').color}`}>
                     {getStatusDisplay(profile?.subscription_status || 'inactive').text}
                   </span>
                 </div>
                 {profile?.last_payment_at && (
-                  <p className="text-xs text-gunmetal/60">
+                  <p className="text-xs text-sv-stone">
                     Last payment: {format(new Date(profile.last_payment_at), 'MMM d, yyyy')}
                   </p>
                 )}
@@ -102,7 +102,7 @@ export default function Account() {
               </button>
             </div>
           </div>
-          <p className="mt-4 text-xs text-gunmetal/60">
+          <p className="mt-4 text-xs text-sv-stone">
             You will be redirected to our secure payment partner, Stripe, to manage your subscription.
           </p>
         </div>

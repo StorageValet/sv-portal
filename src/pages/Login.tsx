@@ -31,7 +31,7 @@ export default function Login() {
   return (
     <div className="min-h-screen flex">
       {/* Hero Panel - Left Side */}
-      <div className="hidden lg:flex lg:w-1/2 bg-oxford-navy items-center justify-center p-12">
+      <div className="hidden lg:flex lg:w-1/2 bg-sv-midnight items-center justify-center p-12">
         <img
           src="/logo-auth-hero.png"
           alt="Storage Valet"
@@ -40,7 +40,7 @@ export default function Login() {
       </div>
 
       {/* Form Panel - Right Side */}
-      <div className="flex-1 flex items-center justify-center bg-honeydew p-8">
+      <div className="flex-1 flex items-center justify-center bg-sv-ivory p-8">
         <div className="max-w-md w-full space-y-8">
           {/* Mobile logo - only visible on smaller screens */}
           <div className="lg:hidden text-center">
@@ -52,17 +52,17 @@ export default function Login() {
           </div>
 
           <div className="text-center lg:text-left">
-            <h1 className="text-2xl font-semibold text-oxford-navy">Sign in to your account</h1>
-            <p className="mt-2 text-text-secondary">Enter your email to receive a magic link</p>
+            <h1 className="text-2xl font-semibold text-sv-midnight">Sign in to your account</h1>
+            <p className="mt-2 text-sv-slate">Enter your email to receive a magic link</p>
           </div>
 
           {sent ? (
             <div className="card text-center">
-              <h2 className="text-xl font-semibold text-text-primary mb-2">Check your email</h2>
-              <p className="text-text-secondary">
+              <h2 className="text-xl font-semibold text-sv-midnight mb-2">Check your email</h2>
+              <p className="text-sv-slate">
                 We sent a magic link to <strong>{email}</strong>
               </p>
-              <p className="text-sm text-text-secondary mt-4">
+              <p className="text-sm text-sv-slate mt-4">
                 Click the link in the email to sign in. It may take up to 2 minutes to arrive.
               </p>
             </div>
@@ -70,7 +70,7 @@ export default function Login() {
             <form onSubmit={handleLogin} className="card">
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-text-primary mb-1">
+                  <label htmlFor="email" className="block text-sm font-medium text-sv-midnight mb-1">
                     Email address
                   </label>
                   <input
@@ -96,7 +96,7 @@ export default function Login() {
             </form>
           )}
 
-          <p className="text-center text-xs text-text-secondary">
+          <p className="text-center text-xs text-sv-slate">
             Premium concierge storage — available as needed
           </p>
         </div>

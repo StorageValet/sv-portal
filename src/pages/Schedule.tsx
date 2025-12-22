@@ -31,7 +31,7 @@ export default function Schedule() {
   return (
     <AppLayout>
       <div className="p-8 text-center">
-        <p className="text-gray-500">Redirecting to dashboard...</p>
+        <p className="text-sv-stone">Redirecting to dashboard...</p>
       </div>
     </AppLayout>
   )

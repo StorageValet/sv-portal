@@ -251,7 +251,7 @@ export default function Dashboard() {
       <div className="mb-8">
         <h2 className="text-2xl font-bold mb-2">Your Items</h2>
         {profile && (
-          <p className="text-text-secondary">
+          <p className="text-sv-slate">
             Subscription: <span className="font-medium capitalize">{profile.subscription_status}</span>
           </p>
         )}
@@ -316,7 +316,7 @@ export default function Dashboard() {
       {/* Upcoming Services Section - Always shown */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-lg font-semibold text-stormy-teal">Upcoming Services</h3>
+          <h3 className="text-lg font-semibold text-sv-terracotta">Upcoming Services</h3>
           <a
             href="https://calendly.com/zach-mystoragevalet"
             target="_blank"
@@ -330,7 +330,7 @@ export default function Dashboard() {
           </a>
         </div>
         {/* Webhook processing note */}
-        <p className="text-xs text-text-secondary mb-3">
+        <p className="text-xs text-sv-slate mb-3">
           Note: After booking, your appointment may take 15-30 seconds to appear below.
         </p>
 
@@ -341,15 +341,15 @@ export default function Dashboard() {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
-                      <svg className="h-5 w-5 text-cerulean" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="h-5 w-5 text-sv-terracotta" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
-                      <p className="text-sm font-semibold text-text-primary">
+                      <p className="text-sm font-semibold text-sv-midnight">
                         {formatDateTime(booking.scheduled_start)}
                       </p>
                     </div>
-                    <div className="flex items-center space-x-4 text-sm text-text-secondary">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-frosted-blue text-oxford-navy capitalize">
+                    <div className="flex items-center space-x-4 text-sm text-sv-slate">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-sv-bone text-sv-midnight capitalize">
                         {booking.status === 'pending_items' ? 'Awaiting Items' : 'Scheduled'}
                       </span>
                       {booking.pickup_item_ids && booking.pickup_item_ids.length > 0 && (
@@ -381,12 +381,12 @@ export default function Dashboard() {
             ))}
           </div>
         ) : (
-          <div className="border border-dashed border-border rounded-lg p-6 text-center bg-bright-snow">
-            <svg className="mx-auto h-10 w-10 text-cerulean/40 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="border border-dashed border-border rounded-lg p-6 text-center bg-sv-ivory">
+            <svg className="mx-auto h-10 w-10 text-sv-terracotta/40 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            <p className="text-text-secondary mb-2">No upcoming appointments</p>
-            <p className="text-sm text-text-secondary">Click "Book Appointment" to schedule a pickup or delivery</p>
+            <p className="text-sv-slate mb-2">No upcoming appointments</p>
+            <p className="text-sm text-sv-slate">Click "Book Appointment" to schedule a pickup or delivery</p>
           </div>
         )}
       </div>
@@ -394,24 +394,24 @@ export default function Dashboard() {
       {insurance && (
         <div className="card mb-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-text-primary font-medium">Insurance Coverage</span>
-            <span className="text-cerulean text-sm">{formatCurrency(insuranceCapCents)} plan</span>
+            <span className="text-sv-midnight font-medium">Insurance Coverage</span>
+            <span className="text-sv-terracotta text-sm">{formatCurrency(insuranceCapCents)} plan</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-text-secondary w-6">$0</span>
-            <div className="flex-1 h-2 bg-honeydew rounded">
+            <span className="text-xs text-sv-slate w-6">$0</span>
+            <div className="flex-1 h-2 bg-sv-ivory rounded">
               <div
-                className="h-2 bg-stormy-teal rounded transition-all"
+                className="h-2 bg-sv-terracotta rounded transition-all"
                 style={{ width: `${Math.round(usedRatio * 100)}%` }}
               />
             </div>
-            <span className="text-xs text-text-secondary w-12 text-right">{formatCurrency(insuranceCapCents)}</span>
+            <span className="text-xs text-sv-slate w-12 text-right">{formatCurrency(insuranceCapCents)}</span>
           </div>
-          <div className="text-sm text-text-secondary mt-2 flex justify-between">
+          <div className="text-sm text-sv-slate mt-2 flex justify-between">
             <span>{formatCurrency(totalItemValueCents)} used</span>
             <span>{formatCurrency(remainingCents)} remaining</span>
           </div>
-          <p className="text-xs text-text-secondary mt-2">
+          <p className="text-xs text-sv-slate mt-2">
             Coverage applies only to items currently in our possession (picked up through return delivery). Values update after pickup.
           </p>
         </div>
@@ -426,19 +426,19 @@ export default function Dashboard() {
             onChange={(e) => setSearchQuery(e.target.value)}
             className="input pl-10"
           />
-          <svg className="absolute left-3 top-3 h-5 w-5 text-cerulean/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="absolute left-3 top-3 h-5 w-5 text-sv-terracotta/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </div>
 
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center space-x-2 flex-wrap">
-            <span className="text-sm font-medium text-text-primary">Filters:</span>
+            <span className="text-sm font-medium text-sv-midnight">Filters:</span>
 
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as any)}
-              className="px-3 py-1.5 text-sm border border-border rounded-md bg-bright-snow hover:bg-frosted-blue focus:outline-none focus:ring-2 focus:ring-cerulean"
+              className="px-3 py-1.5 text-sm border border-border rounded-md bg-sv-ivory hover:bg-sv-bone focus:outline-none focus:ring-2 focus:ring-sv-navy"
             >
               <option value="all">All Status</option>
               <option value="home">Home</option>
@@ -449,7 +449,7 @@ export default function Dashboard() {
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="px-3 py-1.5 text-sm border border-border rounded-md bg-bright-snow hover:bg-frosted-blue focus:outline-none focus:ring-2 focus:ring-cerulean"
+              className="px-3 py-1.5 text-sm border border-border rounded-md bg-sv-ivory hover:bg-sv-bone focus:outline-none focus:ring-2 focus:ring-sv-navy"
               disabled={categories.length === 0}
             >
               <option value="all">All Categories</option>
@@ -465,17 +465,17 @@ export default function Dashboard() {
                   setStatusFilter('all')
                   setCategoryFilter('all')
                 }}
-                className="px-3 py-1.5 text-sm text-cerulean hover:text-stormy-teal underline"
+                className="px-3 py-1.5 text-sm text-sv-terracotta hover:text-sv-terracotta underline"
               >
                 Clear Filters
               </button>
             )}
           </div>
 
-          <div className="flex items-center space-x-1 bg-frosted-blue rounded-lg p-1">
+          <div className="flex items-center space-x-1 bg-sv-bone rounded-lg p-1">
             <button
               onClick={() => setViewMode('grid')}
-              className={`p-2 rounded ${viewMode === 'grid' ? 'bg-bright-snow shadow-sm text-cerulean' : 'text-oxford-navy/50 hover:text-oxford-navy'}`}
+              className={`p-2 rounded ${viewMode === 'grid' ? 'bg-sv-ivory shadow-sm text-sv-terracotta' : 'text-sv-midnight/50 hover:text-sv-midnight'}`}
               title="Grid View"
             >
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -484,7 +484,7 @@ export default function Dashboard() {
             </button>
             <button
               onClick={() => setViewMode('list')}
-              className={`p-2 rounded ${viewMode === 'list' ? 'bg-bright-snow shadow-sm text-cerulean' : 'text-oxford-navy/50 hover:text-oxford-navy'}`}
+              className={`p-2 rounded ${viewMode === 'list' ? 'bg-sv-ivory shadow-sm text-sv-terracotta' : 'text-sv-midnight/50 hover:text-sv-midnight'}`}
               title="List View"
             >
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -495,15 +495,15 @@ export default function Dashboard() {
         </div>
 
         {items && items.length > 0 && (
-          <p className="text-sm text-text-secondary">
+          <p className="text-sm text-sv-slate">
             Showing {filteredItems.length} of {items.length} item{items.length !== 1 ? 's' : ''}
           </p>
         )}
       </div>
 
       {selectedItems.size > 0 && (
-        <div className="bg-frosted-blue p-4 rounded-lg mb-6 border border-border flex items-center justify-between flex-wrap gap-4">
-          <p className="text-sm font-medium text-oxford-navy">
+        <div className="bg-sv-bone p-4 rounded-lg mb-6 border border-border flex items-center justify-between flex-wrap gap-4">
+          <p className="text-sm font-medium text-sv-midnight">
             {selectedItems.size} item(s) selected
           </p>
           <div className="flex items-center space-x-2">
@@ -537,11 +537,11 @@ export default function Dashboard() {
         <ErrorState error={itemsError} onRetry={refetchItems} message="Failed to load items" />
       ) : isLoading ? (
         <div className="flex flex-col items-center justify-center py-12">
-          <svg className="animate-spin h-8 w-8 text-cerulean mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <svg className="animate-spin h-8 w-8 text-sv-terracotta mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
-          <p className="text-text-secondary">Loading your items...</p>
+          <p className="text-sv-slate">Loading your items...</p>
         </div>
       ) : items && items.length > 0 ? (
         filteredItems.length > 0 ? (
@@ -564,7 +564,7 @@ export default function Dashboard() {
           </div>
         ) : (
           <div className="card text-center">
-            <p className="text-text-secondary mb-4">
+            <p className="text-sv-slate mb-4">
               No items match your filters. Try adjusting your search or filters.
             </p>
             <button
@@ -581,7 +581,7 @@ export default function Dashboard() {
         )
       ) : (
         <div className="card text-center">
-          <p className="text-text-secondary mb-4">No items yet. Get started by adding your first item.</p>
+          <p className="text-sv-slate mb-4">No items yet. Get started by adding your first item.</p>
           <button
             onClick={() => setOpenAdd(true)}
             className="btn-primary inline-block"
@@ -593,7 +593,7 @@ export default function Dashboard() {
 
       <button
         onClick={() => setOpenAdd(true)}
-        className="fixed bottom-6 right-6 rounded-full w-14 h-14 bg-tropical-teal text-white shadow-lg hover:shadow-xl hover:bg-stormy-teal text-2xl transition-all"
+        className="fixed bottom-6 right-6 rounded-full w-14 h-14 bg-sv-terracotta text-white shadow-lg hover:shadow-xl hover:bg-sv-ember text-2xl transition-all"
         aria-label="Add Item"
       >
         +
