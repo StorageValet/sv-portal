@@ -24,28 +24,31 @@ export default {
         'sv-sand': 'rgb(var(--color-sv-sand) / <alpha-value>)',            // #e2ded6 - Borders ONLY
         'sv-stone': 'rgb(var(--color-sv-stone) / <alpha-value>)',          // #d4cfc5 - Muted text, disabled
 
-        // ===== Legacy v1.0 Palette (deprecated, removing after migration) =====
-        'oxford-navy': 'rgb(var(--color-oxford-navy) / <alpha-value>)',    // #1d3557 - Text, depth, authority
-        'valet-teal': 'rgb(var(--color-valet-teal) / <alpha-value>)',      // #006d77 - Primary CTA, links
-        'bright-snow': 'rgb(var(--color-bright-snow) / <alpha-value>)',    // #d5dede - Marketing backgrounds
-        'soft-white': 'rgb(var(--color-soft-white) / <alpha-value>)',      // #fafafa - App backgrounds, cards
-        'bone': 'rgb(var(--color-bone) / <alpha-value>)',                  // #e8e4e0 - Warm neutral, badges
-        'burnished-gold': 'rgb(var(--color-burnished-gold) / <alpha-value>)', // #c9a962 - Premium accents
+        // ===== DEPRECATED: Legacy v1.0 Teal Palette =====
+        // DO NOT USE in new code. Use sv-* tokens above instead.
+        // Kept only for backward compatibility during Brand v1.1 transition.
+        // Maps teal-based aliases to Brand v1.1 equivalents.
+        'oxford-navy': 'rgb(var(--color-sv-navy) / <alpha-value>)',        // DEPRECATED → use sv-navy
+        'valet-teal': 'rgb(var(--color-sv-terracotta) / <alpha-value>)',   // DEPRECATED → use sv-terracotta (CTA)
+        'bright-snow': 'rgb(var(--color-sv-bone) / <alpha-value>)',        // DEPRECATED → use sv-bone
+        'soft-white': 'rgb(var(--color-sv-ivory) / <alpha-value>)',        // DEPRECATED → use sv-ivory
+        'bone': 'rgb(var(--color-sv-bone) / <alpha-value>)',               // DEPRECATED → use sv-bone
+        'burnished-gold': 'rgb(var(--color-sv-peach) / <alpha-value>)',    // DEPRECATED → use sv-peach
 
-        // Legacy mappings (backward compatibility during transition)
-        'stormy-teal': 'rgb(var(--color-valet-teal) / <alpha-value>)',     // → valet-teal
-        'tropical-teal': 'rgb(var(--color-valet-teal) / <alpha-value>)',   // → valet-teal
-        'tropical-teal-hover': 'rgb(var(--color-valet-teal) / 0.9)',       // → valet-teal/90
-        'cerulean': 'rgb(var(--color-oxford-navy) / 0.6)',                 // → oxford-navy/60
-        'frosted-blue': 'rgb(var(--color-bone) / <alpha-value>)',          // → bone
-        'honeydew': 'rgb(var(--color-soft-white) / <alpha-value>)',        // → soft-white
-        'text-primary': 'rgb(var(--color-oxford-navy) / <alpha-value>)',   // → oxford-navy
-        'text-secondary': 'rgb(var(--color-oxford-navy) / 0.6)',           // → oxford-navy/60
-        'border': 'rgb(var(--color-sv-sand) / <alpha-value>)',             // Updated to v1.1 sand
-        'gunmetal': 'rgb(var(--color-valet-teal) / <alpha-value>)',        // → valet-teal
-        'gunmetal-2': 'rgb(var(--color-oxford-navy) / <alpha-value>)',     // → oxford-navy
-        'slate': 'rgb(var(--color-oxford-navy) / 0.6)',                    // → oxford-navy/60
-        'cream': 'rgb(var(--color-soft-white) / <alpha-value>)',           // → soft-white
+        // DEPRECATED legacy aliases (all map to Brand v1.1 tokens)
+        'stormy-teal': 'rgb(var(--color-sv-terracotta) / <alpha-value>)',  // DEPRECATED → sv-terracotta
+        'tropical-teal': 'rgb(var(--color-sv-terracotta) / <alpha-value>)',// DEPRECATED → sv-terracotta
+        'tropical-teal-hover': 'rgb(var(--color-sv-ember) / <alpha-value>)',// DEPRECATED → sv-ember
+        'cerulean': 'rgb(var(--color-sv-slate) / <alpha-value>)',          // DEPRECATED → sv-slate
+        'frosted-blue': 'rgb(var(--color-sv-bone) / <alpha-value>)',       // DEPRECATED → sv-bone
+        'honeydew': 'rgb(var(--color-sv-ivory) / <alpha-value>)',          // DEPRECATED → sv-ivory
+        'text-primary': 'rgb(var(--color-sv-midnight) / <alpha-value>)',   // DEPRECATED → sv-midnight
+        'text-secondary': 'rgb(var(--color-sv-slate) / <alpha-value>)',    // DEPRECATED → sv-slate
+        'border': 'rgb(var(--color-sv-sand) / <alpha-value>)',             // DEPRECATED → sv-sand
+        'gunmetal': 'rgb(var(--color-sv-midnight) / <alpha-value>)',       // DEPRECATED → sv-midnight
+        'gunmetal-2': 'rgb(var(--color-sv-navy) / <alpha-value>)',         // DEPRECATED → sv-navy
+        'slate': 'rgb(var(--color-sv-slate) / <alpha-value>)',             // DEPRECATED → sv-slate
+        'cream': 'rgb(var(--color-sv-cream) / <alpha-value>)',             // DEPRECATED → sv-cream
       },
     },
   },

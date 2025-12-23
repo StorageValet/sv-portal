@@ -12,7 +12,7 @@ export default function WaitlistDashboard({ profile }: WaitlistDashboardProps) {
     <AppLayout>
       <div className="max-w-4xl mx-auto px-4 py-12">
         {/* Hero Section */}
-        <div className="bg-gradient-to-br from-gunmetal to-slate rounded-xl p-8 mb-8 text-white">
+        <div className="bg-gradient-to-br from-sv-midnight to-sv-slate rounded-xl p-8 mb-8 text-white">
           <h1 className="text-3xl font-bold mb-4">
             You're on the Storage Valet Waitlist! 🚀
           </h1>
@@ -22,7 +22,7 @@ export default function WaitlistDashboard({ profile }: WaitlistDashboardProps) {
           </p>
 
           {needsRefund && (
-            <div className="bg-bone/20 rounded-lg p-4 mb-6">
+            <div className="bg-sv-bone/20 rounded-lg p-4 mb-6">
               <p className="font-semibold">Your $99 setup fee will be refunded within 3-5 business days.</p>
               <p className="text-sm mt-2">You won't be charged the monthly subscription until service is available in your area.</p>
             </div>
@@ -51,17 +51,17 @@ export default function WaitlistDashboard({ profile }: WaitlistDashboardProps) {
         </div>
 
         {/* Current Service Areas */}
-        <div className="bg-white rounded-xl shadow-sm p-8 mb-8">
-          <h2 className="text-xl font-semibold text-gunmetal mb-4">
+        <div className="bg-sv-cream rounded-xl shadow-sm p-8 mb-8">
+          <h2 className="text-xl font-semibold text-sv-midnight mb-4">
             Current Service Areas (Northern New Jersey)
           </h2>
-          <p className="text-gray-600 mb-4">
+          <p className="text-sv-slate mb-4">
             We're currently serving these ZIP codes with plans to expand based on demand:
           </p>
           <div className="grid grid-cols-3 gap-3 text-center">
             {['07001', '07002', '07003', '07004', '07005', '07006', '07007',
               '07008', '07009', '07010', '07011', '07012', '07013'].map(zip => (
-              <div key={zip} className="bg-cream rounded-lg py-2 font-mono text-sm">
+              <div key={zip} className="bg-sv-bone rounded-lg py-2 font-mono text-sm">
                 {zip}
               </div>
             ))}
@@ -69,40 +69,40 @@ export default function WaitlistDashboard({ profile }: WaitlistDashboardProps) {
         </div>
 
         {/* Expansion Timeline */}
-        <div className="bg-white rounded-xl shadow-sm p-8">
-          <h2 className="text-xl font-semibold text-gunmetal mb-4">
+        <div className="bg-sv-cream rounded-xl shadow-sm p-8">
+          <h2 className="text-xl font-semibold text-sv-midnight mb-4">
             What's Coming Next
           </h2>
           <div className="space-y-4">
             <div className="flex gap-4">
-              <div className="flex-shrink-0 w-12 h-12 bg-cream rounded-full flex items-center justify-center font-bold text-gunmetal">
+              <div className="flex-shrink-0 w-12 h-12 bg-sv-bone rounded-full flex items-center justify-center font-bold text-sv-midnight">
                 Q1
               </div>
               <div>
                 <h3 className="font-semibold">Service Area Expansion</h3>
-                <p className="text-gray-600">
+                <p className="text-sv-slate">
                   Based on waitlist demand, we'll expand to high-interest ZIP codes first
                 </p>
               </div>
             </div>
             <div className="flex gap-4">
-              <div className="flex-shrink-0 w-12 h-12 bg-cream rounded-full flex items-center justify-center font-bold text-gunmetal">
+              <div className="flex-shrink-0 w-12 h-12 bg-sv-bone rounded-full flex items-center justify-center font-bold text-sv-midnight">
                 Q2
               </div>
               <div>
                 <h3 className="font-semibold">Autonomous Delivery Testing</h3>
-                <p className="text-gray-600">
+                <p className="text-sv-slate">
                   Pilot program for contactless, autonomous pickup and delivery
                 </p>
               </div>
             </div>
             <div className="flex gap-4">
-              <div className="flex-shrink-0 w-12 h-12 bg-cream rounded-full flex items-center justify-center font-bold text-gunmetal">
+              <div className="flex-shrink-0 w-12 h-12 bg-sv-bone rounded-full flex items-center justify-center font-bold text-sv-midnight">
                 Q3
               </div>
               <div>
                 <h3 className="font-semibold">Regional Launch</h3>
-                <p className="text-gray-600">
+                <p className="text-sv-slate">
                   Full service across the tri-state area with enhanced features
                 </p>
               </div>

@@ -12,14 +12,14 @@ export default function FilterChips({ activeStatus, onStatusChange }: FilterChip
   const getChipClass = (status: ItemStatus) => {
     const baseClass = 'px-3 py-1 text-sm font-medium rounded-full cursor-pointer transition-colors';
     if (status === activeStatus) {
-      return `${baseClass} bg-indigo-600 text-white`;
+      return `${baseClass} bg-sv-terracotta text-white`;
     }
-    return `${baseClass} bg-gray-100 text-gray-700 hover:bg-gray-200`;
+    return `${baseClass} bg-sv-bone text-sv-slate hover:bg-sv-sand`;
   };
 
   return (
     <div className="flex items-center space-x-2">
-      <span className="text-sm font-medium text-gray-600">Filter by status:</span>
+      <span className="text-sm font-medium text-sv-slate">Filter by status:</span>
       {statuses.map((status) => (
         <button
           key={status}

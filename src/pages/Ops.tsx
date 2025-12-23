@@ -166,8 +166,8 @@ export default function Ops() {
   const getStatusBadge = (status: ActionStatus) => {
     const styles: Record<ActionStatus, string> = {
       pending_items: 'bg-amber-100 text-amber-800',
-      pending_confirmation: 'bg-bone text-slate',
-      confirmed: 'bg-slate text-bone',
+      pending_confirmation: 'bg-sv-bone text-sv-slate',
+      confirmed: 'bg-sv-slate text-sv-cream',
       completed: 'bg-green-100 text-green-800',
       canceled: 'bg-red-100 text-red-800',
     }
@@ -186,13 +186,14 @@ export default function Ops() {
   }
 
   const getTypeBadge = (type: string) => {
+    // Using Brand v1.1 tokens for type differentiation
     const styles: Record<string, string> = {
-      pickup: 'bg-blue-100 text-blue-800',
-      redelivery: 'bg-purple-100 text-purple-800',
-      container_delivery: 'bg-teal-100 text-teal-800',
+      pickup: 'bg-sv-navy/10 text-sv-navy',           // Navy for pickups
+      redelivery: 'bg-sv-peach/30 text-sv-ember',     // Terracotta family for redeliveries
+      container_delivery: 'bg-sv-slate/10 text-sv-slate', // Slate for containers
     }
     return (
-      <span className={`text-xs font-medium px-2 py-1 rounded-full ${styles[type] || 'bg-gray-100'}`}>
+      <span className={`text-xs font-medium px-2 py-1 rounded-full ${styles[type] || 'bg-sv-bone'}`}>
         {type === 'container_delivery' ? 'Container' : type.charAt(0).toUpperCase() + type.slice(1)}
       </span>
     )
@@ -201,13 +202,13 @@ export default function Ops() {
   // Loading state
   if (staffLoading) {
     return (
-      <div className="min-h-screen bg-cream flex items-center justify-center">
+      <div className="min-h-screen bg-sv-cream flex items-center justify-center">
         <div className="text-center">
-          <svg className="animate-spin h-8 w-8 text-slate mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <svg className="animate-spin h-8 w-8 text-sv-slate mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
-          <p className="text-gunmetal/70">Checking access...</p>
+          <p className="text-sv-slate/70">Checking access...</p>
         </div>
       </div>
     )
@@ -216,15 +217,15 @@ export default function Ops() {
   // Error state - RPC failed
   if (staffError) {
     return (
-      <div className="min-h-screen bg-cream flex items-center justify-center p-4">
+      <div className="min-h-screen bg-sv-cream flex items-center justify-center p-4">
         <div className="card max-w-md w-full text-center">
           <div className="mb-4">
             <svg className="mx-auto h-12 w-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
           </div>
-          <h2 className="text-xl font-semibold text-gunmetal mb-2">Error Verifying Access</h2>
-          <p className="text-gunmetal/70 mb-4">
+          <h2 className="text-xl font-semibold text-sv-midnight mb-2">Error Verifying Access</h2>
+          <p className="text-sv-midnight/70 mb-4">
             Unable to verify staff access. Please contact support if this persists.
           </p>
           <pre className="text-xs text-red-600 mb-4 font-mono bg-red-50 p-2 rounded text-left whitespace-pre-wrap break-all max-h-40 overflow-auto">
@@ -241,15 +242,15 @@ export default function Ops() {
   // Access denied
   if (!isStaff) {
     return (
-      <div className="min-h-screen bg-cream flex items-center justify-center p-4">
+      <div className="min-h-screen bg-sv-cream flex items-center justify-center p-4">
         <div className="card max-w-md w-full text-center">
           <div className="mb-4">
             <svg className="mx-auto h-12 w-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
           </div>
-          <h2 className="text-xl font-semibold text-gunmetal mb-2">Access Denied</h2>
-          <p className="text-gunmetal/70 mb-4">
+          <h2 className="text-xl font-semibold text-sv-midnight mb-2">Access Denied</h2>
+          <p className="text-sv-midnight/70 mb-4">
             This page is restricted to Storage Valet staff members.
           </p>
           <a href="/dashboard" className="btn-primary inline-block">
@@ -262,11 +263,11 @@ export default function Ops() {
 
   // Staff dashboard
   return (
-    <div className="min-h-screen bg-cream">
-      <header className="bg-gunmetal text-bone py-4 px-6">
+    <div className="min-h-screen bg-sv-cream">
+      <header className="bg-sv-midnight text-sv-ivory py-4 px-6">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <h1 className="text-xl font-bold">Operations Dashboard</h1>
-          <a href="/dashboard" className="text-sm text-bone/80 hover:text-bone underline">
+          <a href="/dashboard" className="text-sm text-sv-ivory/80 hover:text-sv-ivory underline">
             ← Customer Portal
           </a>
         </div>
@@ -274,15 +275,15 @@ export default function Ops() {
 
       <main className="max-w-6xl mx-auto p-6">
         {/* Filter Tabs */}
-        <div className="flex space-x-1 bg-bone rounded-lg p-1 mb-6 w-fit">
+        <div className="flex space-x-1 bg-sv-bone rounded-lg p-1 mb-6 w-fit">
           {(['upcoming', 'today', 'completed'] as FilterTab[]).map((tab) => (
             <button
               key={tab}
               onClick={() => setFilter(tab)}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                 filter === tab
-                  ? 'bg-cream shadow-sm text-slate'
-                  : 'text-slate/70 hover:text-slate'
+                  ? 'bg-sv-cream shadow-sm text-sv-slate'
+                  : 'text-sv-slate/70 hover:text-sv-slate'
               }`}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -291,16 +292,16 @@ export default function Ops() {
         </div>
 
         {/* Auto-refresh indicator */}
-        <p className="text-xs text-slate/60 mb-4">Auto-refreshes every 30 seconds</p>
+        <p className="text-xs text-sv-slate/60 mb-4">Auto-refreshes every 30 seconds</p>
 
         {/* Actions List */}
         {actionsLoading ? (
           <div className="text-center py-12">
-            <svg className="animate-spin h-8 w-8 text-slate mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <svg className="animate-spin h-8 w-8 text-sv-slate mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
-            <p className="text-gunmetal/70">Loading actions...</p>
+            <p className="text-sv-midnight/70">Loading actions...</p>
           </div>
         ) : actions && actions.length > 0 ? (
           <div className="space-y-4">
@@ -323,13 +324,13 @@ export default function Ops() {
                       </div>
 
                       {/* Customer Info */}
-                      <p className="font-semibold text-gunmetal">
-                        {profileData?.full_name || 'Unknown'} {profileData?.delivery_address?.postal_code && <span className="text-slate/60 font-normal">({profileData.delivery_address.postal_code})</span>}
+                      <p className="font-semibold text-sv-midnight">
+                        {profileData?.full_name || 'Unknown'} {profileData?.delivery_address?.postal_code && <span className="text-sv-slate/60 font-normal">({profileData.delivery_address.postal_code})</span>}
                       </p>
-                      <p className="text-sm text-gunmetal/70">{profileData?.email}</p>
+                      <p className="text-sm text-sv-midnight/70">{profileData?.email}</p>
 
                       {/* Schedule */}
-                      <p className="text-sm text-gunmetal/70 mt-2">
+                      <p className="text-sm text-sv-midnight/70 mt-2">
                         <svg className="inline-block h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
@@ -337,7 +338,7 @@ export default function Ops() {
                       </p>
 
                       {/* Items */}
-                      <p className="text-sm text-slate/70 mt-1">
+                      <p className="text-sm text-sv-slate/70 mt-1">
                         {itemCount} item{itemCount !== 1 ? 's' : ''}
                         {action.pickup_item_ids?.length ? ` (${action.pickup_item_ids.length} pickup)` : ''}
                         {action.delivery_item_ids?.length ? ` (${action.delivery_item_ids.length} delivery)` : ''}
@@ -361,10 +362,10 @@ export default function Ops() {
           </div>
         ) : (
           <div className="card text-center py-12">
-            <svg className="mx-auto h-10 w-10 text-slate/40 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="mx-auto h-10 w-10 text-sv-slate/40 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
-            <p className="text-gunmetal/70">
+            <p className="text-sv-midnight/70">
               {filter === 'upcoming' && 'No upcoming actions'}
               {filter === 'today' && 'No actions scheduled for today'}
               {filter === 'completed' && 'No completed actions yet'}

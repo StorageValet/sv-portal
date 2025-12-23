@@ -22,13 +22,11 @@
   --color-sv-sand: 226 222 214;          /* #e2ded6 - Borders */
   --color-sv-stone: 212 207 197;         /* #d4cfc5 - Disabled states */
 
-  /* ===== Legacy v1.0 Palette (deprecated, removing soon) ===== */
-  --color-oxford-navy: 29 53 87;         /* #1d3557 */
-  --color-valet-teal: 0 109 119;         /* #006d77 */
-  --color-bright-snow: 213 222 222;      /* #d5dede */
-  --color-soft-white: 250 250 250;       /* #fafafa */
-  --color-bone: 232 228 224;             /* #e8e4e0 */
-  --color-burnished-gold: 201 169 98;    /* #c9a962 */
+  /* ===== DEPRECATED: Legacy v1.0 Teal Palette (removed) =====
+     These CSS variables are no longer needed. Legacy Tailwind aliases
+     in tailwind.config.js now map directly to sv-* tokens above.
+     See Brand v1.1 documentation for canonical color reference.
+  */
 }
 
 @layer base {

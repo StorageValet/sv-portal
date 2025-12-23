@@ -354,29 +354,48 @@ The family needs revenue, not perfect code.
 
 ---
 
-## 🎨 UI Guardrails — Do Not Break Production
+## 🎨 UI Guardrails — Brand v1.1 (Terracotta)
 
-**Added:** Dec 15, 2025
+**Updated:** Dec 23, 2025
 **Purpose:** Keep the codebase stable, brand-consistent, and easy to refine after launch.
+
+### Brand v1.1 Palette (Single Source of Truth)
+
+| Token | Hex | Usage |
+|-------|-----|-------|
+| `sv-midnight` | #0f2942 | Headers, headlines |
+| `sv-navy` | #1a3a5c | Secondary text |
+| `sv-slate` | #3d5a80 | Body text |
+| `sv-terracotta` | #D97757 | **PRIMARY CTA** |
+| `sv-ember` | #C4654A | Hover states |
+| `sv-peach` | #E8A090 | Light accents |
+| `sv-ivory` | #fdfcf9 | **Page backgrounds** |
+| `sv-cream` | #f8f6f2 | Cards, modals |
+| `sv-bone` | #eeebe5 | Subtle backgrounds |
+| `sv-sand` | #e2ded6 | Borders ONLY |
+| `sv-stone` | #d4cfc5 | Disabled, muted text |
 
 ### 1) Token-First Colors (No Random Tailwind)
 
 **Do not introduce new colors** via Tailwind defaults.
 
-**Allowed (brand tokens):**
-- Backgrounds: `bg-bright-snow`, `bg-soft-white`, `bg-bone`
-- Text: `text-oxford-navy`, `text-soft-white`, `text-bone`
-- Accents: `bg-valet-teal`, `border-oxford-navy`, `ring-valet-teal`, `text-burnished-gold`
-- With opacity: `border-oxford-navy/12`, `text-oxford-navy/60`, `ring-valet-teal/30`
+**Allowed (Brand v1.1 tokens):**
+- Backgrounds: `bg-sv-ivory`, `bg-sv-cream`, `bg-sv-bone`
+- Text: `text-sv-midnight`, `text-sv-navy`, `text-sv-slate`, `text-sv-stone`
+- CTA: `bg-sv-terracotta`, `hover:bg-sv-ember`
+- Borders: `border-sv-sand`, `divide-sv-sand`
+- With opacity: `border-sv-sand/50`, `text-sv-slate/70`
 
 **Allowed semantic exceptions:**
 - **Error/Danger:** `red-*` classes for destructive actions, validation errors, delete buttons
-- **Success:** `green-*` classes for "Active", "Success", "Confirmed" states (e.g., subscription badge)
-- **Warning:** Avoid `amber-*`/`yellow-*` unless something truly needs urgent attention
+- **Success:** `green-*` classes for "Active", "Success", "Confirmed" states
+- **Warning:** `amber-*`/`yellow-*` ONLY for urgent attention (refund badges, etc.)
 
 **Prohibited:**
 - `bg-white`, `text-black`, `text-gray-*`, `border-gray-*`
-- `bg-blue-*`, `bg-indigo-*`, `bg-purple-*`, `border-amber-*`
+- `bg-blue-*`, `bg-indigo-*`, `bg-purple-*`
+- Any teal-based tokens (`valet-teal`, `tropical-teal`, etc.) — **DEPRECATED**
+- Pure `#FFFFFF` for page backgrounds — use `sv-ivory` or `sv-cream`
 - Hardcoded hex colors in components (unless one-off approved)
 
 ### 2) CSS Variable Format (Critical)
@@ -385,19 +404,19 @@ CSS variables **must be space-separated RGB**, not comma-separated:
 
 ```css
 /* ✅ Correct */
-:root { --color-oxford-navy: 29 53 87; }
+:root { --color-sv-midnight: 15 41 66; }
 
 /* ❌ Breaks alpha parsing */
-:root { --color-oxford-navy: 29, 53, 87; }
+:root { --color-sv-midnight: 15, 41, 66; }
 ```
 
 ### 3) @apply Limitations
 
-`@apply` does not reliably support opacity modifiers (`border-oxford-navy/12`).
+`@apply` does not reliably support opacity modifiers (`border-sv-sand/50`).
 
 **Solutions:**
 - Use utility classes directly in JSX
-- Or define semantic tokens: `border-border` maps to `rgb(var(--color-oxford-navy) / 0.12)`
+- Or define semantic tokens in index.css
 
 ### 4) Scope Control
 
@@ -418,9 +437,14 @@ npm run build
 #    - /dashboard (cards, borders, badges)
 #    - /account (forms, buttons)
 
-# 3. Check for prohibited colors (grep will flag semantic exceptions - that's OK)
-rg -n "bg-white|text-gray-|border-gray-|bg-indigo-|bg-purple-|border-amber-" src
+# 3. Check for prohibited colors
+rg -n "bg-white|text-gray-|border-gray-|bg-indigo-|bg-purple-" src
 # Note: green-* and red-* are allowed for semantic states (success/error)
+# Note: amber-* allowed for warnings (refund badges)
+
+# 4. Check for deprecated teal tokens (should not appear in new code)
+rg -n "valet-teal|tropical-teal|oxford-navy|bright-snow|soft-white|burnished-gold" src
+# These are DEPRECATED - use sv-* tokens instead
 ```
 
 ### 6) Current Primitives (Phase 1)

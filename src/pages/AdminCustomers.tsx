@@ -117,7 +117,7 @@ export default function AdminCustomers() {
     return (
       <AppLayout>
         <div className="max-w-7xl mx-auto px-4 py-8">
-          <div className="text-center text-gray-500">Loading...</div>
+          <div className="text-center text-sv-stone">Loading...</div>
         </div>
       </AppLayout>
     )
@@ -127,8 +127,8 @@ export default function AdminCustomers() {
     return (
       <AppLayout>
         <div className="max-w-7xl mx-auto px-4 py-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
-          <p className="text-gray-600">This page is restricted to administrators.</p>
+          <h1 className="text-2xl font-bold text-sv-midnight mb-4">Access Denied</h1>
+          <p className="text-sv-slate">This page is restricted to administrators.</p>
         </div>
       </AppLayout>
     )
@@ -138,14 +138,14 @@ export default function AdminCustomers() {
     <AppLayout>
       <div className="max-w-3xl mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Create Customer Account</h1>
-          <p className="text-gray-600">Manually create a customer account for existing customers</p>
+          <h1 className="text-2xl font-bold text-sv-midnight">Create Customer Account</h1>
+          <p className="text-sv-slate">Manually create a customer account for existing customers</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-white shadow rounded-lg p-6 space-y-6">
+        <form onSubmit={handleSubmit} className="bg-sv-cream shadow rounded-lg p-6 space-y-6">
           {/* Email (required) */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="email" className="block text-sm font-medium text-sv-slate">
               Email <span className="text-red-500">*</span>
             </label>
             <input
@@ -155,7 +155,7 @@ export default function AdminCustomers() {
               value={form.email}
               onChange={handleChange}
               required
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-navy focus:ring-navy"
+              className="mt-1 block w-full rounded-md border-sv-sand shadow-sm focus:border-navy focus:ring-navy"
               placeholder="customer@example.com"
             />
           </div>
@@ -163,7 +163,7 @@ export default function AdminCustomers() {
           {/* Name */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="first_name" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="first_name" className="block text-sm font-medium text-sv-slate">
                 First Name
               </label>
               <input
@@ -172,11 +172,11 @@ export default function AdminCustomers() {
                 name="first_name"
                 value={form.first_name}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-navy focus:ring-navy"
+                className="mt-1 block w-full rounded-md border-sv-sand shadow-sm focus:border-navy focus:ring-navy"
               />
             </div>
             <div>
-              <label htmlFor="last_name" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="last_name" className="block text-sm font-medium text-sv-slate">
                 Last Name
               </label>
               <input
@@ -185,14 +185,14 @@ export default function AdminCustomers() {
                 name="last_name"
                 value={form.last_name}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-navy focus:ring-navy"
+                className="mt-1 block w-full rounded-md border-sv-sand shadow-sm focus:border-navy focus:ring-navy"
               />
             </div>
           </div>
 
           {/* Phone */}
           <div>
-            <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="phone" className="block text-sm font-medium text-sv-slate">
               Phone
             </label>
             <input
@@ -201,17 +201,17 @@ export default function AdminCustomers() {
               name="phone"
               value={form.phone}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-navy focus:ring-navy"
+              className="mt-1 block w-full rounded-md border-sv-sand shadow-sm focus:border-navy focus:ring-navy"
               placeholder="(201) 555-1234"
             />
           </div>
 
           {/* Address */}
           <div className="space-y-4">
-            <h3 className="text-sm font-medium text-gray-700">Address (Optional)</h3>
+            <h3 className="text-sm font-medium text-sv-slate">Address (Optional)</h3>
             <div className="grid grid-cols-3 gap-4">
               <div className="col-span-2">
-                <label htmlFor="street" className="block text-sm text-gray-500">
+                <label htmlFor="street" className="block text-sm text-sv-stone">
                   Street
                 </label>
                 <input
@@ -220,12 +220,12 @@ export default function AdminCustomers() {
                   name="street"
                   value={form.street}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-navy focus:ring-navy"
+                  className="mt-1 block w-full rounded-md border-sv-sand shadow-sm focus:border-navy focus:ring-navy"
                   placeholder="123 Main St"
                 />
               </div>
               <div>
-                <label htmlFor="unit" className="block text-sm text-gray-500">
+                <label htmlFor="unit" className="block text-sm text-sv-stone">
                   Unit
                 </label>
                 <input
@@ -234,14 +234,14 @@ export default function AdminCustomers() {
                   name="unit"
                   value={form.unit}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-navy focus:ring-navy"
+                  className="mt-1 block w-full rounded-md border-sv-sand shadow-sm focus:border-navy focus:ring-navy"
                   placeholder="Apt 4B"
                 />
               </div>
             </div>
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <label htmlFor="city" className="block text-sm text-gray-500">
+                <label htmlFor="city" className="block text-sm text-sv-stone">
                   City
                 </label>
                 <input
@@ -250,12 +250,12 @@ export default function AdminCustomers() {
                   name="city"
                   value={form.city}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-navy focus:ring-navy"
+                  className="mt-1 block w-full rounded-md border-sv-sand shadow-sm focus:border-navy focus:ring-navy"
                   placeholder="Hoboken"
                 />
               </div>
               <div>
-                <label htmlFor="state" className="block text-sm text-gray-500">
+                <label htmlFor="state" className="block text-sm text-sv-stone">
                   State
                 </label>
                 <select
@@ -263,14 +263,14 @@ export default function AdminCustomers() {
                   name="state"
                   value={form.state}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-navy focus:ring-navy"
+                  className="mt-1 block w-full rounded-md border-sv-sand shadow-sm focus:border-navy focus:ring-navy"
                 >
                   <option value="NJ">NJ</option>
                   <option value="NY">NY</option>
                 </select>
               </div>
               <div>
-                <label htmlFor="zip" className="block text-sm text-gray-500">
+                <label htmlFor="zip" className="block text-sm text-sv-stone">
                   ZIP
                 </label>
                 <input
@@ -279,7 +279,7 @@ export default function AdminCustomers() {
                   name="zip"
                   value={form.zip}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-navy focus:ring-navy"
+                  className="mt-1 block w-full rounded-md border-sv-sand shadow-sm focus:border-navy focus:ring-navy"
                   placeholder="07030"
                   maxLength={5}
                 />
@@ -295,13 +295,13 @@ export default function AdminCustomers() {
               name="skip_payment"
               checked={form.skip_payment}
               onChange={handleChange}
-              className="h-4 w-4 text-navy focus:ring-navy border-gray-300 rounded"
+              className="h-4 w-4 text-navy focus:ring-navy border-sv-sand rounded"
             />
             <label htmlFor="skip_payment" className="ml-3">
-              <span className="block text-sm font-medium text-gray-900">
+              <span className="block text-sm font-medium text-sv-midnight">
                 Bypass Payment (Set Active Immediately)
               </span>
-              <span className="block text-sm text-gray-500">
+              <span className="block text-sm text-sv-stone">
                 Use for existing customers or beta testers. They will not need to pay through Stripe.
               </span>
             </label>
@@ -320,9 +320,9 @@ export default function AdminCustomers() {
         </form>
 
         {/* Instructions */}
-        <div className="mt-8 p-4 bg-gray-50 rounded-lg">
-          <h3 className="text-sm font-medium text-gray-900 mb-2">After Creating:</h3>
-          <ol className="text-sm text-gray-600 space-y-1 list-decimal list-inside">
+        <div className="mt-8 p-4 bg-sv-bone rounded-lg">
+          <h3 className="text-sm font-medium text-sv-midnight mb-2">After Creating:</h3>
+          <ol className="text-sm text-sv-slate space-y-1 list-decimal list-inside">
             <li>Customer will receive a magic link email to set up their account</li>
             <li>They can then log in at portal.mystoragevalet.com</li>
             <li>If "Bypass Payment" was checked, they have immediate access</li>
