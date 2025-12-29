@@ -8,6 +8,7 @@ import AddItemModal from '../components/AddItemModal'
 import EditItemModal from '../components/EditItemModal'
 import DeleteConfirmModal from '../components/DeleteConfirmModal'
 import ItemDetailModal from '../components/ItemDetailModal'
+import BookingModal from '../components/BookingModal'
 import WaitlistDashboard from '../components/WaitlistDashboard'
 import ErrorState from '../components/ErrorState'
 import { isInServiceArea } from '../lib/serviceArea'
@@ -18,6 +19,7 @@ export default function Dashboard() {
   const [editingItemId, setEditingItemId] = useState<string | null>(null)
   const [deletingItemId, setDeletingItemId] = useState<string | null>(null)
   const [viewingItemId, setViewingItemId] = useState<string | null>(null)
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false)
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set())
 
   // Sprint 3: Search and filter state
@@ -317,22 +319,16 @@ export default function Dashboard() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-lg font-semibold text-sv-terracotta">Upcoming Services</h3>
-          <a
-            href="https://calendly.com/zach-mystoragevalet"
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            onClick={() => setIsBookingModalOpen(true)}
             className="btn-primary inline-flex items-center"
           >
             <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
             Book Appointment
-          </a>
+          </button>
         </div>
-        {/* Webhook processing note */}
-        <p className="text-xs text-sv-slate mb-3">
-          Note: After booking, your appointment may take 15-30 seconds to appear below.
-        </p>
 
         {pendingBookings && pendingBookings.length > 0 ? (
           <div className="space-y-3">
@@ -603,6 +599,14 @@ export default function Dashboard() {
       {editingItemId && <EditItemModal itemId={editingItemId} onClose={() => setEditingItemId(null)} />}
       {deletingItemId && <DeleteConfirmModal itemId={deletingItemId} onClose={() => setDeletingItemId(null)} />}
       {viewingItemId && <ItemDetailModal itemId={viewingItemId} onClose={() => setViewingItemId(null)} />}
+      {profile && user && (
+        <BookingModal
+          isOpen={isBookingModalOpen}
+          onClose={() => setIsBookingModalOpen(false)}
+          profile={{ email: profile.email || user.email || '', full_name: profile.full_name }}
+          userId={user.id}
+        />
+      )}
     </AppLayout>
   )
 }
