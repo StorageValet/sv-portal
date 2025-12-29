@@ -97,17 +97,24 @@ The production Calendly → Supabase → Portal integration is **confirmed worki
 
 ## ✅ **4. Item Status Logic: DO NOT REWRITE**
 
-The correct and intentional state machine is:
+**See ~/.claude/CLAUDE.md → "CANONICAL PORTAL & INVENTORY SYSTEM SPECIFICATION" for authoritative spec.**
 
+### Target State Machine (Canonical)
 ```text
-home → scheduled → stored
-(stored → home on delivery completion)
+Pickup flow:  home → scheduled_pickup → stored
+Delivery flow: stored → scheduled_delivery → home
+Cancel/Revert: scheduled_pickup → home | scheduled_delivery → stored
 ```
 
-And for editing:
-- Adding items → scheduled
-- Removing pickup items → home
-- Removing delivery items → stored
+### Current Reality (Dec 29, 2025)
+The DB currently uses a single `scheduled` state (not split). Implementation must:
+- Infer pickup vs delivery from action association (which array contains the item)
+- Revert to `home` if in `pickup_item_ids`, `stored` if in `delivery_item_ids`
+
+**Critical safety requirement (production-blocking):**
+- Items must NEVER be stranded in a scheduled state
+- Customers must be able to self-revert scheduled items
+- Visible "Cancel / Revert" action required for all scheduled items
 
 This state model is correct.
 Do NOT change it unless explicitly asked.
