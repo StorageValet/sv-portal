@@ -95,7 +95,7 @@ The production Calendly → Supabase → Portal integration is **confirmed worki
 
 ---
 
-## ✅ **4. Item Status Logic: DO NOT REWRITE**
+## ✅ **4. Item Status Logic (Production-Critical — DO NOT REWRITE)**
 
 **See ~/.claude/CLAUDE.md → "CANONICAL PORTAL & INVENTORY SYSTEM SPECIFICATION" for authoritative spec.**
 
@@ -110,6 +110,8 @@ Cancel/Revert: scheduled_pickup → home | scheduled_delivery → stored
 The DB currently uses a single `scheduled` state (not split). Implementation must:
 - Infer pickup vs delivery from action association (which array contains the item)
 - Revert to `home` if in `pickup_item_ids`, `stored` if in `delivery_item_ids`
+
+**Phase 1 constraint:** This single-state design is intentional. Do not simulate or partially implement split states in code.
 
 **Critical safety requirement (production-blocking):**
 - Items must NEVER be stranded in a scheduled state
