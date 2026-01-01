@@ -1,11 +1,15 @@
 // Storage Valet — Bookings List Component
-// v1.0 • Read-only display of customer bookings
+// v1.1 • Display bookings + cancel action for pending states
 //
-// Uses: POST /functions/v1/bookings-list edge function
-// No mutations, no cancel action (Step 3 spec)
+// Uses: POST /functions/v1/bookings-list (read)
+//       POST /functions/v1/booking-cancel (cancel)
 
-import { useQuery } from '@tanstack/react-query'
-import { fetchBookings, Booking } from '../lib/supabase'
+import { useState } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { fetchBookings, cancelBooking, Booking } from '../lib/supabase'
+
+// Customer-cancelable states (must match edge function)
+const CANCELABLE_STATES = ['pending_items', 'pending_confirmation']
 
 // Status label mapping (UI only)
 const STATUS_LABELS: Record<string, string> = {
@@ -65,6 +69,10 @@ function getStatusColor(status: string): string {
   return STATUS_COLORS[status] || 'bg-sv-bone text-sv-slate'
 }
 
+function isCancelable(status: string): boolean {
+  return CANCELABLE_STATES.includes(status)
+}
+
 function sortBookings(bookings: Booking[]): Booking[] {
   const now = new Date()
 
@@ -100,6 +108,9 @@ function sortBookings(bookings: Booking[]): Booking[] {
 }
 
 export default function BookingsList() {
+  const queryClient = useQueryClient()
+  const [cancelTarget, setCancelTarget] = useState<Booking | null>(null)
+
   const {
     data: bookings,
     isLoading,
@@ -110,6 +121,38 @@ export default function BookingsList() {
     staleTime: 30000, // 30 seconds - freshness matters
     refetchOnWindowFocus: true,
   })
+
+  const cancelMutation = useMutation({
+    mutationFn: (bookingId: string) => cancelBooking(bookingId),
+    onSuccess: () => {
+      // Invalidate bookings list to refresh
+      queryClient.invalidateQueries({ queryKey: ['bookings-list'] })
+      // Also invalidate items since their status may have reverted
+      queryClient.invalidateQueries({ queryKey: ['items'] })
+      setCancelTarget(null)
+    },
+    onError: (err) => {
+      console.error('Cancel booking failed:', err)
+      // Keep dialog open so user sees error
+    },
+  })
+
+  const handleCancelClick = (booking: Booking) => {
+    setCancelTarget(booking)
+  }
+
+  const handleConfirmCancel = () => {
+    if (cancelTarget) {
+      cancelMutation.mutate(cancelTarget.id)
+    }
+  }
+
+  const handleCloseDialog = () => {
+    if (!cancelMutation.isPending) {
+      setCancelTarget(null)
+      cancelMutation.reset()
+    }
+  }
 
   if (isLoading) {
     return (
@@ -223,9 +266,105 @@ export default function BookingsList() {
                     </span>
                   </div>
                 </div>
+
+                {/* Cancel button (only for cancelable states) */}
+                {isCancelable(booking.status) && (
+                  <button
+                    onClick={() => handleCancelClick(booking)}
+                    className="ml-4 px-3 py-1.5 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors"
+                  >
+                    Cancel
+                  </button>
+                )}
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Cancel Confirmation Dialog */}
+      {cancelTarget && (
+        <div className="fixed inset-0 z-50 overflow-y-auto">
+          <div className="flex min-h-full items-center justify-center p-4">
+            {/* Backdrop */}
+            <div
+              className="fixed inset-0 bg-black/30 transition-opacity"
+              onClick={handleCloseDialog}
+            />
+
+            {/* Dialog */}
+            <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+              <h3 className="text-lg font-semibold text-sv-midnight mb-2">
+                Cancel Booking?
+              </h3>
+              <p className="text-sv-slate text-sm mb-4">
+                Are you sure you want to cancel this{' '}
+                <span className="font-medium">{cancelTarget.service_type}</span>
+                {cancelTarget.scheduled_start && (
+                  <>
+                    {' '}scheduled for{' '}
+                    <span className="font-medium">
+                      {formatDate(cancelTarget.scheduled_start)}
+                    </span>
+                  </>
+                )}
+                ? Any items associated with this booking will be returned to their previous status.
+              </p>
+
+              {cancelMutation.isError && (
+                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
+                  <p className="text-red-800 text-sm">
+                    {cancelMutation.error instanceof Error
+                      ? cancelMutation.error.message
+                      : 'Failed to cancel booking. Please try again.'}
+                  </p>
+                </div>
+              )}
+
+              <div className="flex justify-end space-x-3">
+                <button
+                  onClick={handleCloseDialog}
+                  disabled={cancelMutation.isPending}
+                  className="px-4 py-2 text-sm font-medium text-sv-slate hover:text-sv-midnight disabled:opacity-50"
+                >
+                  Keep Booking
+                </button>
+                <button
+                  onClick={handleConfirmCancel}
+                  disabled={cancelMutation.isPending}
+                  className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-md disabled:opacity-50 flex items-center"
+                >
+                  {cancelMutation.isPending ? (
+                    <>
+                      <svg
+                        className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        />
+                      </svg>
+                      Canceling...
+                    </>
+                  ) : (
+                    'Yes, Cancel Booking'
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>

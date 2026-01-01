@@ -242,3 +242,28 @@ export async function fetchBookings(): Promise<Booking[]> {
   const data: BookingsListResponse = await response.json()
   return data.bookings
 }
+
+// Cancel booking via edge function (reverts item states)
+export async function cancelBooking(bookingId: string): Promise<void> {
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session?.access_token) {
+    throw new Error('Not authenticated')
+  }
+
+  const response = await fetch(
+    `${supabaseUrl}/functions/v1/booking-cancel`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${session.access_token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ booking_id: bookingId }),
+    }
+  )
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Unknown error' }))
+    throw new Error(error.error || `Failed to cancel booking: ${response.status}`)
+  }
+}
