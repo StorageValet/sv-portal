@@ -9,6 +9,7 @@ import EditItemModal from '../components/EditItemModal'
 import DeleteConfirmModal from '../components/DeleteConfirmModal'
 import ItemDetailModal from '../components/ItemDetailModal'
 import BookingModal from '../components/BookingModal'
+import BookingsList from '../components/BookingsList'
 import WaitlistDashboard from '../components/WaitlistDashboard'
 import ErrorState from '../components/ErrorState'
 import { isInServiceArea } from '../lib/serviceArea'
@@ -314,6 +315,9 @@ export default function Dashboard() {
       )}
 
       {/* CASE C: Valid address in service area - Normal dashboard (no blocking card) */}
+
+      {/* My Bookings - Read-only list via edge function */}
+      <BookingsList />
 
       {/* Upcoming Services Section - Always shown */}
       <div className="mb-6">

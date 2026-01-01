@@ -197,3 +197,48 @@ export async function logInventoryEventAuto(
     // Non-critical, so we don't re-throw to the user
   }
 }
+
+// ═══════════════════════════════════════════════════════════════════
+// BOOKINGS API (Edge Function Clients)
+// ═══════════════════════════════════════════════════════════════════
+
+export interface Booking {
+  id: string
+  status: string
+  service_type: string
+  scheduled_start: string | null
+  scheduled_end: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface BookingsListResponse {
+  bookings: Booking[]
+}
+
+// Fetch bookings list via edge function (read-only)
+export async function fetchBookings(): Promise<Booking[]> {
+  const { data: { session } } = await supabase.auth.getSession()
+  if (!session?.access_token) {
+    throw new Error('Not authenticated')
+  }
+
+  const response = await fetch(
+    `${supabaseUrl}/functions/v1/bookings-list`,
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${session.access_token}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  )
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Unknown error' }))
+    throw new Error(error.error || `Failed to fetch bookings: ${response.status}`)
+  }
+
+  const data: BookingsListResponse = await response.json()
+  return data.bookings
+}
