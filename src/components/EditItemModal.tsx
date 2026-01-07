@@ -26,10 +26,16 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
   const { data: item, isLoading, isError } = useQuery({
     queryKey: ['item', itemId],
     queryFn: async () => {
+      // SECURITY: Get user for double-guard filter
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('Not authenticated')
+
+      // SECURITY: Explicit user_id filter (double-guard with RLS)
       const { data, error } = await supabase
         .from('items')
         .select('*')
         .eq('id', itemId)
+        .eq('user_id', user.id)
         .single()
       if (error) throw new Error(error.message)
       return data

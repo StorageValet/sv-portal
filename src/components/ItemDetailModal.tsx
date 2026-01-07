@@ -15,7 +15,17 @@ export default function ItemDetailModal({ itemId, onClose }: ItemDetailModalProp
   const { data: item, isLoading } = useQuery({
     queryKey: ['item', itemId],
     queryFn: async () => {
-      const { data, error } = await supabase.from('items').select('*').eq('id', itemId).single();
+      // SECURITY: Get user for double-guard filter
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Not authenticated');
+
+      // SECURITY: Explicit user_id filter (double-guard with RLS)
+      const { data, error } = await supabase
+        .from('items')
+        .select('*')
+        .eq('id', itemId)
+        .eq('user_id', user.id)
+        .single();
       if (error) throw new Error(error.message);
       return data;
     },

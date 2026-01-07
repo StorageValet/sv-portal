@@ -71,6 +71,26 @@ export default function Account() {
                     {getStatusDisplay(profile?.subscription_status || 'inactive').text}
                   </span>
                 </div>
+                {/* v4.0: Trial end date */}
+                {profile?.subscription_status === 'trialing' && profile?.trial_end_at && (
+                  <div className="mt-2 p-3 bg-green-50 border border-green-200 rounded-md">
+                    <p className="text-sm text-green-700 font-medium">Free Trial Active</p>
+                    <p className="text-xs text-green-600 mt-1">
+                      Your trial ends on {format(new Date(profile.trial_end_at), 'MMM d, yyyy')}.
+                      Billing begins automatically after the trial period.
+                    </p>
+                  </div>
+                )}
+                {/* v4.0: Cancel at period end notice */}
+                {profile?.cancel_at_period_end && profile?.cancel_at && (
+                  <div className="mt-2 p-3 bg-sv-bone border border-sv-sand rounded-md">
+                    <p className="text-sm text-sv-midnight font-medium">Cancellation Scheduled</p>
+                    <p className="text-xs text-sv-slate mt-1">
+                      Your subscription will cancel on {format(new Date(profile.cancel_at), 'MMM d, yyyy')}.
+                      You'll retain access until then. No further charges will occur.
+                    </p>
+                  </div>
+                )}
                 {profile?.last_payment_at && (
                   <p className="text-xs text-sv-stone">
                     Last payment: {format(new Date(profile.last_payment_at), 'MMM d, yyyy')}

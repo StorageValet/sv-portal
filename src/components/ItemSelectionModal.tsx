@@ -47,14 +47,15 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('Not authenticated')
 
+      // SECURITY: Explicit user_id filter (double-guard with RLS)
       const { data, error } = await supabase
         .from('actions')
         .select('*')
         .eq('id', actionId)
+        .eq('user_id', user.id)
         .single()
 
       if (error) throw new Error(error.message)
-      if (data.user_id !== user.id) throw new Error('Unauthorized: Action does not belong to user')
 
       return data
     },
@@ -64,9 +65,15 @@ export default function ItemSelectionModal({ actionId }: ItemSelectionModalProps
   const { data: items, isLoading: itemsLoading } = useQuery({
     queryKey: ['items'],
     queryFn: async () => {
+      // SECURITY: Get user for double-guard filter
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('Not authenticated')
+
+      // SECURITY: Explicit user_id filter (double-guard with RLS)
       const { data, error } = await supabase
         .from('items')
         .select('*')
+        .eq('user_id', user.id)
         .order('created_at', { ascending: false })
 
       if (error) throw error

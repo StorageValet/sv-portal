@@ -17,10 +17,16 @@ export default function DeleteConfirmModal({ itemId, onClose }: DeleteConfirmMod
   const { data: item, isLoading } = useQuery({
     queryKey: ['item', itemId],
     queryFn: async () => {
+      // SECURITY: Get user for double-guard filter
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('Not authenticated')
+
+      // SECURITY: Explicit user_id filter (double-guard with RLS)
       const { data, error } = await supabase
         .from('items')
         .select('label, photo_path, photo_paths')
         .eq('id', itemId)
+        .eq('user_id', user.id)
         .single()
       if (error) throw new Error(error.message)
 
@@ -70,7 +76,16 @@ export default function DeleteConfirmModal({ itemId, onClose }: DeleteConfirmMod
 
       // Delete the item record from the database
       // Note: inventory_events will cascade delete automatically (ON DELETE CASCADE)
-      const { error: dbError } = await supabase.from('items').delete().eq('id', id)
+      // SECURITY: Get user for double-guard filter
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('Not authenticated')
+
+      // SECURITY: Explicit user_id filter (double-guard with RLS)
+      const { error: dbError } = await supabase
+        .from('items')
+        .delete()
+        .eq('id', id)
+        .eq('user_id', user.id)
       if (dbError) throw new Error(`Failed to delete item: ${dbError.message}`)
     },
     onSuccess: () => {

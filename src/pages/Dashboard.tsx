@@ -73,6 +73,56 @@ export default function Dashboard() {
   // Check if user is out of service area (waitlist)
   const isWaitlist = profile?.out_of_service_area === true
 
+  // === v4.0 Billing v2: Subscription status helpers ===
+  const subscriptionStatus = profile?.subscription_status as string | undefined
+  const trialEndAt = profile?.trial_end_at as string | undefined
+  const cancelAtPeriodEnd = profile?.cancel_at_period_end as boolean | undefined
+  const cancelAt = profile?.cancel_at as string | undefined
+
+  // Determine if user is blocked from scheduling due to payment issues
+  const isPastDue = subscriptionStatus === 'past_due'
+  const isCanceled = subscriptionStatus === 'canceled'
+  const isTrialing = subscriptionStatus === 'trialing'
+
+  // Format trial end date for display
+  const formatTrialEnd = (isoString: string | undefined): string => {
+    if (!isoString) return ''
+    const date = new Date(isoString)
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  }
+
+  // Build subscription status display text
+  const getSubscriptionDisplayText = (): string => {
+    if (isTrialing && trialEndAt) {
+      return `Free trial ends ${formatTrialEnd(trialEndAt)}`
+    }
+    if (subscriptionStatus === 'active') {
+      return 'Active subscription'
+    }
+    if (isPastDue) {
+      return 'Payment issue — update your card to continue'
+    }
+    if (isCanceled && cancelAtPeriodEnd && cancelAt) {
+      return `Cancels on ${formatTrialEnd(cancelAt)}`
+    }
+    if (isCanceled) {
+      return 'Subscription canceled'
+    }
+    if (subscriptionStatus === 'inactive') {
+      return 'Awaiting first pickup'
+    }
+    return subscriptionStatus || 'Unknown'
+  }
+
+  // Get status badge color
+  const getStatusBadgeClass = (): string => {
+    if (isTrialing) return 'bg-green-100 text-green-800'
+    if (subscriptionStatus === 'active') return 'bg-green-100 text-green-800'
+    if (isPastDue) return 'bg-red-100 text-red-800'
+    if (isCanceled) return 'bg-sv-stone/50 text-sv-slate'
+    return 'bg-sv-bone text-sv-midnight'
+  }
+
   // Load items (depends on user and profile)
   const { data: items, isLoading, error: itemsError, refetch: refetchItems } = useQuery({
     queryKey: ['items', user?.id],
@@ -105,11 +155,15 @@ export default function Dashboard() {
 
   // Query pending bookings (schedule-first flow)
   const { data: pendingBookings } = useQuery({
-    queryKey: ['pending-bookings'],
+    queryKey: ['pending-bookings', user?.id],
     queryFn: async () => {
+      if (!user) return []
+
+      // SECURITY: Explicit user_id filter (double-guard with RLS)
       const { data, error } = await supabase
         .from('actions')
         .select('id, scheduled_start, scheduled_end, status, pickup_item_ids, delivery_item_ids')
+        .eq('user_id', user.id)
         .in('status', ['pending_items', 'pending_confirmation', 'confirmed'])
         .gte('scheduled_start', new Date().toISOString())
         .order('scheduled_start', { ascending: true })
@@ -120,6 +174,7 @@ export default function Dashboard() {
       }
       return data || []
     },
+    enabled: !!user,
   })
 
   const formatCurrency = (valueCents: number) =>
@@ -148,8 +203,9 @@ export default function Dashboard() {
   // Check if ZIP is in our launch service area (14 Hudson County ZIPs)
   const isInServiceAreaFrontEnd = hasAddress && isInServiceArea(deliveryZip)
 
-  // User can schedule ONLY if they have an address AND are in service area
-  const canSchedule = hasAddress && isInServiceAreaFrontEnd
+  // User can schedule ONLY if they have an address AND are in service area AND not past_due
+  // v4.0: past_due users must resolve payment before scheduling new services
+  const canSchedule = hasAddress && isInServiceAreaFrontEnd && !isPastDue
 
   const insuranceCapCents = insurance?.insurance_cap_cents ?? 0
   const totalItemValueCents = insurance?.total_item_value_cents ?? 0
@@ -254,11 +310,36 @@ export default function Dashboard() {
       <div className="mb-8">
         <h2 className="text-2xl font-bold mb-2">Your Items</h2>
         {profile && (
-          <p className="text-sv-slate">
-            Subscription: <span className="font-medium capitalize">{profile.subscription_status}</span>
-          </p>
+          <div className="flex items-center space-x-2">
+            <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusBadgeClass()}`}>
+              {getSubscriptionDisplayText()}
+            </span>
+          </div>
         )}
       </div>
+
+      {/* v4.0: Past Due Payment Banner */}
+      {!profileLoading && profile && isPastDue && (
+        <div className="mb-6 p-4 rounded-lg border-2 border-red-400 bg-red-50">
+          <div className="flex items-start">
+            <svg className="h-5 w-5 text-red-600 mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div className="flex-1">
+              <h3 className="text-sm font-bold text-red-900 mb-1">Payment Failed</h3>
+              <p className="text-sm text-red-800 mb-2">
+                We couldn't process your recent payment. Update your payment method to continue scheduling pickups and deliveries.
+              </p>
+              <button
+                onClick={() => navigate('/account')}
+                className="text-sm font-medium text-red-700 hover:text-red-900 underline"
+              >
+                Update Payment Method →
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Service Area Gating - Three States */}
       {/* CASE A: No address yet - Blocking card */}
@@ -325,7 +406,9 @@ export default function Dashboard() {
           <h3 className="text-lg font-semibold text-sv-terracotta">Upcoming Services</h3>
           <button
             onClick={() => setIsBookingModalOpen(true)}
-            className="btn-primary inline-flex items-center"
+            disabled={isPastDue}
+            className={`btn-primary inline-flex items-center ${isPastDue ? 'opacity-50 cursor-not-allowed' : ''}`}
+            title={isPastDue ? 'Update your payment method to schedule new services' : ''}
           >
             <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
