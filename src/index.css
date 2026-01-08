@@ -9,6 +9,7 @@
   --color-sv-midnight: 15 41 66;         /* #0f2942 - Headers, headlines */
   --color-sv-navy: 26 58 92;             /* #1a3a5c - Secondary elements */
   --color-sv-slate: 61 90 128;           /* #3d5a80 - Body text */
+  --color-sv-viridian: 44 74 82;         /* #2C4A52 - Hero panels (matches landing page) */
 
   /* Accent: Terracotta Family */
   --color-sv-terracotta: 217 119 87;     /* #D97757 - PRIMARY CTA */

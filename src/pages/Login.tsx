@@ -31,7 +31,7 @@ export default function Login() {
   return (
     <div className="min-h-screen flex">
       {/* Hero Panel - Left Side */}
-      <div className="hidden lg:flex lg:w-1/2 bg-sv-midnight items-center justify-center p-12">
+      <div className="hidden lg:flex lg:w-1/2 bg-sv-viridian items-center justify-center p-12">
         <img
           src="/logo-auth-hero.png"
           alt="Storage Valet"

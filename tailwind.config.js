@@ -15,6 +15,7 @@ export default {
         'sv-midnight': 'rgb(var(--color-sv-midnight) / <alpha-value>)',    // #0f2942 - Headers, headlines
         'sv-navy': 'rgb(var(--color-sv-navy) / <alpha-value>)',            // #1a3a5c - Secondary elements
         'sv-slate': 'rgb(var(--color-sv-slate) / <alpha-value>)',          // #3d5a80 - Body text
+        'sv-viridian': 'rgb(var(--color-sv-viridian) / <alpha-value>)',    // #2C4A52 - Hero panels (matches landing)
         'sv-terracotta': 'rgb(var(--color-sv-terracotta) / <alpha-value>)', // #D97757 - PRIMARY CTA
         'sv-ember': 'rgb(var(--color-sv-ember) / <alpha-value>)',          // #C4654A - Hover states
         'sv-peach': 'rgb(var(--color-sv-peach) / <alpha-value>)',          // #E8A090 - Light accents
