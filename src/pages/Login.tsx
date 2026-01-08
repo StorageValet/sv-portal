@@ -29,27 +29,19 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex">
-      {/* Hero Panel - Left Side */}
-      <div className="hidden lg:flex lg:w-1/2 bg-sv-viridian items-center justify-center p-12">
+    <div className="min-h-screen flex flex-col lg:flex-row">
+      {/* Hero Panel - Desktop: Left Side, Mobile: Top Header */}
+      <div className="bg-sv-viridian flex items-center justify-center p-8 lg:p-12 lg:w-1/2">
         <img
           src="/logo-auth-hero.png"
           alt="Storage Valet"
-          className="w-full max-w-sm md:max-w-md lg:max-w-lg mx-auto"
+          className="w-48 sm:w-64 lg:w-full lg:max-w-lg mx-auto"
         />
       </div>
 
-      {/* Form Panel - Right Side */}
+      {/* Form Panel - Right Side / Below on Mobile */}
       <div className="flex-1 flex items-center justify-center bg-sv-ivory p-8">
         <div className="max-w-md w-full space-y-8">
-          {/* Mobile logo - only visible on smaller screens */}
-          <div className="lg:hidden text-center">
-            <img
-              src="/logo-auth-hero.png"
-              alt="Storage Valet"
-              className="w-full max-w-sm md:max-w-md mx-auto mb-6"
-            />
-          </div>
 
           <div className="text-center lg:text-left">
             <h1 className="text-2xl font-semibold text-sv-midnight">Sign in to your account</h1>
