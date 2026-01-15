@@ -178,12 +178,13 @@ export default function Dashboard() {
   const remainingCents = Math.max(0, insurance?.remaining_cents ?? (insuranceCapCents - totalItemValueCents))
   const usedRatio = insuranceCapCents > 0 ? Math.min(totalItemValueCents / insuranceCapCents, 1) : 0
 
+  // Defensive: ensure items is always an array (fixes React #310)
+  const safeItems = Array.isArray(items) ? items : []
+
   // Sprint 3: Filter and search items
   // Searches: label, description, QR code, category, tags (per README spec)
   const filteredItems = useMemo(() => {
-    if (!items) return []
-
-    let filtered = items
+    let filtered = safeItems
 
     if (debouncedSearch) {
       const query = debouncedSearch.toLowerCase().trim()
@@ -214,7 +215,7 @@ export default function Dashboard() {
     }
 
     return filtered
-  }, [items, debouncedSearch, statusFilter, categoryFilter])
+  }, [safeItems, debouncedSearch, statusFilter, categoryFilter])
 
   // ─────────────────────────────────────────────────────────────────────────────
   // SEARCH TEST PROTOCOL (for verification):
@@ -226,16 +227,15 @@ export default function Dashboard() {
   // ─────────────────────────────────────────────────────────────────────────────
 
   const categories = useMemo(() => {
-    if (!items) return []
     const uniqueCategories = new Set(
-      items.map(item => item.category).filter((cat): cat is string => !!cat)
+      safeItems.map(item => item.category).filter((cat): cat is string => !!cat)
     )
     return Array.from(uniqueCategories).sort()
-  }, [items])
+  }, [safeItems])
 
   const handleSelectItem = (itemId: string) => {
     // Prevent selecting scheduled items
-    const item = items?.find(i => i.id === itemId)
+    const item = safeItems.find(i => i.id === itemId)
     if (item?.status === 'scheduled') return
 
     setSelectedItems(prev => {
@@ -254,11 +254,11 @@ export default function Dashboard() {
   }
 
   const selectedHomeItems = useMemo(() => {
-    return filteredItems?.filter(item => selectedItems.has(item.id) && item.status === 'home') || []
+    return filteredItems.filter(item => selectedItems.has(item.id) && item.status === 'home')
   }, [filteredItems, selectedItems])
 
   const selectedStoredItems = useMemo(() => {
-    return filteredItems?.filter(item => selectedItems.has(item.id) && item.status === 'stored') || []
+    return filteredItems.filter(item => selectedItems.has(item.id) && item.status === 'stored')
   }, [filteredItems, selectedItems])
 
   const handleSchedulePickup = () => {
@@ -476,9 +476,9 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {items && items.length > 0 && (
+        {safeItems.length > 0 && (
           <p className="text-sm text-sv-slate">
-            Showing {filteredItems.length} of {items.length} item{items.length !== 1 ? 's' : ''}
+            Showing {filteredItems.length} of {safeItems.length} item{safeItems.length !== 1 ? 's' : ''}
           </p>
         )}
       </div>
@@ -504,7 +504,7 @@ export default function Dashboard() {
           </svg>
           <p className="text-sv-slate">Loading your items...</p>
         </div>
-      ) : items && items.length > 0 ? (
+      ) : safeItems.length > 0 ? (
         filteredItems.length > 0 ? (
           <div className={viewMode === 'grid'
             ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
