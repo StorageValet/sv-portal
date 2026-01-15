@@ -41,9 +41,9 @@ export default function ItemDetailModal({ itemId, onClose }: ItemDetailModalProp
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-sv-cream rounded-lg shadow-xl p-6 max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-sv-white rounded-lg shadow-xl p-6 max-w-3xl w-full max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-start mb-4">
-          <h2 className="text-xl font-bold text-sv-midnight">{item?.label || 'Loading...'}</h2>
+          <h2 className="text-xl font-bold text-sv-gunmetal">{item?.label || 'Loading...'}</h2>
           <button onClick={onClose} className="btn-secondary px-3 py-1">×</button>
         </div>
 
@@ -63,7 +63,7 @@ export default function ItemDetailModal({ itemId, onClose }: ItemDetailModalProp
               {photoUrls.length > 0 ? (
                 <div className="space-y-3">
                   {/* Primary Image */}
-                  <div className="w-full rounded-xl overflow-hidden bg-sv-bone">
+                  <div className="w-full rounded-xl overflow-hidden bg-sv-parchment">
                     <img
                       src={photoUrls[selectedPhotoIndex]}
                       alt={item.label}
@@ -78,9 +78,9 @@ export default function ItemDetailModal({ itemId, onClose }: ItemDetailModalProp
                           key={url}
                           type="button"
                           onClick={() => setSelectedPhotoIndex(index)}
-                          className={`h-16 w-16 rounded-md overflow-hidden bg-sv-bone flex-shrink-0 transition-all ${
+                          className={`h-16 w-16 rounded-md overflow-hidden bg-sv-parchment flex-shrink-0 transition-all ${
                             index === selectedPhotoIndex
-                              ? 'ring-2 ring-sv-terracotta ring-offset-1'
+                              ? 'ring-2 ring-sv-accent ring-offset-1'
                               : 'opacity-70 hover:opacity-100'
                           }`}
                         >
@@ -98,11 +98,11 @@ export default function ItemDetailModal({ itemId, onClose }: ItemDetailModalProp
             {/* QR Code + Timeline Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="card">
-                <h3 className="font-semibold text-sv-midnight mb-4">QR Code</h3>
+                <h3 className="font-semibold text-sv-gunmetal mb-4">QR Code</h3>
                 <QRCodeDisplay item={item} />
               </div>
               <div className="card">
-                <h3 className="font-semibold text-sv-midnight mb-4">Item History</h3>
+                <h3 className="font-semibold text-sv-gunmetal mb-4">Item History</h3>
                 <ItemTimeline itemId={item.id} />
               </div>
             </div>

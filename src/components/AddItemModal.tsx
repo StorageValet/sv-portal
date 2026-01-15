@@ -159,9 +159,9 @@ export default function AddItemModal({ onClose }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-lg bg-sv-cream p-6 shadow-xl">
+      <div className="w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-lg bg-sv-white p-6 shadow-xl">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold text-sv-midnight">Add Item</h2>
+          <h2 className="text-xl font-semibold text-sv-gunmetal">Add Item</h2>
           <button onClick={onClose} className="btn-secondary px-3 py-1">×</button>
         </div>
 
@@ -218,11 +218,11 @@ export default function AddItemModal({ onClose }: Props) {
                   <img
                     src={URL.createObjectURL(file)}
                     alt={`Photo ${index + 1}`}
-                    className="h-24 w-24 object-cover rounded-md border-2 border-sv-sand transition-all group-hover:border-sv-slate"
+                    className="h-24 w-24 object-cover rounded-md border-2 border-sv-deep-teal/12 transition-all group-hover:border-sv-slate"
                   />
                   {/* Cover Badge (first photo is cover) */}
                   {index === 0 && (
-                    <div className="absolute top-1 left-1 bg-sv-midnight text-sv-ivory text-xs px-2 py-0.5 rounded font-medium">
+                    <div className="absolute top-1 left-1 bg-sv-deep-teal text-sv-white text-xs px-2 py-0.5 rounded font-medium">
                       Cover
                     </div>
                   )}
@@ -231,7 +231,7 @@ export default function AddItemModal({ onClose }: Props) {
                     <button
                       type="button"
                       onClick={() => handleSetCover(index)}
-                      className="absolute top-1 left-1 bg-sv-slate/90 hover:bg-sv-slate text-sv-ivory text-xs px-2 py-0.5 rounded font-medium opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute top-1 left-1 bg-sv-steel/90 hover:bg-sv-steel text-sv-white text-xs px-2 py-0.5 rounded font-medium opacity-0 group-hover:opacity-100 transition-opacity"
                       title="Set as cover photo"
                     >
                       Set Cover
@@ -257,12 +257,12 @@ export default function AddItemModal({ onClose }: Props) {
             accept="image/jpeg,image/png,image/webp"
             multiple
             onChange={handlePhotoChange}
-            className="block w-full text-sm text-sv-midnight
+            className="block w-full text-sm text-sv-gunmetal
               file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0
-              file:text-sm file:font-semibold file:bg-sv-slate file:text-sv-ivory
-              hover:file:bg-sv-midnight file:cursor-pointer cursor-pointer"
+              file:text-sm file:font-semibold file:bg-sv-steel file:text-sv-white
+              hover:file:bg-sv-gunmetal file:cursor-pointer cursor-pointer"
           />
-          <p className="mt-1 text-xs text-sv-stone">
+          <p className="mt-1 text-xs text-sv-steel">
             JPG, PNG, or WebP only. Max {MAX_PHOTO_SIZE_MB}MB per photo. Select 1-{MAX_PHOTO_COUNT} photos at once.
             First photo is the cover image.
           </p>

@@ -49,32 +49,34 @@
 
 @layer base {
   body {
-    @apply bg-sv-ivory text-sv-slate font-sans;
+    @apply bg-sv-parchment text-sv-gunmetal font-sans;
   }
 
   h1, h2, h3 {
-    @apply font-serif text-sv-midnight;
+    @apply font-serif text-sv-deep-teal;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-sv-terracotta text-white px-6 py-3 rounded-lg transition-colors font-semibold;
-    @apply hover:bg-sv-ember disabled:opacity-40 disabled:cursor-not-allowed;
+    @apply bg-sv-brown text-white px-6 py-3 rounded-lg transition-colors font-semibold;
+    @apply hover:bg-sv-brown-hover disabled:opacity-40 disabled:cursor-not-allowed;
   }
 
   .btn-secondary {
-    @apply bg-transparent text-sv-navy px-6 py-3 rounded-lg transition-colors font-semibold;
-    @apply border-2 border-sv-navy hover:bg-sv-cream;
+    @apply bg-transparent text-sv-gunmetal px-6 py-3 rounded-lg transition-colors font-semibold;
+    @apply border-2 border-sv-gunmetal hover:bg-sv-alabaster;
   }
 
   .card {
-    @apply bg-sv-cream rounded-xl shadow-sm border border-sv-sand p-6;
+    @apply bg-sv-white rounded-xl shadow-sm p-6;
+    border: 1px solid rgb(var(--color-sv-deep-teal) / 0.10);
   }
 
   .input {
-    @apply w-full px-4 py-3 border border-sv-sand rounded-lg bg-sv-ivory text-sv-midnight;
-    @apply focus:ring-2 focus:ring-sv-navy focus:border-sv-navy focus:ring-opacity-30;
-    @apply placeholder:text-sv-stone;
+    @apply w-full px-4 py-3 rounded-lg bg-sv-white text-sv-gunmetal;
+    @apply focus:ring-2 focus:ring-sv-accent focus:border-sv-accent focus:ring-opacity-30;
+    @apply placeholder:text-sv-steel;
+    border: 1px solid rgb(var(--color-sv-deep-teal) / 0.12);
   }
 }

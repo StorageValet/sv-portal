@@ -220,9 +220,9 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
   if (isLoading) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div className="bg-sv-cream rounded-lg p-6 text-center">
+        <div className="bg-sv-white rounded-lg p-6 text-center">
           <p className="text-sv-slate mb-4">Loading item...</p>
-          <button onClick={onClose} className="text-sm text-sv-stone hover:text-sv-slate underline">
+          <button onClick={onClose} className="text-sm text-sv-steel hover:text-sv-slate underline">
             Cancel
           </button>
         </div>
@@ -233,9 +233,9 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
   if (isError || !item) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div className="bg-sv-cream rounded-lg p-6 text-center">
+        <div className="bg-sv-white rounded-lg p-6 text-center">
           <p className="text-red-600 mb-4">Error loading item.</p>
-          <button onClick={onClose} className="text-sm text-sv-stone hover:text-sv-slate underline">
+          <button onClick={onClose} className="text-sm text-sv-steel hover:text-sv-slate underline">
             Close
           </button>
         </div>
@@ -247,8 +247,8 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-sv-cream rounded-lg shadow-xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <h2 className="text-2xl font-bold mb-6 text-sv-midnight">Edit Item</h2>
+      <div className="bg-sv-white rounded-lg shadow-xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <h2 className="text-2xl font-bold mb-6 text-sv-gunmetal">Edit Item</h2>
 
         {isLocked && (
           <div className="p-3 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 border border-yellow-200" role="alert">
@@ -269,7 +269,7 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
               required
               minLength={3}
               defaultValue={item.label}
-              className="mt-1 block w-full rounded-md border-sv-sand shadow-sm focus:border-sv-navy focus:ring-sv-navy sm:text-sm px-3 py-2 border"
+              className="mt-1 block w-full rounded-md border-sv-deep-teal/12 shadow-sm focus:border-sv-accent focus:ring-sv-accent sm:text-sm px-3 py-2 border"
             />
           </div>
 
@@ -285,7 +285,7 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
               minLength={3}
               rows={3}
               defaultValue={item.description}
-              className="mt-1 block w-full rounded-md border-sv-sand shadow-sm focus:border-sv-navy focus:ring-sv-navy sm:text-sm px-3 py-2 border"
+              className="mt-1 block w-full rounded-md border-sv-deep-teal/12 shadow-sm focus:border-sv-accent focus:ring-sv-accent sm:text-sm px-3 py-2 border"
             />
           </div>
 
@@ -302,7 +302,7 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
               step="0.01"
               placeholder="Optional"
               defaultValue={item.estimated_value_cents ? centsToDollars(item.estimated_value_cents) : ''}
-              className="mt-1 block w-full rounded-md border-sv-sand shadow-sm focus:border-sv-navy focus:ring-sv-navy sm:text-sm px-3 py-2 border"
+              className="mt-1 block w-full rounded-md border-sv-deep-teal/12 shadow-sm focus:border-sv-accent focus:ring-sv-accent sm:text-sm px-3 py-2 border"
             />
           </div>
 
@@ -320,7 +320,7 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
               step="0.01"
               defaultValue={item.weight_lbs}
               disabled={isLocked}
-              className="mt-1 block w-full rounded-md border-sv-sand shadow-sm focus:border-sv-navy focus:ring-sv-navy sm:text-sm px-3 py-2 border disabled:bg-sv-bone disabled:cursor-not-allowed"
+              className="mt-1 block w-full rounded-md border-sv-deep-teal/12 shadow-sm focus:border-sv-accent focus:ring-sv-accent sm:text-sm px-3 py-2 border disabled:bg-sv-alabaster disabled:cursor-not-allowed"
             />
           </div>
 
@@ -339,7 +339,7 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
                 step="0.01"
                 defaultValue={item.length_inches}
                 disabled={isLocked}
-                className="mt-1 block w-full rounded-md border-sv-sand shadow-sm focus:border-sv-navy focus:ring-sv-navy sm:text-sm px-3 py-2 border disabled:bg-sv-bone disabled:cursor-not-allowed"
+                className="mt-1 block w-full rounded-md border-sv-deep-teal/12 shadow-sm focus:border-sv-accent focus:ring-sv-accent sm:text-sm px-3 py-2 border disabled:bg-sv-alabaster disabled:cursor-not-allowed"
               />
             </div>
             <div>
@@ -355,7 +355,7 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
                 step="0.01"
                 defaultValue={item.width_inches}
                 disabled={isLocked}
-                className="mt-1 block w-full rounded-md border-sv-sand shadow-sm focus:border-sv-navy focus:ring-sv-navy sm:text-sm px-3 py-2 border disabled:bg-sv-bone disabled:cursor-not-allowed"
+                className="mt-1 block w-full rounded-md border-sv-deep-teal/12 shadow-sm focus:border-sv-accent focus:ring-sv-accent sm:text-sm px-3 py-2 border disabled:bg-sv-alabaster disabled:cursor-not-allowed"
               />
             </div>
             <div>
@@ -371,7 +371,7 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
                 step="0.01"
                 defaultValue={item.height_inches}
                 disabled={isLocked}
-                className="mt-1 block w-full rounded-md border-sv-sand shadow-sm focus:border-sv-navy focus:ring-sv-navy sm:text-sm px-3 py-2 border disabled:bg-sv-bone disabled:cursor-not-allowed"
+                className="mt-1 block w-full rounded-md border-sv-deep-teal/12 shadow-sm focus:border-sv-accent focus:ring-sv-accent sm:text-sm px-3 py-2 border disabled:bg-sv-alabaster disabled:cursor-not-allowed"
               />
             </div>
           </div>
@@ -387,7 +387,7 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
               id="tags"
               defaultValue={item.tags?.join(', ') || ''}
               placeholder="e.g., fragile, seasonal, electronics"
-              className="mt-1 block w-full rounded-md border-sv-sand shadow-sm focus:border-sv-navy focus:ring-sv-navy sm:text-sm px-3 py-2 border"
+              className="mt-1 block w-full rounded-md border-sv-deep-teal/12 shadow-sm focus:border-sv-accent focus:ring-sv-accent sm:text-sm px-3 py-2 border"
             />
           </div>
 
@@ -403,11 +403,11 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
                   <img
                     src={existingPhotoUrls[index] || ''}
                     alt={`Existing ${index + 1}`}
-                    className="h-24 w-24 object-cover rounded-md border border-sv-sand"
+                    className="h-24 w-24 object-cover rounded-md border border-sv-deep-teal/12"
                   />
                   {/* Cover Badge (first photo is cover) */}
                   {index === 0 && (
-                    <div className="absolute top-1 left-1 bg-sv-midnight text-white text-xs px-2 py-0.5 rounded font-medium">
+                    <div className="absolute top-1 left-1 bg-sv-deep-teal text-white text-xs px-2 py-0.5 rounded font-medium">
                       Cover
                     </div>
                   )}
@@ -416,7 +416,7 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
                     <button
                       type="button"
                       onClick={() => handleSetCoverExisting(index)}
-                      className="absolute top-1 left-1 bg-sv-slate/90 hover:bg-sv-slate text-white text-xs px-2 py-0.5 rounded font-medium opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute top-1 left-1 bg-sv-steel/90 hover:bg-sv-steel text-white text-xs px-2 py-0.5 rounded font-medium opacity-0 group-hover:opacity-100 transition-opacity"
                       title="Set as cover photo"
                     >
                       Set Cover
@@ -438,7 +438,7 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
                   <img
                     src={URL.createObjectURL(file)}
                     alt={`New ${index + 1}`}
-                    className="h-24 w-24 object-cover rounded-md border border-sv-sand"
+                    className="h-24 w-24 object-cover rounded-md border border-sv-deep-teal/12"
                   />
                   <button
                     type="button"
@@ -458,9 +458,9 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
               multiple
               accept="image/jpeg,image/png,image/webp"
               onChange={handlePhotoChange}
-              className="mt-4 block w-full text-sm text-sv-stone file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-sv-bone file:text-sv-midnight hover:file:bg-sv-sand"
+              className="mt-4 block w-full text-sm text-sv-steel file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-sv-alabaster file:text-sv-gunmetal hover:file:bg-sv-parchment"
             />
-            <p className="mt-1 text-xs text-sv-stone">
+            <p className="mt-1 text-xs text-sv-steel">
               JPG, PNG, or WebP only. Max {MAX_PHOTO_SIZE_MB}MB per photo. Total 1-{MAX_PHOTO_COUNT} photos.
             </p>
             {photoError && (
@@ -476,7 +476,7 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
             type="button"
             onClick={onClose}
             disabled={isSubmitting}
-            className="rounded-md border border-sv-sand bg-sv-cream py-2 px-4 text-sm font-medium text-sv-slate shadow-sm hover:bg-sv-bone focus:outline-none focus:ring-2 focus:ring-sv-navy focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="rounded-md border border-sv-deep-teal/12 bg-sv-white py-2 px-4 text-sm font-medium text-sv-slate shadow-sm hover:bg-sv-alabaster focus:outline-none focus:ring-2 focus:ring-sv-accent focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Cancel
           </button>
@@ -484,7 +484,7 @@ export default function EditItemModal({ itemId, onClose }: EditItemModalProps) {
             type="button"
             onClick={() => formRef.current?.requestSubmit()}
             disabled={isSubmitting}
-            className="inline-flex justify-center rounded-md border border-transparent bg-sv-terracotta py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-sv-ember focus:outline-none focus:ring-2 focus:ring-sv-navy focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex justify-center rounded-md border border-transparent bg-sv-brown py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-sv-brown-hover focus:outline-none focus:ring-2 focus:ring-sv-accent focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSubmitting ? 'Saving...' : 'Save Changes'}
           </button>

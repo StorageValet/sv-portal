@@ -112,8 +112,8 @@ export default function DeleteConfirmModal({ itemId, onClose }: DeleteConfirmMod
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
-      <div className="bg-sv-cream rounded-lg shadow-xl p-8 max-w-md w-full">
-        <h2 className="text-xl font-bold text-sv-midnight mb-4">Confirm Deletion</h2>
+      <div className="bg-sv-white rounded-lg shadow-xl p-8 max-w-md w-full">
+        <h2 className="text-xl font-bold text-sv-gunmetal mb-4">Confirm Deletion</h2>
 
         <div className="text-sm text-sv-slate space-y-4">
           <p className="font-medium text-red-600">
@@ -124,23 +124,23 @@ export default function DeleteConfirmModal({ itemId, onClose }: DeleteConfirmMod
           </p>
 
           {isLoading ? (
-            <div className="mt-4 h-20 bg-sv-bone animate-pulse rounded-md" />
+            <div className="mt-4 h-20 bg-sv-parchment animate-pulse rounded-md" />
           ) : item ? (
-            <div className="mt-4 flex items-center space-x-4 p-4 bg-sv-ivory rounded-md border border-sv-sand">
+            <div className="mt-4 flex items-center space-x-4 p-4 bg-sv-alabaster rounded-md border border-sv-deep-teal/10">
               {photoUrl ? (
                 <img
                   src={photoUrl}
                   alt={item.label}
-                  className="h-16 w-16 object-cover rounded-md border border-sv-sand"
+                  className="h-16 w-16 object-cover rounded-md border border-sv-deep-teal/10"
                 />
               ) : (
-                <div className="h-16 w-16 bg-sv-bone rounded-md flex items-center justify-center text-sv-stone text-xs">
+                <div className="h-16 w-16 bg-sv-parchment rounded-md flex items-center justify-center text-sv-steel text-xs">
                   No Photo
                 </div>
               )}
               <div className="flex-1">
-                <p className="font-semibold text-sv-midnight">{item.label}</p>
-                <p className="text-xs text-sv-stone mt-1">
+                <p className="font-semibold text-sv-gunmetal">{item.label}</p>
+                <p className="text-xs text-sv-steel mt-1">
                   {item.photo_paths?.length || (item.photo_path ? 1 : 0)} photo(s)
                 </p>
               </div>
@@ -155,7 +155,7 @@ export default function DeleteConfirmModal({ itemId, onClose }: DeleteConfirmMod
             type="button"
             onClick={onClose}
             disabled={isDeleting}
-            className="rounded-md border border-sv-sand bg-sv-cream py-2 px-4 text-sm font-medium text-sv-slate shadow-sm hover:bg-sv-ivory focus:outline-none focus:ring-2 focus:ring-sv-navy focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="rounded-md border border-sv-deep-teal/12 bg-sv-white py-2 px-4 text-sm font-medium text-sv-slate shadow-sm hover:bg-sv-alabaster focus:outline-none focus:ring-2 focus:ring-sv-accent focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Cancel
           </button>

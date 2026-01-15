@@ -158,9 +158,9 @@ export default function BookingModal({ isOpen, onClose, profile, userId }: Booki
           firstName: profile.full_name?.split(' ')[0] || ''
         }}
         pageSettings={{
-          backgroundColor: 'f8f6f2',  // sv-cream
-          primaryColor: 'D97757',     // sv-terracotta
-          textColor: '0f2942'         // sv-midnight
+          backgroundColor: 'EEEBE5',  // sv-parchment
+          primaryColor: '6B4E3D',     // sv-brown
+          textColor: '343A40'         // sv-gunmetal
         }}
       />
 
@@ -172,12 +172,12 @@ export default function BookingModal({ isOpen, onClose, profile, userId }: Booki
           aria-modal="true"
           aria-labelledby="booking-status-title"
         >
-          <div className="bg-sv-cream rounded-lg p-6 sm:p-8 max-w-sm w-full mx-auto text-center shadow-xl">
+          <div className="bg-sv-white rounded-lg p-6 sm:p-8 max-w-sm w-full mx-auto text-center shadow-xl">
             {/* Processing State - Immediate ACK */}
             {bookingState.status === 'processing' && (
               <>
-                <div className="animate-spin h-12 w-12 border-4 border-sv-terracotta border-t-transparent rounded-full mx-auto mb-4" />
-                <h3 id="booking-status-title" className="text-lg font-semibold text-sv-midnight mb-2">
+                <div className="animate-spin h-12 w-12 border-4 border-sv-brown border-t-transparent rounded-full mx-auto mb-4" />
+                <h3 id="booking-status-title" className="text-lg font-semibold text-sv-gunmetal mb-2">
                   Booking Received!
                 </h3>
                 <p className="text-sv-slate text-sm">Setting up your appointment...</p>
@@ -192,7 +192,7 @@ export default function BookingModal({ isOpen, onClose, profile, userId }: Booki
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <h3 id="booking-status-title" className="text-lg font-semibold text-sv-midnight mb-2">
+                <h3 id="booking-status-title" className="text-lg font-semibold text-sv-gunmetal mb-2">
                   All Set!
                 </h3>
                 <p className="text-sv-slate text-sm">Redirecting to add items...</p>
@@ -202,12 +202,12 @@ export default function BookingModal({ isOpen, onClose, profile, userId }: Booki
             {/* Timeout State */}
             {bookingState.status === 'timeout' && (
               <>
-                <div className="h-12 w-12 bg-sv-bone rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="h-12 w-12 bg-sv-parchment rounded-full flex items-center justify-center mx-auto mb-4">
                   <svg className="h-6 w-6 text-sv-slate" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <h3 id="booking-status-title" className="text-lg font-semibold text-sv-midnight mb-2">
+                <h3 id="booking-status-title" className="text-lg font-semibold text-sv-gunmetal mb-2">
                   Booking Received
                 </h3>
                 <p className="text-sv-slate text-sm mb-4">
@@ -230,7 +230,7 @@ export default function BookingModal({ isOpen, onClose, profile, userId }: Booki
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </div>
-                <h3 id="booking-status-title" className="text-lg font-semibold text-sv-midnight mb-2">
+                <h3 id="booking-status-title" className="text-lg font-semibold text-sv-gunmetal mb-2">
                   Something went wrong
                 </h3>
                 <p className="text-sv-slate text-sm mb-4">{bookingState.message}</p>
