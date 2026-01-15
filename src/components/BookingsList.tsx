@@ -162,6 +162,35 @@ export default function BookingsList({ onBookAppointment, isPastDue = false }: B
     }
   }
 
+  // Defensive: ensure bookings is always an array
+  const safeBookings = Array.isArray(bookings) ? bookings : []
+  const sortedBookings = sortBookings(safeBookings)
+
+  // Separate upcoming and past bookings for history toggle
+  // NOTE: This useMemo MUST be called before any early returns
+  const now = new Date()
+  const { upcomingBookings, pastBookings } = useMemo(() => {
+    const upcoming: Booking[] = []
+    const past: Booking[] = []
+
+    for (const booking of sortedBookings) {
+      if (!booking.scheduled_start) {
+        upcoming.push(booking) // Unscheduled goes to upcoming
+      } else if (new Date(booking.scheduled_start) >= now) {
+        upcoming.push(booking)
+      } else {
+        past.push(booking)
+      }
+    }
+
+    return { upcomingBookings: upcoming, pastBookings: past }
+  }, [sortedBookings])
+
+  // Display bookings based on history toggle
+  const displayedBookings = showHistory
+    ? [...upcomingBookings, ...pastBookings]
+    : upcomingBookings
+
   if (isLoading) {
     return (
       <div className="mb-6">
@@ -205,32 +234,6 @@ export default function BookingsList({ onBookAppointment, isPastDue = false }: B
       </div>
     )
   }
-
-  const sortedBookings = sortBookings(bookings || [])
-
-  // Separate upcoming and past bookings for history toggle
-  const now = new Date()
-  const { upcomingBookings, pastBookings } = useMemo(() => {
-    const upcoming: Booking[] = []
-    const past: Booking[] = []
-
-    for (const booking of sortedBookings) {
-      if (!booking.scheduled_start) {
-        upcoming.push(booking) // Unscheduled goes to upcoming
-      } else if (new Date(booking.scheduled_start) >= now) {
-        upcoming.push(booking)
-      } else {
-        past.push(booking)
-      }
-    }
-
-    return { upcomingBookings: upcoming, pastBookings: past }
-  }, [sortedBookings])
-
-  // Display bookings based on history toggle
-  const displayedBookings = showHistory
-    ? [...upcomingBookings, ...pastBookings]
-    : upcomingBookings
 
   return (
     <div className="mb-6">
