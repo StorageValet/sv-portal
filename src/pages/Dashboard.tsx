@@ -121,7 +121,7 @@ export default function Dashboard() {
     if (subscriptionStatus === 'active') return 'bg-green-100 text-green-800'
     if (isPastDue) return 'bg-red-100 text-red-800'
     if (isCanceled) return 'bg-sv-stone/50 text-sv-slate'
-    return 'bg-sv-bone text-sv-midnight'
+    return 'bg-sv-bone text-sv-deep-teal'
   }
 
   // Load items (depends on user and profile)
