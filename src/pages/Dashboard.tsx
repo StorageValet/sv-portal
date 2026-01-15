@@ -10,6 +10,7 @@ import DeleteConfirmModal from '../components/DeleteConfirmModal'
 import ItemDetailModal from '../components/ItemDetailModal'
 import BookingModal from '../components/BookingModal'
 import BookingsList from '../components/BookingsList'
+import SelectionActionBar from '../components/SelectionActionBar'
 import WaitlistDashboard from '../components/WaitlistDashboard'
 import ErrorState from '../components/ErrorState'
 import { isInServiceArea } from '../lib/serviceArea'
@@ -233,6 +234,10 @@ export default function Dashboard() {
   }, [items])
 
   const handleSelectItem = (itemId: string) => {
+    // Prevent selecting scheduled items
+    const item = items?.find(i => i.id === itemId)
+    if (item?.status === 'scheduled') return
+
     setSelectedItems(prev => {
       const newSelection = new Set(prev)
       if (newSelection.has(itemId)) {
@@ -371,14 +376,14 @@ export default function Dashboard() {
       {insurance && (
         <div className="card mb-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sv-midnight font-medium">Insurance Coverage</span>
-            <span className="text-sv-terracotta text-sm">{formatCurrency(insuranceCapCents)} plan</span>
+            <span className="text-sv-deep-teal font-medium">Insurance Coverage</span>
+            <span className="text-sv-accent text-sm">{formatCurrency(insuranceCapCents)} plan</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-xs text-sv-slate w-6">$0</span>
             <div className="flex-1 h-2 bg-sv-ivory rounded">
               <div
-                className="h-2 bg-sv-terracotta rounded transition-all"
+                className="h-2 bg-sv-accent rounded transition-all"
                 style={{ width: `${Math.round(usedRatio * 100)}%` }}
               />
             </div>
@@ -403,19 +408,19 @@ export default function Dashboard() {
             onChange={(e) => setSearchQuery(e.target.value)}
             className="input pl-10"
           />
-          <svg className="absolute left-3 top-3 h-5 w-5 text-sv-terracotta/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="absolute left-3 top-3 h-5 w-5 text-sv-accent/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </div>
 
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center space-x-2 flex-wrap">
-            <span className="text-sm font-medium text-sv-midnight">Filters:</span>
+            <span className="text-sm font-medium text-sv-deep-teal">Filters:</span>
 
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as any)}
-              className="px-3 py-1.5 text-sm border border-border rounded-md bg-sv-ivory hover:bg-sv-bone focus:outline-none focus:ring-2 focus:ring-sv-navy"
+              className="px-3 py-1.5 text-sm border border-sv-sand rounded-md bg-sv-ivory hover:bg-sv-bone focus:outline-none focus:ring-2 focus:ring-sv-accent"
             >
               <option value="all">All Status</option>
               <option value="home">Home</option>
@@ -426,7 +431,7 @@ export default function Dashboard() {
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="px-3 py-1.5 text-sm border border-border rounded-md bg-sv-ivory hover:bg-sv-bone focus:outline-none focus:ring-2 focus:ring-sv-navy"
+              className="px-3 py-1.5 text-sm border border-sv-sand rounded-md bg-sv-ivory hover:bg-sv-bone focus:outline-none focus:ring-2 focus:ring-sv-accent"
               disabled={categories.length === 0}
             >
               <option value="all">All Categories</option>
@@ -442,7 +447,7 @@ export default function Dashboard() {
                   setStatusFilter('all')
                   setCategoryFilter('all')
                 }}
-                className="px-3 py-1.5 text-sm text-sv-terracotta hover:text-sv-terracotta underline"
+                className="px-3 py-1.5 text-sm text-sv-accent hover:text-sv-deep-teal underline"
               >
                 Clear Filters
               </button>
@@ -452,7 +457,7 @@ export default function Dashboard() {
           <div className="flex items-center space-x-1 bg-sv-bone rounded-lg p-1">
             <button
               onClick={() => setViewMode('grid')}
-              className={`p-2 rounded ${viewMode === 'grid' ? 'bg-sv-ivory shadow-sm text-sv-terracotta' : 'text-sv-midnight/50 hover:text-sv-midnight'}`}
+              className={`p-2 rounded ${viewMode === 'grid' ? 'bg-sv-ivory shadow-sm text-sv-brown' : 'text-sv-deep-teal/50 hover:text-sv-deep-teal'}`}
               title="Grid View"
             >
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -461,7 +466,7 @@ export default function Dashboard() {
             </button>
             <button
               onClick={() => setViewMode('list')}
-              className={`p-2 rounded ${viewMode === 'list' ? 'bg-sv-ivory shadow-sm text-sv-terracotta' : 'text-sv-midnight/50 hover:text-sv-midnight'}`}
+              className={`p-2 rounded ${viewMode === 'list' ? 'bg-sv-ivory shadow-sm text-sv-brown' : 'text-sv-deep-teal/50 hover:text-sv-deep-teal'}`}
               title="List View"
             >
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -478,43 +483,22 @@ export default function Dashboard() {
         )}
       </div>
 
-      {selectedItems.size > 0 && (
-        <div className="bg-sv-bone p-4 rounded-lg mb-6 border border-border flex items-center justify-between flex-wrap gap-4">
-          <p className="text-sm font-medium text-sv-midnight">
-            {selectedItems.size} item(s) selected
-          </p>
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={handleSchedulePickup}
-              disabled={!canSchedule || selectedHomeItems.length === 0}
-              className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
-              title={!canSchedule ? 'Address required and must be in service area' : selectedHomeItems.length === 0 ? 'Select items at home to schedule pickup' : ''}
-            >
-              Schedule Pickup ({selectedHomeItems.length})
-            </button>
-            <button
-              onClick={handleScheduleRedelivery}
-              disabled={!canSchedule || selectedStoredItems.length === 0}
-              className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
-              title={!canSchedule ? 'Address required and must be in service area' : selectedStoredItems.length === 0 ? 'Select items in storage to schedule redelivery' : ''}
-            >
-              Schedule Redelivery ({selectedStoredItems.length})
-            </button>
-            <button
-              onClick={handleClearSelection}
-              className="btn-secondary"
-            >
-              Clear Selection
-            </button>
-          </div>
-        </div>
-      )}
+      {/* SelectionActionBar - fixed at bottom */}
+      <SelectionActionBar
+        selectedCount={selectedItems.size}
+        selectedHomeCount={selectedHomeItems.length}
+        selectedStoredCount={selectedStoredItems.length}
+        canSchedule={canSchedule}
+        onSchedulePickup={handleSchedulePickup}
+        onScheduleRedelivery={handleScheduleRedelivery}
+        onClearSelection={handleClearSelection}
+      />
 
       {itemsError ? (
         <ErrorState error={itemsError} onRetry={refetchItems} message="Failed to load items" />
       ) : isLoading ? (
         <div className="flex flex-col items-center justify-center py-12">
-          <svg className="animate-spin h-8 w-8 text-sv-terracotta mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <svg className="animate-spin h-8 w-8 text-sv-accent mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
@@ -570,7 +554,7 @@ export default function Dashboard() {
 
       <button
         onClick={() => setOpenAdd(true)}
-        className="fixed bottom-6 right-6 rounded-full w-14 h-14 bg-sv-terracotta text-white shadow-lg hover:shadow-xl hover:bg-sv-ember text-2xl transition-all"
+        className="fixed bottom-24 right-6 rounded-full w-14 h-14 bg-sv-brown text-white shadow-lg hover:shadow-xl hover:bg-sv-brown-hover text-2xl transition-all z-30"
         aria-label="Add Item"
       >
         +
