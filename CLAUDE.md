@@ -382,49 +382,60 @@ The family needs revenue, not perfect code.
 
 ---
 
-## 🎨 UI Guardrails — Brand v1.1 (Terracotta)
+## 🎨 UI Guardrails — Brand v2.2 (Deep Teal + Action Brown)
 
-**Updated:** Dec 23, 2025
-**Purpose:** Keep the codebase stable, brand-consistent, and easy to refine after launch.
+**Updated:** January 15, 2025
+**Purpose:** Keep the codebase stable, brand-consistent, and aligned with sv-website.
+**Canonical Reference:** `~/code/sv-docs/brand/sv-brand-guide-jan-2025.html`
 
-### Brand v1.1 Palette (Single Source of Truth)
+### Brand v2.2 Palette (Single Source of Truth)
 
-| Token | Hex | Usage |
-|-------|-----|-------|
-| `sv-midnight` | #0f2942 | Headers, headlines |
-| `sv-navy` | #1a3a5c | Secondary text |
-| `sv-slate` | #3d5a80 | Body text |
-| `sv-terracotta` | #D97757 | **PRIMARY CTA** |
-| `sv-ember` | #C4654A | Hover states |
-| `sv-peach` | #E8A090 | Light accents |
-| `sv-ivory` | #fdfcf9 | **Page backgrounds** |
-| `sv-cream` | #f8f6f2 | Cards, modals |
-| `sv-bone` | #eeebe5 | Subtle backgrounds |
-| `sv-sand` | #e2ded6 | Borders ONLY |
-| `sv-stone` | #d4cfc5 | Disabled, muted text |
+| Token | Hex | RGB | Usage |
+|-------|-----|-----|-------|
+| `sv-deep-teal` | #213C47 | 33 60 71 | Headers, hero panels, headlines |
+| `sv-gunmetal` | #343A40 | 52 58 64 | Primary body text |
+| `sv-slate` | #6A7F83 | 106 127 131 | Secondary text |
+| `sv-steel` | #88989A | 136 152 154 | Muted text, placeholders |
+| `sv-brown` | #6B4E3D | 107 78 61 | **PRIMARY CTA ONLY** |
+| `sv-brown-hover` | #5A4133 | 90 65 51 | CTA hover states |
+| `sv-accent` | #0E6F6A | 14 111 106 | Links, icons, focus rings |
+| `sv-parchment` | #EEEBE5 | 238 235 229 | Warm page backgrounds |
+| `sv-alabaster` | #E0E1DD | 224 225 221 | Cool section backgrounds |
+| `sv-white` | #FFFFFF | 255 255 255 | Cards, modals, inputs |
+
+### Token Migration (Deprecated → New)
+
+| Deprecated | New Token | Notes |
+|------------|-----------|-------|
+| `sv-midnight`, `sv-viridian` | `sv-deep-teal` | Headers |
+| `sv-terracotta` | `sv-brown` | Primary CTA |
+| `sv-ember` | `sv-brown-hover` | Hover states |
+| `sv-navy`, `sv-peach` | `sv-accent` | Links, focus |
+| `sv-ivory`, `sv-cream` | `sv-white` | Cards |
+| `sv-bone`, `sv-sand` | `sv-parchment` | Backgrounds |
+| `sv-stone` | `sv-steel` | Muted text |
 
 ### 1) Token-First Colors (No Random Tailwind)
 
 **Do not introduce new colors** via Tailwind defaults.
 
-**Allowed (Brand v1.1 tokens):**
-- Backgrounds: `bg-sv-ivory`, `bg-sv-cream`, `bg-sv-bone`
-- Text: `text-sv-midnight`, `text-sv-navy`, `text-sv-slate`, `text-sv-stone`
-- CTA: `bg-sv-terracotta`, `hover:bg-sv-ember`
-- Borders: `border-sv-sand`, `divide-sv-sand`
-- With opacity: `border-sv-sand/50`, `text-sv-slate/70`
+**Allowed (Brand v2.2 tokens):**
+- Backgrounds: `bg-sv-parchment`, `bg-sv-alabaster`, `bg-sv-white`
+- Text: `text-sv-deep-teal`, `text-sv-gunmetal`, `text-sv-slate`, `text-sv-steel`
+- CTA: `bg-sv-brown`, `hover:bg-sv-brown-hover`
+- Accent: `text-sv-accent`, `border-sv-accent`, `ring-sv-accent`
+- With opacity: `border-sv-deep-teal/10`, `text-sv-slate/70`
 
 **Allowed semantic exceptions:**
-- **Error/Danger:** `red-*` classes for destructive actions, validation errors, delete buttons
+- **Error/Danger:** `red-*` classes for destructive actions, validation errors
 - **Success:** `green-*` classes for "Active", "Success", "Confirmed" states
-- **Warning:** `amber-*`/`yellow-*` ONLY for urgent attention (refund badges, etc.)
+- **Warning:** `amber-*`/`yellow-*` ONLY for urgent attention
 
 **Prohibited:**
 - `bg-white`, `text-black`, `text-gray-*`, `border-gray-*`
 - `bg-blue-*`, `bg-indigo-*`, `bg-purple-*`
-- Any teal-based tokens (`valet-teal`, `tropical-teal`, etc.) — **DEPRECATED**
-- Pure `#FFFFFF` for page backgrounds — use `sv-ivory` or `sv-cream`
-- Hardcoded hex colors in components (unless one-off approved)
+- Deprecated tokens: `sv-midnight`, `sv-terracotta`, `sv-ember`, `sv-viridian`, etc.
+- Hardcoded hex colors in components
 
 ### 2) CSS Variable Format (Critical)
 
@@ -432,69 +443,32 @@ CSS variables **must be space-separated RGB**, not comma-separated:
 
 ```css
 /* ✅ Correct */
-:root { --color-sv-midnight: 15 41 66; }
+:root { --color-sv-deep-teal: 33 60 71; }
 
 /* ❌ Breaks alpha parsing */
-:root { --color-sv-midnight: 15, 41, 66; }
+:root { --color-sv-deep-teal: 33, 60, 71; }
 ```
 
-### 3) @apply Limitations
-
-`@apply` does not reliably support opacity modifiers (`border-sv-sand/50`).
-
-**Solutions:**
-- Use utility classes directly in JSX
-- Or define semantic tokens in index.css
-
-### 4) Scope Control
-
-- **Small diffs, one visible outcome per commit**
-- Avoid broad "restyle everything" passes
-- Commit messages should match the outcome
-
-### 5) Pre-Push Checklist
-
-Before pushing any styling changes:
+### 3) Pre-Push Checklist
 
 ```bash
 # 1. Must pass
 npm run build
 
-# 2. Quick visual QA (minimum)
-#    - /login (button colors, input focus ring)
-#    - /dashboard (cards, borders, badges)
+# 2. Quick visual QA
+#    - /login (hero panel Deep Teal, button Action Brown)
+#    - /dashboard (cards white, headers Deep Teal)
 #    - /account (forms, buttons)
 
 # 3. Check for prohibited colors
-rg -n "bg-white|text-gray-|border-gray-|bg-indigo-|bg-purple-" src
-# Note: green-* and red-* are allowed for semantic states (success/error)
-# Note: amber-* allowed for warnings (refund badges)
+rg -n "bg-white|text-gray-|border-gray-|bg-indigo-" src
 
-# 4. Check for deprecated teal tokens (should not appear in new code)
-rg -n "valet-teal|tropical-teal|oxford-navy|bright-snow|soft-white|burnished-gold" src
-# These are DEPRECATED - use sv-* tokens instead
+# 4. Check for deprecated tokens (should not appear)
+rg -n "sv-midnight|sv-terracotta|sv-ember|sv-viridian|sv-ivory|sv-cream|sv-bone" src
 ```
 
-### 6) Current Primitives (Phase 1)
+### 4) Implementation Reference
 
-These exist in `src/index.css` and serve as shared styling:
-- `.btn-primary` / `.btn-secondary` — buttons
-- `.card` — card containers
-- `.input` — form inputs
-
-**Rule:** If you touch the same styling in 2+ places, promote it to a shared class.
-
-### 7) Post-Launch Polish Approach
-
-When refining after launch, follow this order:
-1. Normalize tokens and primitives (don't change layout)
-2. Typography scale + spacing rhythm
-3. Subtle shadows/borders/badge polish
-
-**Never** refactor layout and styling simultaneously.
-
-### 8) If UI Looks "Default Black/White"
-
-Suspect CSS variable parsing first. Check:
-- Space-separated RGB values (not comma-separated)
-- Variable names match between `:root` and `tailwind.config.js`
+Full migration guide with Tailwind config and component examples:
+- `~/code/sv-docs/brand/sv-portal-brand-migration-prompt.md`
+- `~/code/sv-docs/brand/sv-brand-guide-jan-2025.html` (interactive)
