@@ -28,6 +28,23 @@
      in tailwind.config.js now map directly to sv-* tokens above.
      See Brand v1.1 documentation for canonical color reference.
   */
+
+  /* ===== Brand v2.2 Palette (January 2026) ===== */
+  /* Primary: Deep Teal Family */
+  --color-sv-deep-teal: 33 60 71;       /* #213C47 - Headers, hero panels */
+  --color-sv-gunmetal: 52 58 64;        /* #343A40 - Primary body text */
+  --color-sv-slate-v2: 106 127 131;     /* #6A7F83 - Secondary text (v2 override) */
+  --color-sv-steel: 136 152 154;        /* #88989A - Muted, placeholders */
+
+  /* Accent & Action */
+  --color-sv-brown: 107 78 61;          /* #6B4E3D - PRIMARY CTA */
+  --color-sv-brown-hover: 90 65 51;     /* #5A4133 - CTA hover */
+  --color-sv-accent: 14 111 106;        /* #0E6F6A - Links, focus rings */
+
+  /* Backgrounds */
+  --color-sv-parchment: 238 235 229;    /* #EEEBE5 - Warm backgrounds */
+  --color-sv-alabaster: 224 225 221;    /* #E0E1DD - Cool backgrounds */
+  --color-sv-white: 255 255 255;        /* #FFFFFF - Cards, modals */
 }
 
 @layer base {

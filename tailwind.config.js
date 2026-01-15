@@ -6,6 +6,26 @@ export default {
   ],
   theme: {
     extend: {
+      keyframes: {
+        'scale-in': {
+          '0%': { transform: 'scale(0.95)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+        'slide-up': {
+          '0%': { transform: 'translateY(100%)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        'check-bounce': {
+          '0%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.2)' },
+          '100%': { transform: 'scale(1)' },
+        },
+      },
+      animation: {
+        'scale-in': 'scale-in 0.2s ease-out',
+        'slide-up': 'slide-up 0.3s ease-out',
+        'check-bounce': 'check-bounce 0.2s ease-out',
+      },
       fontFamily: {
         'serif': ['"DM Serif Display"', 'Georgia', 'serif'],
         'sans': ['Inter', '"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
@@ -24,6 +44,17 @@ export default {
         'sv-bone': 'rgb(var(--color-sv-bone) / <alpha-value>)',            // #eeebe5 - Subtle backgrounds
         'sv-sand': 'rgb(var(--color-sv-sand) / <alpha-value>)',            // #e2ded6 - Borders ONLY
         'sv-stone': 'rgb(var(--color-sv-stone) / <alpha-value>)',          // #d4cfc5 - Muted text, disabled
+
+        // ===== Brand v2.2 Palette (January 2026) =====
+        'sv-deep-teal': 'rgb(var(--color-sv-deep-teal) / <alpha-value>)',   // #213C47 - Headers, hero panels
+        'sv-gunmetal': 'rgb(var(--color-sv-gunmetal) / <alpha-value>)',     // #343A40 - Primary body text
+        'sv-steel': 'rgb(var(--color-sv-steel) / <alpha-value>)',           // #88989A - Muted, placeholders
+        'sv-brown': 'rgb(var(--color-sv-brown) / <alpha-value>)',           // #6B4E3D - PRIMARY CTA
+        'sv-brown-hover': 'rgb(var(--color-sv-brown-hover) / <alpha-value>)', // #5A4133 - CTA hover
+        'sv-accent': 'rgb(var(--color-sv-accent) / <alpha-value>)',         // #0E6F6A - Links, focus rings
+        'sv-parchment': 'rgb(var(--color-sv-parchment) / <alpha-value>)',   // #EEEBE5 - Warm backgrounds
+        'sv-alabaster': 'rgb(var(--color-sv-alabaster) / <alpha-value>)',   // #E0E1DD - Cool backgrounds
+        'sv-white': 'rgb(var(--color-sv-white) / <alpha-value>)',           // #FFFFFF - Cards, modals
 
         // ===== DEPRECATED: Legacy v1.0 Teal Palette =====
         // DO NOT USE in new code. Use sv-* tokens above instead.
