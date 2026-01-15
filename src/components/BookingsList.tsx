@@ -1,12 +1,18 @@
 // Storage Valet — Bookings List Component
-// v1.1 • Display bookings + cancel action for pending states
+// v2.0 • Consolidated booking display with actions, history toggle, and CTAs
 //
 // Uses: POST /functions/v1/bookings-list (read)
 //       POST /functions/v1/booking-cancel (cancel)
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
 import { fetchBookings, cancelBooking, Booking } from '../lib/supabase'
+
+interface BookingsListProps {
+  onBookAppointment?: () => void
+  isPastDue?: boolean
+}
 
 // Customer-cancelable states (must match edge function)
 const CANCELABLE_STATES = ['pending_items', 'pending_confirmation']
@@ -107,9 +113,11 @@ function sortBookings(bookings: Booking[]): Booking[] {
   return [...upcoming, ...past]
 }
 
-export default function BookingsList() {
+export default function BookingsList({ onBookAppointment, isPastDue = false }: BookingsListProps) {
+  const navigate = useNavigate()
   const queryClient = useQueryClient()
   const [cancelTarget, setCancelTarget] = useState<Booking | null>(null)
+  const [showHistory, setShowHistory] = useState(false)
 
   const {
     data: bookings,
@@ -157,10 +165,10 @@ export default function BookingsList() {
   if (isLoading) {
     return (
       <div className="mb-6">
-        <h3 className="text-lg font-semibold text-sv-midnight mb-3">My Bookings</h3>
+        <h3 className="text-lg font-semibold text-sv-deep-teal mb-3">My Bookings</h3>
         <div className="flex items-center justify-center py-8">
           <svg
-            className="animate-spin h-6 w-6 text-sv-terracotta"
+            className="animate-spin h-6 w-6 text-sv-accent"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -188,7 +196,7 @@ export default function BookingsList() {
   if (error) {
     return (
       <div className="mb-6">
-        <h3 className="text-lg font-semibold text-sv-midnight mb-3">My Bookings</h3>
+        <h3 className="text-lg font-semibold text-sv-deep-teal mb-3">My Bookings</h3>
         <div className="card bg-red-50 border-red-200">
           <p className="text-red-800 text-sm">
             Failed to load bookings. Please try refreshing the page.
@@ -200,14 +208,63 @@ export default function BookingsList() {
 
   const sortedBookings = sortBookings(bookings || [])
 
+  // Separate upcoming and past bookings for history toggle
+  const now = new Date()
+  const { upcomingBookings, pastBookings } = useMemo(() => {
+    const upcoming: Booking[] = []
+    const past: Booking[] = []
+
+    for (const booking of sortedBookings) {
+      if (!booking.scheduled_start) {
+        upcoming.push(booking) // Unscheduled goes to upcoming
+      } else if (new Date(booking.scheduled_start) >= now) {
+        upcoming.push(booking)
+      } else {
+        past.push(booking)
+      }
+    }
+
+    return { upcomingBookings: upcoming, pastBookings: past }
+  }, [sortedBookings])
+
+  // Display bookings based on history toggle
+  const displayedBookings = showHistory
+    ? [...upcomingBookings, ...pastBookings]
+    : upcomingBookings
+
   return (
     <div className="mb-6">
-      <h3 className="text-lg font-semibold text-sv-midnight mb-3">My Bookings</h3>
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-lg font-semibold text-sv-deep-teal">My Bookings</h3>
+        <div className="flex items-center space-x-3">
+          {pastBookings.length > 0 && (
+            <button
+              onClick={() => setShowHistory(!showHistory)}
+              className="text-sm text-sv-accent hover:text-sv-deep-teal transition-colors"
+            >
+              {showHistory ? 'Hide history' : `Show history (${pastBookings.length})`}
+            </button>
+          )}
+          {onBookAppointment && (
+            <button
+              onClick={onBookAppointment}
+              disabled={isPastDue}
+              className={`btn-primary inline-flex items-center ${isPastDue ? 'opacity-50 cursor-not-allowed' : ''}`}
+              title={isPastDue ? 'Update your payment method to schedule new services' : ''}
+            >
+              <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              Book Appointment
+            </button>
+          )}
+        </div>
+      </div>
 
-      {sortedBookings.length === 0 ? (
+      {displayedBookings.length === 0 ? (
         <div className="border border-dashed border-sv-sand rounded-lg p-6 text-center bg-sv-ivory">
           <svg
-            className="mx-auto h-10 w-10 text-sv-terracotta/40 mb-3"
+            className="mx-auto h-10 w-10 text-sv-accent/40 mb-3"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -219,66 +276,93 @@ export default function BookingsList() {
               d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
             />
           </svg>
-          <p className="text-sv-slate">You have no scheduled bookings.</p>
+          <p className="text-sv-slate mb-2">No upcoming appointments</p>
+          <p className="text-sm text-sv-slate">Click "Book Appointment" to schedule a pickup or delivery</p>
         </div>
       ) : (
         <div className="space-y-3">
-          {sortedBookings.map((booking) => (
-            <div key={booking.id} className="card">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  {/* Date and time */}
-                  <div className="flex items-center space-x-2 mb-2">
-                    <svg
-                      className="h-5 w-5 text-sv-terracotta"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                      />
-                    </svg>
-                    <p className="text-sm font-semibold text-sv-midnight">
-                      {formatDate(booking.scheduled_start)}
-                    </p>
-                    {booking.scheduled_start && (
-                      <span className="text-sm text-sv-slate">
-                        {formatTimeRange(booking.scheduled_start, booking.scheduled_end)}
+          {displayedBookings.map((booking) => {
+            const isPast = booking.scheduled_start && new Date(booking.scheduled_start) < now
+            return (
+              <div key={booking.id} className={`card ${isPast ? 'opacity-60' : ''}`}>
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    {/* Date and time */}
+                    <div className="flex items-center space-x-2 mb-2">
+                      <svg
+                        className="h-5 w-5 text-sv-accent"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
+                      </svg>
+                      <p className="text-sm font-semibold text-sv-deep-teal">
+                        {formatDate(booking.scheduled_start)}
+                      </p>
+                      {booking.scheduled_start && (
+                        <span className="text-sm text-sv-slate">
+                          {formatTimeRange(booking.scheduled_start, booking.scheduled_end)}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Service type and status */}
+                    <div className="flex items-center space-x-3 text-sm">
+                      <span className="capitalize text-sv-slate">
+                        {booking.service_type}
                       </span>
+                      <span
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(
+                          booking.status
+                        )}`}
+                      >
+                        {getStatusLabel(booking.status)}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Action buttons */}
+                  <div className="flex items-center space-x-2 ml-4">
+                    {/* Add Items button for pending_items */}
+                    {booking.status === 'pending_items' && (
+                      <button
+                        onClick={() => navigate(`/schedule?action_id=${booking.id}`)}
+                        className="btn-primary text-sm px-3 py-1.5"
+                      >
+                        Add Items
+                      </button>
+                    )}
+
+                    {/* Edit Items button for pending_confirmation */}
+                    {booking.status === 'pending_confirmation' && (
+                      <button
+                        onClick={() => navigate(`/schedule?action_id=${booking.id}`)}
+                        className="btn-secondary text-sm px-3 py-1.5"
+                      >
+                        Edit Items
+                      </button>
+                    )}
+
+                    {/* Cancel button (only for cancelable states) */}
+                    {isCancelable(booking.status) && (
+                      <button
+                        onClick={() => handleCancelClick(booking)}
+                        className="px-3 py-1.5 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors"
+                      >
+                        Cancel
+                      </button>
                     )}
                   </div>
-
-                  {/* Service type and status */}
-                  <div className="flex items-center space-x-3 text-sm">
-                    <span className="capitalize text-sv-slate">
-                      {booking.service_type}
-                    </span>
-                    <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(
-                        booking.status
-                      )}`}
-                    >
-                      {getStatusLabel(booking.status)}
-                    </span>
-                  </div>
                 </div>
-
-                {/* Cancel button (only for cancelable states) */}
-                {isCancelable(booking.status) && (
-                  <button
-                    onClick={() => handleCancelClick(booking)}
-                    className="ml-4 px-3 py-1.5 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors"
-                  >
-                    Cancel
-                  </button>
-                )}
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       )}
 
@@ -294,7 +378,7 @@ export default function BookingsList() {
 
             {/* Dialog */}
             <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full p-6">
-              <h3 className="text-lg font-semibold text-sv-midnight mb-2">
+              <h3 className="text-lg font-semibold text-sv-deep-teal mb-2">
                 Cancel Booking?
               </h3>
               <p className="text-sv-slate text-sm mb-4">
@@ -325,7 +409,7 @@ export default function BookingsList() {
                 <button
                   onClick={handleCloseDialog}
                   disabled={cancelMutation.isPending}
-                  className="px-4 py-2 text-sm font-medium text-sv-slate hover:text-sv-midnight disabled:opacity-50"
+                  className="px-4 py-2 text-sm font-medium text-sv-slate hover:text-sv-deep-teal disabled:opacity-50"
                 >
                   Keep Booking
                 </button>

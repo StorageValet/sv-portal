@@ -153,43 +153,8 @@ export default function Dashboard() {
     enabled: !!user && !!profile && !isWaitlist,
   })
 
-  // Query pending bookings (schedule-first flow)
-  const { data: pendingBookings } = useQuery({
-    queryKey: ['pending-bookings', user?.id],
-    queryFn: async () => {
-      if (!user) return []
-
-      // SECURITY: Explicit user_id filter (double-guard with RLS)
-      const { data, error } = await supabase
-        .from('actions')
-        .select('id, scheduled_start, scheduled_end, status, pickup_item_ids, delivery_item_ids')
-        .eq('user_id', user.id)
-        .in('status', ['pending_items', 'pending_confirmation', 'confirmed'])
-        .gte('scheduled_start', new Date().toISOString())
-        .order('scheduled_start', { ascending: true })
-
-      if (error) {
-        console.warn('Pending bookings query error:', error.message)
-        return []
-      }
-      return data || []
-    },
-    enabled: !!user,
-  })
-
   const formatCurrency = (valueCents: number) =>
     `$${(valueCents / 100).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
-
-  const formatDateTime = (isoString: string) => {
-    const date = new Date(isoString)
-    return date.toLocaleString('en-US', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: '2-digit'
-    })
-  }
 
   // Service area gating logic (CANONICAL FRONTEND CHECK)
   // Extract delivery address fields
@@ -397,82 +362,11 @@ export default function Dashboard() {
 
       {/* CASE C: Valid address in service area - Normal dashboard (no blocking card) */}
 
-      {/* My Bookings - Read-only list via edge function */}
-      <BookingsList />
-
-      {/* Upcoming Services Section - Always shown */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-lg font-semibold text-sv-terracotta">Upcoming Services</h3>
-          <button
-            onClick={() => setIsBookingModalOpen(true)}
-            disabled={isPastDue}
-            className={`btn-primary inline-flex items-center ${isPastDue ? 'opacity-50 cursor-not-allowed' : ''}`}
-            title={isPastDue ? 'Update your payment method to schedule new services' : ''}
-          >
-            <svg className="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            Book Appointment
-          </button>
-        </div>
-
-        {pendingBookings && pendingBookings.length > 0 ? (
-          <div className="space-y-3">
-            {pendingBookings.map(booking => (
-              <div key={booking.id} className="card">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-2 mb-2">
-                      <svg className="h-5 w-5 text-sv-terracotta" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                      <p className="text-sm font-semibold text-sv-midnight">
-                        {formatDateTime(booking.scheduled_start)}
-                      </p>
-                    </div>
-                    <div className="flex items-center space-x-4 text-sm text-sv-slate">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-sv-bone text-sv-midnight capitalize">
-                        {booking.status === 'pending_items' ? 'Awaiting Items' : 'Scheduled'}
-                      </span>
-                      {booking.pickup_item_ids && booking.pickup_item_ids.length > 0 && (
-                        <span>↑ {booking.pickup_item_ids.length} pickup</span>
-                      )}
-                      {booking.delivery_item_ids && booking.delivery_item_ids.length > 0 && (
-                        <span>↓ {booking.delivery_item_ids.length} delivery</span>
-                      )}
-                    </div>
-                  </div>
-                  {booking.status === 'pending_items' && (
-                    <button
-                      onClick={() => navigate(`/schedule?action_id=${booking.id}`)}
-                      className="btn-primary ml-4"
-                    >
-                      Add Items
-                    </button>
-                  )}
-                  {booking.status === 'pending_confirmation' && (
-                    <button
-                      onClick={() => navigate(`/schedule?action_id=${booking.id}`)}
-                      className="btn-secondary ml-4"
-                    >
-                      Edit Items
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="border border-dashed border-border rounded-lg p-6 text-center bg-sv-ivory">
-            <svg className="mx-auto h-10 w-10 text-sv-terracotta/40 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            <p className="text-sv-slate mb-2">No upcoming appointments</p>
-            <p className="text-sm text-sv-slate">Click "Book Appointment" to schedule a pickup or delivery</p>
-          </div>
-        )}
-      </div>
+      {/* My Bookings - Consolidated component with CTA and history toggle */}
+      <BookingsList
+        onBookAppointment={() => setIsBookingModalOpen(true)}
+        isPastDue={isPastDue}
+      />
 
       {insurance && (
         <div className="card mb-6">
