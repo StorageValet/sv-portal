@@ -24,7 +24,7 @@ export default function Account() {
     try {
       const { data, error } = await supabase.functions.invoke('create-portal-session')
       if (error) throw error
-      window.location.href = data.url
+      window.open(data.url, '_blank', 'noopener,noreferrer')
     } catch (error) {
       toast.error((error as Error).message)
     }
