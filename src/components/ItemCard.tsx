@@ -92,7 +92,7 @@ export default function ItemCard({ item, isSelected, onSelect, onEdit, onDelete,
                 ? 'opacity-50 cursor-not-allowed border-sv-steel bg-sv-steel/20'
                 : isSelected
                   ? 'bg-sv-brown border-sv-brown text-white'
-                  : 'border-sv-sand hover:border-sv-brown focus:ring-sv-accent'
+                  : 'border-sv-steel/30 hover:border-sv-brown focus:ring-sv-accent'
             }`}
             title={isScheduled ? 'Already scheduled' : isSelected ? 'Deselect' : 'Select'}
           >
@@ -104,7 +104,7 @@ export default function ItemCard({ item, isSelected, onSelect, onEdit, onDelete,
           </button>
 
           {/* Thumbnail */}
-          <div className="flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden bg-sv-bone">
+          <div className="flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden bg-sv-parchment">
             {isLoading ? (
               <div className="w-full h-full animate-pulse" />
             ) : photoUrl ? (
@@ -142,7 +142,7 @@ export default function ItemCard({ item, isSelected, onSelect, onEdit, onDelete,
           <div className="flex-shrink-0 flex items-center gap-1">
             <button
               onClick={() => onViewDetails(item.id)}
-              className="p-1.5 text-sv-slate hover:text-sv-deep-teal rounded hover:bg-sv-bone transition-colors"
+              className="p-1.5 text-sv-slate hover:text-sv-deep-teal rounded hover:bg-sv-parchment transition-colors"
               title="Details"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -152,7 +152,7 @@ export default function ItemCard({ item, isSelected, onSelect, onEdit, onDelete,
             </button>
             <button
               onClick={() => onEdit(item.id)}
-              className="p-1.5 text-sv-brown hover:text-sv-brown-hover rounded hover:bg-sv-bone transition-colors"
+              className="p-1.5 text-sv-brown hover:text-sv-brown-hover rounded hover:bg-sv-parchment transition-colors"
               title="Edit"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -161,7 +161,7 @@ export default function ItemCard({ item, isSelected, onSelect, onEdit, onDelete,
             </button>
             <button
               onClick={() => onDelete(item.id)}
-              className="p-1.5 text-red-500 hover:text-red-700 rounded hover:bg-sv-bone transition-colors"
+              className="p-1.5 text-red-500 hover:text-red-700 rounded hover:bg-sv-parchment transition-colors"
               title="Delete"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -193,7 +193,7 @@ export default function ItemCard({ item, isSelected, onSelect, onEdit, onDelete,
               ? 'opacity-50 cursor-not-allowed border-sv-steel bg-sv-steel/20'
               : isSelected
                 ? 'bg-sv-brown border-sv-brown text-white'
-                : 'border-sv-sand bg-white/80 hover:border-sv-brown focus:ring-sv-accent'
+                : 'border-sv-steel/30 bg-sv-white/80 hover:border-sv-brown focus:ring-sv-accent'
           }`}
           title={isScheduled ? 'Already scheduled' : isSelected ? 'Deselect' : 'Select'}
         >
@@ -205,7 +205,7 @@ export default function ItemCard({ item, isSelected, onSelect, onEdit, onDelete,
         </button>
 
         {isLoading ? (
-          <div className="h-48 w-full bg-sv-bone animate-pulse" />
+          <div className="h-48 w-full bg-sv-parchment animate-pulse" />
         ) : photoUrl ? (
           <img
             src={photoUrl}
@@ -213,7 +213,7 @@ export default function ItemCard({ item, isSelected, onSelect, onEdit, onDelete,
             className="h-48 w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="h-48 w-full bg-sv-ivory flex items-center justify-center text-sv-steel">
+          <div className="h-48 w-full bg-sv-parchment flex items-center justify-center text-sv-steel">
             <svg className="h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
@@ -260,7 +260,7 @@ export default function ItemCard({ item, isSelected, onSelect, onEdit, onDelete,
         </div>
 
         {/* Action Buttons */}
-        <div className="mt-4 flex justify-end space-x-2 border-t border-sv-sand pt-3">
+        <div className="mt-4 flex justify-end space-x-2 border-t border-sv-steel/30 pt-3">
           <button
             onClick={() => onViewDetails(item.id)}
             className="text-sm font-medium text-sv-slate hover:text-sv-deep-teal transition-colors"

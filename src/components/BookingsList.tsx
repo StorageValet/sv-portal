@@ -32,8 +32,8 @@ const STATUS_COLORS: Record<string, string> = {
   pending_items: 'bg-amber-100 text-amber-800',
   pending_confirmation: 'bg-blue-100 text-blue-800',
   confirmed: 'bg-green-100 text-green-800',
-  canceled: 'bg-sv-bone text-sv-slate',
-  completed: 'bg-sv-bone text-sv-slate',
+  canceled: 'bg-sv-alabaster text-sv-slate',
+  completed: 'bg-sv-alabaster text-sv-slate',
   in_progress: 'bg-purple-100 text-purple-800',
 }
 
@@ -72,7 +72,7 @@ function getStatusLabel(status: string): string {
 }
 
 function getStatusColor(status: string): string {
-  return STATUS_COLORS[status] || 'bg-sv-bone text-sv-slate'
+  return STATUS_COLORS[status] || 'bg-sv-alabaster text-sv-slate'
 }
 
 function isCancelable(status: string): boolean {
@@ -265,7 +265,7 @@ export default function BookingsList({ onBookAppointment, isPastDue = false }: B
       </div>
 
       {displayedBookings.length === 0 ? (
-        <div className="border border-dashed border-sv-sand rounded-lg p-6 text-center bg-sv-ivory">
+        <div className="border border-dashed border-sv-steel/30 rounded-lg p-6 text-center bg-sv-alabaster">
           <svg
             className="mx-auto h-10 w-10 text-sv-accent/40 mb-3"
             fill="none"
@@ -380,7 +380,7 @@ export default function BookingsList({ onBookAppointment, isPastDue = false }: B
             />
 
             {/* Dialog */}
-            <div className="relative bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+            <div className="relative bg-sv-white rounded-lg shadow-xl max-w-md w-full p-6">
               <h3 className="text-lg font-semibold text-sv-deep-teal mb-2">
                 Cancel Booking?
               </h3>
